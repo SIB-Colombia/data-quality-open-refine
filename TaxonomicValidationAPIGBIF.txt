@@ -1,0 +1,412 @@
+
+SiB Colombia scripts for Biodiversity data cleaning in OPEN REFINE
+Language: GERL
+Date:2018-04-24
+Contributors: Ricardo Ortiz, Camila Plata
+Name: Taxonomic Validation using GBIF's API
+
+Procedure: 
+1-Matches original scientificName with GBIF's taxonomic Backbone
+2-Retrieves GBIF's rank and status allowing the user to evaluate the state of each name
+3-Retrieves GBIF's higher taxonomy for all names
+4-Compares GBIF'S taxonomic suggestions with original taxonomy using a boolean descriptor (1,0)
+
+Conditions
+Dataset with minimum 'scientificName' column
+To obtain a validation of higher taxonomy these elements are also required: 'kingdom','phylum','class','order','family','genus'
+
+Important
+The Definitions of object/elements retrieve by GBIF's API may differ with those of the online tool SpeciesMatching
+
+	ScientificName: GBIF's scientific name matching the scientificName of the query
+	canonicalName: GBIF's canonicalName matching the scientificName of the query
+	species: GBIF's accepted name given the GBIF's scientific name matching the scientificName of the query
+
+Conventions boolean descriptor
+0-GBIF's suggested name DOES NOT match the original name
+1-GBIF's suggested name matches the original name
+	
+Warnings
+New data will be stored in columns at the beginning of the dataset
+Taxonomy elements are reorganized to facilitate the taxonomic validation
+----------------------------------------------------------------------------
+
+ {
+    "op": "core/column-addition",
+    "description": "Create column NomAPI at index 2 based on column scientificName using expression grel:value.replace(\" \",\"%20\")",
+    "engineConfig": {
+      "mode": "row-based",
+      "facets": []
+    },
+    "newColumnName": "NomAPI",
+    "columnInsertIndex": 2,
+    "baseColumnName": "scientificName",
+    "expression": "grel:value.replace(\" \",\"%20\")",
+    "onError": "set-to-blank"
+  },
+   {
+    "op": "core/column-addition-by-fetching-urls",
+    "description": "Create column callAPI at index 2 by fetching URLs based on column NomAPI using expression grel:\"http://api.gbif.org/v1/species/match?strict=true&name=\"+value+\"&kingdom=\"+cells['kingdom'].value",
+    "engineConfig": {
+      "mode": "row-based",
+      "facets": []
+    },
+    "newColumnName": "callAPI",
+    "columnInsertIndex": 2,
+    "baseColumnName": "NomAPI",
+    "urlExpression": "grel:\"http://api.gbif.org/v1/species/match?strict=true&name=\"+value+\"&kingdom=\"+cells['kingdom'].value",
+    "onError": "set-to-blank",
+    "delay": 250,
+    "cacheResponses": true
+  },
+    {
+    "op": "core/column-addition",
+    "description": "Create column suggestedGenus at index 2 based on column callAPI using expression grel:if(value.parseJson().get(\"status\")=='SYNONYM',(split(value.parseJson().get(\"canonicalName\"),' ')[0]),value.parseJson().get(\"genus\"))",
+    "engineConfig": {
+      "mode": "row-based",
+      "facets": []
+    },
+    "newColumnName": "suggestedGenus",
+    "columnInsertIndex": 2,
+    "baseColumnName": "callAPI",
+    "expression": "grel:if(value.parseJson().get(\"status\")=='SYNONYM',(split(value.parseJson().get(\"canonicalName\"),' ')[0]),value.parseJson().get(\"genus\"))",
+    "onError": "set-to-blank"
+  },
+  {
+    "op": "core/column-addition",
+    "description": "Create column genusValidation at index 2 based on column suggestedGenus using expression grel:if(value==cells[\"genus\"].value,1,0)",
+    "engineConfig": {
+      "mode": "row-based",
+      "facets": []
+    },
+    "newColumnName": "genusValidation",
+    "columnInsertIndex": 2,
+    "baseColumnName": "suggestedGenus",
+    "expression": "grel:if(value==cells[\"genus\"].value,1,0)",
+    "onError": "set-to-blank"
+  },
+  {
+    "op": "core/column-move",
+    "description": "Move column family to position 2",
+    "columnName": "genus",
+    "index": 2
+  },
+   
+ {
+    "op": "core/column-addition",
+    "description": "Create column suggestedFamily at index 2 based on column callAPI using expression grel:value.parseJson().get(\"family\")",
+    "engineConfig": {
+      "mode": "row-based",
+      "facets": []
+    },
+    "newColumnName": "suggestedFamily",
+    "columnInsertIndex": 2,
+    "baseColumnName": "callAPI",
+    "expression": "grel:value.parseJson().get(\"family\")",
+    "onError": "set-to-blank"
+  },
+  {
+    "op": "core/column-addition",
+    "description": "Create column familyValidation at index 2 based on column suggestedFamily using expression grel:if(value==cells[\"family\"].value,1,0)",
+    "engineConfig": {
+      "mode": "row-based",
+      "facets": []
+    },
+    "newColumnName": "familyValidation",
+    "columnInsertIndex": 2,
+    "baseColumnName": "suggestedFamily",
+    "expression": "grel:if(value==cells[\"family\"].value,1,0)",
+    "onError": "set-to-blank"
+  },
+  {
+    "op": "core/column-move",
+    "description": "Move column family to position 2",
+    "columnName": "family",
+    "index": 2
+  },
+  {
+    "op": "core/column-addition",
+    "description": "Create column suggestedOrder at index 2 based on column callAPI using expression grel:value.parseJson().get(\"order\")",
+    "engineConfig": {
+      "mode": "row-based",
+      "facets": []
+    },
+    "newColumnName": "suggestedOrder",
+    "columnInsertIndex": 2,
+    "baseColumnName": "callAPI",
+    "expression": "grel:value.parseJson().get(\"order\")",
+    "onError": "set-to-blank"
+  },
+  
+    {
+    "op": "core/column-addition",
+    "description": "Create column orderValidation at index 2 based on column suggestedOrder using expression grel:if(value==cells[\"order\"].value,1,0)",
+    "engineConfig": {
+      "mode": "row-based",
+      "facets": []
+    },
+    "newColumnName": "orderValidation",
+    "columnInsertIndex": 2,
+    "baseColumnName": "suggestedOrder",
+    "expression": "grel:if(value==cells[\"order\"].value,1,0)",
+    "onError": "set-to-blank"
+  },
+  {
+    "op": "core/column-move",
+    "description": "Move column order to position 2",
+    "columnName": "order",
+    "index": 2
+  },
+  {
+    "op": "core/column-addition",
+    "description": "Create column suggestedClass at index 2 based on column callAPI using expression grel:value.parseJson().get(\"class\")",
+    "engineConfig": {
+      "mode": "row-based",
+      "facets": []
+    },
+    "newColumnName": "suggestedClass",
+    "columnInsertIndex": 2,
+    "baseColumnName": "callAPI",
+    "expression": "grel:value.parseJson().get(\"class\")",
+    "onError": "set-to-blank"
+  },
+  
+   {
+    "op": "core/column-addition",
+    "description": "Create column classValidation at index 2 based on column suggestedClass using expression grel:if(value==cells[\"class\"].value,1,0)",
+    "engineConfig": {
+      "mode": "row-based",
+      "facets": []
+    },
+    "newColumnName": "classValidation",
+    "columnInsertIndex": 2,
+    "baseColumnName": "suggestedClass",
+    "expression": "grel:if(value==cells[\"class\"].value,1,0)",
+    "onError": "set-to-blank"
+  },
+  {
+    "op": "core/column-move",
+    "description": "Move column class to position 2",
+    "columnName": "class",
+    "index": 2
+  },
+  {
+    "op": "core/column-addition",
+    "description": "Create column suggestedPhylum at index 2 based on column callAPI using expression grel:value.parseJson().get(\"phylum\")",
+    "engineConfig": {
+      "mode": "row-based",
+      "facets": []
+    },
+    "newColumnName": "suggestedPhylum",
+    "columnInsertIndex": 2,
+    "baseColumnName": "callAPI",
+    "expression": "grel:value.parseJson().get(\"phylum\")",
+    "onError": "set-to-blank"
+  },
+  {
+    "op": "core/column-addition",
+    "description": "Create column phylumValidation at index 2 based on column suggestedPhylum using expression grel:if(value==cells[\"phylum\"].value,1,0)",
+    "engineConfig": {
+      "mode": "row-based",
+      "facets": []
+    },
+    "newColumnName": "phylumValidation",
+    "columnInsertIndex": 2,
+    "baseColumnName": "suggestedPhylum",
+    "expression": "grel:if(value==cells[\"phylum\"].value,1,0)",
+    "onError": "set-to-blank"
+  },
+  {
+    "op": "core/column-move",
+    "description": "Move column phylum to position 2",
+    "columnName": "phylum",
+    "index": 2
+  },
+  {
+    "op": "core/column-addition",
+    "description": "Create column suggstedKingdom at index 2 based on column callAPI using expression grel:value.parseJson().get(\"kingdom\")",
+    "engineConfig": {
+      "mode": "row-based",
+      "facets": []
+    },
+    "newColumnName": "suggestedKingdom",
+    "columnInsertIndex": 2,
+    "baseColumnName": "callAPI",
+    "expression": "grel:value.parseJson().get(\"kingdom\")",
+    "onError": "set-to-blank"
+  },
+    {
+    "op": "core/column-addition",
+    "description": "Create column kingdomValidation at index 2 based on column suggstedKingdom using expression grel:if(value==cells[\"kingdom\"].value,1,0)",
+    "engineConfig": {
+      "mode": "row-based",
+      "facets": []
+    },
+    "newColumnName": "kingdomValidation",
+    "columnInsertIndex": 2,
+    "baseColumnName": "suggestedKingdom",
+    "expression": "grel:if(value==cells[\"kingdom\"].value,1,0)",
+    "onError": "set-to-blank"
+  },
+  {
+    "op": "core/column-move",
+    "description": "Move column kingdom to position 2",
+    "columnName": "kingdom",
+    "index": 2
+  },
+  {
+    "op": "core/column-addition",
+    "description": "Create column suggestedTaxonomicStatus at index 2 based on column callAPI using expression grel:value.parseJson().get(\"status\")",
+    "engineConfig": {
+      "mode": "row-based",
+      "facets": []
+    },
+    "newColumnName": "suggestedTaxonomicStatus",
+    "columnInsertIndex": 2,
+    "baseColumnName": "callAPI",
+    "expression": "grel:value.parseJson().get(\"status\")",
+    "onError": "set-to-blank"
+  },
+  
+  {
+    "op": "core/column-addition",
+    "description": "Create column suggestedRank at index 2 based on column callAPI using expression grel:value.parseJson().get(\"rank\")",
+    "engineConfig": {
+      "mode": "row-based",
+      "facets": []
+    },
+    "newColumnName": "suggestedRank",
+    "columnInsertIndex": 2,
+    "baseColumnName": "callAPI",
+    "expression": "grel:value.parseJson().get(\"rank\")",
+    "onError": "set-to-blank"
+  },
+  {
+    "op": "core/column-addition",
+    "description": "Create column canonicalNameSuggested at index 2 based on column callAPI using expression grel:value.parseJson().get(\"canonicalName\")",
+    "engineConfig": {
+      "mode": "row-based",
+      "facets": []
+    },
+    "newColumnName": "canonicalNameSuggested",
+    "columnInsertIndex": 2,
+    "baseColumnName": "callAPI",
+    "expression": "grel:value.parseJson().get(\"canonicalName\")",
+    "onError": "set-to-blank"
+  },
+  {
+    "op": "core/column-addition",
+    "description": "Create column acceptedScientificName(species) at index 2 based on column callAPI using expression grel:value.parseJson().get(\"species\")",
+    "engineConfig": {
+      "mode": "row-based",
+      "facets": []
+    },
+    "newColumnName": "acceptedScientificName(species)",
+    "columnInsertIndex": 3,
+    "baseColumnName": "callAPI",
+    "expression": "grel:value.parseJson().get(\"species\")",
+    "onError": "set-to-blank"
+  },
+  {
+    "op": "core/column-addition",
+    "description": "Create column suggestedScientificName at index 2 based on column callAPI using expression grel:value.parseJson().get(\"scientificName\")",
+    "engineConfig": {
+      "mode": "row-based",
+      "facets": []
+    },
+    "newColumnName": "suggestedScientificName",
+    "columnInsertIndex": 2,
+    "baseColumnName": "callAPI",
+    "expression": "grel:value.parseJson().get(\"scientificName\")",
+    "onError": "set-to-blank"
+  },
+   {
+    "op": "core/column-addition",
+    "description": "Create column suggestedscientificNameAuthorship at index 4 based on column suggestedScientificName using expression grel:value.partition(cells[\"canonicalNameSuggested\"].value)[2]",
+    "engineConfig": {
+      "mode": "row-based",
+      "facets": []
+    },
+    "newColumnName": "suggestedscientificNameAuthorship",
+    "columnInsertIndex": 4,
+    "baseColumnName": "suggestedScientificName",
+    "expression": "grel:value.partition(cells[\"canonicalNameSuggested\"].value)[2]",
+    "onError": "set-to-blank"
+  },
+   {
+    "op": "core/column-move",
+    "description": "Move column scientificName to position 2",
+    "columnName": "scientificName",
+    "index": 2
+  },
+  {
+    "op": "core/column-addition",
+    "description": "Create column taxonMatchType at index 2 based on column callAPI using expression grel:value.parseJson().get(\"matchType\")",
+    "engineConfig": {
+      "mode": "row-based",
+      "facets": []
+    },
+    "newColumnName": "taxonMatchType",
+    "columnInsertIndex": 2,
+    "baseColumnName": "callAPI",
+    "expression": "grel:value.parseJson().get(\"matchType\")",
+    "onError": "set-to-blank"
+  },
+  
+    {
+    "op": "core/column-addition",
+    "description": "Create column suggestedSpecificEpithet at index 6 based on column canonicalNameSuggested using expression grel:split(cells['canonicalNameSuggested'].value,' ')[1]",
+    "engineConfig": {
+      "mode": "row-based",
+      "facets": [
+        {
+          "omitError": false,
+          "expression": "value",
+          "selectBlank": false,
+          "selection": [
+            {
+              "v": {
+                "v": "SPECIES",
+                "l": "SPECIES"
+              }
+            }
+          ],
+          "selectError": false,
+          "invert": false,
+          "name": "suggestedRank",
+          "omitBlank": false,
+          "type": "list",
+          "columnName": "suggestedRank"
+        }
+      ]
+    },
+    "newColumnName": "suggestedSpecificEpithet",
+    "columnInsertIndex": 28,
+    "baseColumnName": "canonicalNameSuggested",
+    "expression": "grel:split(cells['canonicalNameSuggested'].value,' ')[1]",
+    "onError": "set-to-blank"
+  },
+  
+  {
+    "op": "core/column-addition",
+    "description": "Create column specificEpithetValidation at index 29 based on column suggestedSpecificEpithet using expression grel:if(value==cells[\"specificEpithet\"].value,1,0)",
+    "engineConfig": {
+      "mode": "row-based",
+      "facets": []
+    },
+    "newColumnName": "specificEpithetValidationValidation",
+    "columnInsertIndex": 28,
+    "baseColumnName": "suggestedSpecificEpithet",
+    "expression": "grel:if(value==cells[\"specificEpithet\"].value,1,0)",
+    "onError": "set-to-blank"
+  },
+  {
+    "op": "core/column-move",
+    "description": "Move column specificEpithet to position 28",
+    "columnName": "specificEpithet",
+    "index": 28
+  }
+  
+  
+ 
+  

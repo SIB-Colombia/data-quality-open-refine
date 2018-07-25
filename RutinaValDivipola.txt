@@ -1,0 +1,160 @@
+--------------------------------------------------------------------------------
+---No Copiar
+Rutinas del SiB Colombia para la limpieza y estandarización de datos primarios 
+de Biodiversidad en OPEN REFINE
+
+Nombre rutina: validación de entidades geográficas 
+de acuerdo a la División político administrativa oficial del país (DIVIPOLA)
+Languaje: GREL 'General Refine Expression Language'
+Fecha última Actualización: 2018-03-21
+Autores: Camila Plata, Ricardo Ortiz 
+
+Explicación de la rutina: 
+1-Crea columnas con las entidades geográficas concatenadas para validar la jerarquía geográfica
+2-Compara las columnas creadas con DIVIPOLA 
+3-Cundo hay una coincidencia trae el nombre de las entidades geográficas
+
+
+Requerimientos para utilizar la rutina
+-Conjunto de datos con las columnas 'stateProvince','county','municipality'
+-Archivo DIVIPOLA_20171231
+
+Advertencias
+Revise las columnas: spMatch, spcMatch, spcmMatch, 
+si se encuentran en blanco debe revisar las entidades geográficas y corregirlas de acuerdo a DIVIPOLA
+
+Convenciones
+sp   = stateProvince
+spc  = stateProvince+County
+spcm = stateProvince+County+Municipality
+spMatch   =  Coincidencia del Departamento del conjunto de datos con Divipola.
+spcMatch  = Coincidencia entre Departamento y Municipio del conjunto de datos con Divipola.
+spcmMatch = Coincidencia entre Departamento, Municipio y Centro Poblado del conjunto de datos con Divipola.
+
+---No Copiar
+--------------------------------------------------------------------------------
+
+{
+    "op": "core/column-addition",
+    "description": "Create column spcm at index 2 based on column stateProvince using expression grel:(cells['stateProvince'].value+' '+cells['county'].value+' '+cells['municipality'].value).trim().replace(/\\\\s+/,' ')",
+    "engineConfig": {
+      "mode": "row-based",
+      "facets": []
+    },
+    "newColumnName": "spcm",
+    "columnInsertIndex": 2,
+    "baseColumnName": "stateProvince",
+    "expression": "grel:(cells['stateProvince'].value+' '+cells['county'].value+' '+cells['municipality'].value).trim().replace(/\\\\s+/,' ')",
+    "onError": "set-to-blank"
+  },
+  {
+    "op": "core/column-addition",
+    "description": "Create column spcmMatch at index 2 based on column spcm using expression grel:cell.cross('DIVIPOLA_20171231','SPCM')[0].cells['SPCM'].value",
+    "engineConfig": {
+      "mode": "row-based",
+      "facets": []
+    },
+    "newColumnName": "spcmSuggested",
+    "columnInsertIndex": 2,
+    "baseColumnName": "spcm",
+    "expression": "grel:cell.cross('DIVIPOLA_20171231','SPCM')[0].cells['SPCM'].value",
+    "onError": "set-to-blank"
+  },
+ {
+    "op": "core/column-addition",
+    "description": "Create column spcmValidation at index 2 based on column kingdom using expression grel:if(value==cells[\"spcmSuggested\"].value,1,0)\"",
+    "engineConfig": {
+      "mode": "row-based",
+      "facets": []
+    },
+    "newColumnName": "spcmValidation",
+    "columnInsertIndex": 2,
+    "baseColumnName": "spcm",
+    "expression": "grel:if(value==cells[\"spcmSuggested\"].value,1,0)\"",
+    "onError": "set-to-blank"
+  },
+  {
+    "op": "core/column-move",
+    "description": "Move column genus to position 2",
+    "columnName": "spcm",
+    "index": 2
+  },
+  {
+    "op": "core/column-addition",
+    "description": "Create column spc at index 2 based on column stateProvince using expression grel:(cells['stateProvince'].value+' '+cells['county'].value).trim().replace(/\\\\s+/,' ')",
+    "engineConfig": {
+      "mode": "row-based",
+      "facets": []
+    },
+    "newColumnName": "spc",
+    "columnInsertIndex": 2,
+    "baseColumnName": "stateProvince",
+    "expression": "grel:(cells['stateProvince'].value+' '+cells['county'].value).trim().replace(/\\\\s+/,' ')",
+    "onError": "set-to-blank"
+  },
+ {
+    "op": "core/column-addition",
+    "description": "Create column spcSuggested at index 2 based on column spc using expression grel:cell.cross('DIVIPOLA_20171231','SPC')[0].cells['SPC'].value",
+    "engineConfig": {
+      "mode": "row-based",
+      "facets": []
+    },
+    "newColumnName": "spcSuggested",
+    "columnInsertIndex": 2,
+    "baseColumnName": "spc",
+    "expression": "grel:cell.cross('DIVIPOLA_20171231','SPC')[0].cells['SPC'].value",
+    "onError": "set-to-blank"
+  },
+  {
+    "op": "core/column-addition",
+    "description": "Create column spcValidation at index 2 based on column kingdom using expression grel:if(value==cells[\"spcSuggested\"].value,1,0)\"",
+    "engineConfig": {
+      "mode": "row-based",
+      "facets": []
+    },
+    "newColumnName": "spcValidation",
+    "columnInsertIndex": 2,
+    "baseColumnName": "spc",
+    "expression": "grel:if(value==cells[\"spcSuggested\"].value,1,0)\"",
+    "onError": "set-to-blank"
+  },
+   {
+    "op": "core/column-move",
+    "description": "Move column genus to position 2",
+    "columnName": "spc",
+    "index": 2
+  },
+  {
+    "op": "core/column-addition",
+    "description": "Create column spMatch at index 2 based on column stateProvince using expression grel:cell.cross('DIVIPOLA_20171231','stateProvince')[0].cells['stateProvince'].value",
+    "engineConfig": {
+      "mode": "row-based",
+      "facets": []
+    },
+    "newColumnName": "spSuggested",
+    "columnInsertIndex": 2,
+    "baseColumnName": "stateProvince",
+    "expression": "grel:cell.cross('DIVIPOLA_20171231','stateProvince')[0].cells['stateProvince'].value",
+    "onError": "set-to-blank"
+  },
+  {
+    "op": "core/column-addition",
+    "description": "Create column spValidation at index 2 based on column kingdom using expression grel:if(value==cells[\"spSuggested\"].value,1,0)\"",
+    "engineConfig": {
+      "mode": "row-based",
+      "facets": []
+    },
+    "newColumnName": "spValidation",
+    "columnInsertIndex": 2,
+    "baseColumnName": "stateProvince",
+    "expression": "grel:if(value==cells[\"spSuggested\"].value,1,0)\"",
+    "onError": "set-to-blank"
+  },
+   {
+    "op": "core/column-move",
+    "description": "Move column genus to position 2",
+    "columnName": "stateProvince",
+    "index": 2
+  }
+ 
+

@@ -1,0 +1,69 @@
+
+----------------------------------------------------------------------------
+---No Copiar
+Rutinas del SiB Colombia para la limpieza y estandarización de datos primarios 
+de Biodiversidad en OPEN REFINE
+
+Nombre rutina:Estandarización de Fechas (Atajo)
+Languaje: GREL 'General Refine Expression Language'
+Fecha última Actualización:2018-03-21
+Autores:Camila Plata, Ricardo Ortiz 
+
+Explicación de la rutina: 
+1-Llamado al API de Canadensys 
+2-ajustar el resultado del API en formato JSON
+3-Genera la fecha estandarizada de acuerdo a la norma ISO 8601 (AAAA-MM-DD)
+
+Requerimiento para utilizar la rutina
+Conjunto de datos con la columna 'eventDate'
+
+Advertencias
+-Las nuevas columnas apareceran el inicio del conjunto de datos
+-No todas las fechas son convertidas exitosamente por el API, 
+revise las celdas donde el resultado haya sido 'null'
+---No Copiar
+----------------------------------------------------------------------------
+
+[
+  {
+    "op": "core/column-addition-by-fetching-urls",
+    "description": "Create column canadensysDateAPI at index 2 by fetching URLs based on column eventDate using expression grel:\"http://data.canadensys.net/tools/dates.json?data=\"+value",
+    "engineConfig": {
+      "mode": "row-based",
+      "facets": []
+    },
+    "newColumnName": "canadensysDateAPI",
+    "columnInsertIndex": 2,
+    "baseColumnName": "eventDate",
+    "urlExpression": "grel:\"http://data.canadensys.net/tools/dates.json?data=\"+value",
+    "onError": "set-to-blank",
+    "delay": 250,
+    "cacheResponses": true
+  },
+  {
+    "op": "core/text-transform",
+    "description": "Text transform on cells in column canadensysDateAPI using expression grel:value.replace('{\"data\":{\"results\":[','').replace(']}}','')",
+    "engineConfig": {
+      "mode": "row-based",
+      "facets": []
+    },
+    "columnName": "canadensysDateAPI",
+    "expression": "grel:value.replace('{\"data\":{\"results\":[','').replace(']}}','')",
+    "onError": "keep-original",
+    "repeat": false,
+    "repeatCount": 10
+  },
+  {
+    "op": "core/column-addition",
+    "description": "Create column eventDateISO at index 2 based on column canadensysDateAPI using expression grel:value.parseJson().get('iso8601').toString()",
+    "engineConfig": {
+      "mode": "row-based",
+      "facets": []
+    },
+    "newColumnName": "eventDateISO",
+    "columnInsertIndex": 2,
+    "baseColumnName": "canadensysDateAPI",
+    "expression": "grel:value.parseJson().get('iso8601').toString()",
+    "onError": "set-to-blank"
+  }
+  ]

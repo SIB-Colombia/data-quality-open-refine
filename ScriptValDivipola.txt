@@ -1,0 +1,94 @@
+
+----------------------------------------------------------------------------
+SiB Colombia scripts for Biodiversity data cleaning in OPEN REFINE
+Language: GERL
+Date:2018-03-21
+Contributors: Camila Plata
+Name: Geographic Names Validation DIVIPOLA
+Procedure: 
+1-Creates concatenated columns of geographic names
+2-Match single and concatenated columns with DIVIPOLA
+3-Returns matched names when matching was posible
+
+Conditions
+Dataset with columns 'stateProvince','county','municipality'
+DIVIPOLA archive, latest version provided by SiB Colombia
+
+Warnings
+New data will be stored in columns at the beginning of the dataset
+Review output (spMatch, spcMatch, spcmMatch)=blank, those rows needs to be fixed and standardized
+BUG:May retrive dates is date api was runned before, date= no match
+
+Conventions
+spcm = stateProvince+County+Municipality
+spc  = stateProvince+County
+sp   = stateProvince
+----------------------------------------------------------------------------
+
+[
+{
+    "op": "core/column-addition",
+    "description": "Create column spcm at index 2 based on column stateProvince using expression grel:(cells['stateProvince'].value+' '+cells['county'].value+' '+cells['municipality'].value).trim().replace(/\\\\s+/,' ')",
+    "engineConfig": {
+      "mode": "row-based",
+      "facets": []
+    },
+    "newColumnName": "spcm",
+    "columnInsertIndex": 2,
+    "baseColumnName": "stateProvince",
+    "expression": "grel:(cells['stateProvince'].value+' '+cells['county'].value+' '+cells['municipality'].value).trim().replace(/\\\\s+/,' ')",
+    "onError": "set-to-blank"
+  },
+  {
+    "op": "core/column-addition",
+    "description": "Create column spc at index 3 based on column stateProvince using expression grel:(cells['stateProvince'].value+' '+cells['county'].value).trim().replace(/\\\\s+/,' ')",
+    "engineConfig": {
+      "mode": "row-based",
+      "facets": []
+    },
+    "newColumnName": "spc",
+    "columnInsertIndex": 3,
+    "baseColumnName": "stateProvince",
+    "expression": "grel:(cells['stateProvince'].value+' '+cells['county'].value).trim().replace(/\\\\s+/,' ')",
+    "onError": "set-to-blank"
+  },
+  {
+    "op": "core/column-addition",
+    "description": "Create column spMatch at index 2 based on column stateProvince using expression grel:cell.cross('DIVIPOLA_20171231','stateProvince')[0].cells['stateProvince'].value",
+    "engineConfig": {
+      "mode": "row-based",
+      "facets": []
+    },
+    "newColumnName": "spMatch",
+    "columnInsertIndex": 2,
+    "baseColumnName": "stateProvince",
+    "expression": "grel:cell.cross('DIVIPOLA_20171231','stateProvince')[0].cells['stateProvince'].value",
+    "onError": "set-to-blank"
+  },
+  {
+    "op": "core/column-addition",
+    "description": "Create column spcMatch at index 5 based on column spc using expression grel:cell.cross('DIVIPOLA_20171231','SPC')[0].cells['SPC'].value",
+    "engineConfig": {
+      "mode": "row-based",
+      "facets": []
+    },
+    "newColumnName": "spcMatch",
+    "columnInsertIndex": 5,
+    "baseColumnName": "spc",
+    "expression": "grel:cell.cross('DIVIPOLA_20171231','SPC')[0].cells['SPC'].value",
+    "onError": "set-to-blank"
+  },
+  {
+    "op": "core/column-addition",
+    "description": "Create column spcmMatch at index 4 based on column spcm using expression grel:cell.cross('DIVIPOLA_20171231','SPCM')[0].cells['SPCM'].value",
+    "engineConfig": {
+      "mode": "row-based",
+      "facets": []
+    },
+    "newColumnName": "spcmMatch",
+    "columnInsertIndex": 4,
+    "baseColumnName": "spcm",
+    "expression": "grel:cell.cross('DIVIPOLA_20171231','SPCM')[0].cells['SPCM'].value",
+    "onError": "set-to-blank"
+  }
+]
