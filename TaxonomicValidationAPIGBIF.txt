@@ -327,12 +327,32 @@ Taxonomy elements are reorganized to facilitate the taxonomic validation
       "mode": "row-based",
       "facets": []
     },
-    "newColumnName": "suggestedscientificNameAuthorship",
-    "columnInsertIndex": 4,
+    "newColumnName": "suggestedAuthorship",
+    "columnInsertIndex": 5,
     "baseColumnName": "suggestedScientificName",
     "expression": "grel:value.partition(cells[\"canonicalNameSuggested\"].value)[2]",
     "onError": "set-to-blank"
   },
+       {
+    "op": "core/column-addition",
+    "description": "Create column authorshipValidation at index 2 based on column suggstedAuthorship using expression grel:if(value==cells[\"scientificNameAuthorship\"].value,1,0)",
+    "engineConfig": {
+      "mode": "row-based",
+      "facets": []
+    },
+    "newColumnName": "authorshipValidation",
+    "columnInsertIndex": 5,
+    "baseColumnName": "suggestedAuthorship",
+    "expression": "grel:if(value==cells[\"scientificNameAuthorship\"].value,1,0)",
+    "onError": "set-to-blank"
+  },
+  {
+    "op": "core/column-move",
+    "description": "Move column scientificNameAuthorship to position 5",
+    "columnName": "scientificNameAuthorship",
+    "index": 5
+  },
+  
    {
     "op": "core/column-move",
     "description": "Move column scientificName to position 2",
