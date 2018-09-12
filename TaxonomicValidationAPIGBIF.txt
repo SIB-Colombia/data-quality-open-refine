@@ -424,7 +424,7 @@ Taxonomy elements are reorganized to facilitate the taxonomic validation
     "op": "core/column-move",
     "description": "Move column specificEpithet to position 28",
     "columnName": "specificEpithet",
-    "index": 28
+    "index": 29
   }
   
   
