@@ -59,6 +59,12 @@ Taxonomy elements are reorganized to facilitate the taxonomic validation
     "delay": 250,
     "cacheResponses": true
   },
+  {
+    "op": "core/column-move",
+    "description": "Move column kingdom to position 2",
+    "columnName": "infraspecificEpithet",
+    "index": 2
+  },
     {
     "op": "core/column-addition",
     "description": "Create column suggestedGenus at index 2 based on column callAPI using expression grel:if(value.parseJson().get(\"status\")=='SYNONYM',(split(value.parseJson().get(\"canonicalName\"),' ')[0]),value.parseJson().get(\"genus\"))",
@@ -91,8 +97,7 @@ Taxonomy elements are reorganized to facilitate the taxonomic validation
     "columnName": "genus",
     "index": 2
   },
-   
- {
+  {
     "op": "core/column-addition",
     "description": "Create column suggestedFamily at index 2 based on column callAPI using expression grel:value.parseJson().get(\"family\")",
     "engineConfig": {
@@ -137,8 +142,7 @@ Taxonomy elements are reorganized to facilitate the taxonomic validation
     "expression": "grel:value.parseJson().get(\"order\")",
     "onError": "set-to-blank"
   },
-  
-    {
+  {
     "op": "core/column-addition",
     "description": "Create column orderValidation at index 2 based on column suggestedOrder using expression grel:if(value==cells[\"order\"].value,1,0)",
     "engineConfig": {
@@ -170,8 +174,7 @@ Taxonomy elements are reorganized to facilitate the taxonomic validation
     "expression": "grel:value.parseJson().get(\"class\")",
     "onError": "set-to-blank"
   },
-  
-   {
+  {
     "op": "core/column-addition",
     "description": "Create column classValidation at index 2 based on column suggestedClass using expression grel:if(value==cells[\"class\"].value,1,0)",
     "engineConfig": {
@@ -235,7 +238,7 @@ Taxonomy elements are reorganized to facilitate the taxonomic validation
     "expression": "grel:value.parseJson().get(\"kingdom\")",
     "onError": "set-to-blank"
   },
-    {
+  {
     "op": "core/column-addition",
     "description": "Create column kingdomValidation at index 2 based on column suggstedKingdom using expression grel:if(value==cells[\"kingdom\"].value,1,0)",
     "engineConfig": {
@@ -266,8 +269,7 @@ Taxonomy elements are reorganized to facilitate the taxonomic validation
     "baseColumnName": "callAPI",
     "expression": "grel:value.parseJson().get(\"status\")",
     "onError": "set-to-blank"
-  },
-  
+  },  
   {
     "op": "core/column-addition",
     "description": "Create column suggestedRank at index 2 based on column callAPI using expression grel:value.parseJson().get(\"rank\")",
@@ -302,7 +304,7 @@ Taxonomy elements are reorganized to facilitate the taxonomic validation
       "facets": []
     },
     "newColumnName": "acceptedScientificName(species)",
-    "columnInsertIndex": 3,
+    "columnInsertIndex": 2,
     "baseColumnName": "callAPI",
     "expression": "grel:value.parseJson().get(\"species\")",
     "onError": "set-to-blank"
@@ -327,13 +329,14 @@ Taxonomy elements are reorganized to facilitate the taxonomic validation
       "mode": "row-based",
       "facets": []
     },
+
     "newColumnName": "suggestedAuthorship",
     "columnInsertIndex": 5,
     "baseColumnName": "suggestedScientificName",
     "expression": "grel:value.partition(cells[\"canonicalNameSuggested\"].value)[2]",
     "onError": "set-to-blank"
   },
-       {
+  {
     "op": "core/column-addition",
     "description": "Create column authorshipValidation at index 2 based on column suggstedAuthorship using expression grel:if(value==cells[\"scientificNameAuthorship\"].value,1,0)",
     "engineConfig": {
@@ -371,9 +374,8 @@ Taxonomy elements are reorganized to facilitate the taxonomic validation
     "baseColumnName": "callAPI",
     "expression": "grel:value.parseJson().get(\"matchType\")",
     "onError": "set-to-blank"
-  },
-  
-    {
+  },    
+  {
     "op": "core/column-addition",
     "description": "Create column suggestedSpecificEpithet at index 6 based on column canonicalNameSuggested using expression grel:split(cells['canonicalNameSuggested'].value,' ')[1]",
     "engineConfig": {
@@ -401,12 +403,11 @@ Taxonomy elements are reorganized to facilitate the taxonomic validation
       ]
     },
     "newColumnName": "suggestedSpecificEpithet",
-    "columnInsertIndex": 28,
+    "columnInsertIndex": 29,
     "baseColumnName": "canonicalNameSuggested",
     "expression": "grel:split(cells['canonicalNameSuggested'].value,' ')[1]",
     "onError": "set-to-blank"
   },
-  
   {
     "op": "core/column-addition",
     "description": "Create column specificEpithetValidation at index 29 based on column suggestedSpecificEpithet using expression grel:if(value==cells[\"specificEpithet\"].value,1,0)",
@@ -414,19 +415,15 @@ Taxonomy elements are reorganized to facilitate the taxonomic validation
       "mode": "row-based",
       "facets": []
     },
-    "newColumnName": "specificEpithetValidationValidation",
-    "columnInsertIndex": 28,
+    "newColumnName": "specificEpithetValidation",
+    "columnInsertIndex": 29,
     "baseColumnName": "suggestedSpecificEpithet",
     "expression": "grel:if(value==cells[\"specificEpithet\"].value,1,0)",
     "onError": "set-to-blank"
   },
   {
     "op": "core/column-move",
-    "description": "Move column specificEpithet to position 28",
+    "description": "Move column specificEpithet to position 2",
     "columnName": "specificEpithet",
     "index": 29
   }
-  
-  
- 
-  
