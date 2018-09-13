@@ -330,10 +330,10 @@ Taxonomy elements are reorganized to facilitate the taxonomic validation
       "facets": []
     },
 
-    "newColumnName": "suggestedAuthorship",
+    "newColumnName": "suggestedScientificNameAuthorship",
     "columnInsertIndex": 5,
     "baseColumnName": "suggestedScientificName",
-    "expression": "grel:value.partition(cells[\"canonicalNameSuggested\"].value)[2]",
+    "expression": "grel:value.partition(cells[\"canonicalNameSuggested\"].value)[2].trim()",
     "onError": "set-to-blank"
   },
   {
@@ -343,9 +343,9 @@ Taxonomy elements are reorganized to facilitate the taxonomic validation
       "mode": "row-based",
       "facets": []
     },
-    "newColumnName": "authorshipValidation",
+    "newColumnName": "scientificNameAuthorshipValidation",
     "columnInsertIndex": 5,
-    "baseColumnName": "suggestedAuthorship",
+    "baseColumnName": "suggestedScientificNameAuthorship",
     "expression": "grel:if(value==cells[\"scientificNameAuthorship\"].value,1,0)",
     "onError": "set-to-blank"
   },
