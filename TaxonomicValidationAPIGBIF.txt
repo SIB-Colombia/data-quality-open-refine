@@ -61,10 +61,44 @@ Taxonomy elements are reorganized to facilitate the taxonomic validation
   },
   {
     "op": "core/column-move",
-    "description": "Move column kingdom to position 2",
+    "description": "Move column infraspecificEpithet to position 2",
     "columnName": "infraspecificEpithet",
     "index": 2
   },
+    {
+    "op": "core/column-addition",
+    "description": "Create column suggestedSpecificEpithet at index 2 based on column callAPI using expression grel:split(value.parseJson().get(\"canonicalName\"),' ')[1]",
+    "engineConfig": {
+      "mode": "row-based",
+      "facets": []
+    },
+    "newColumnName": "suggestedSpecificEpithet",
+    "columnInsertIndex": 2,
+    "baseColumnName": "callAPI",
+    "expression": "grel:split(value.parseJson().get(\"canonicalName\"),' ')[1]",
+    "onError": "set-to-blank"
+  }
+  
+  {
+    "op": "core/column-addition",
+    "description": "Create column specificEpithetValidation at index 2 based on column suggestedSpecificEpithet using expression grel:if(value==cells[\"specificEpithet\"].value,1,0)",
+    "engineConfig": {
+      "mode": "row-based",
+      "facets": []
+    },
+    "newColumnName": "specificEpithetValidationValidation",
+    "columnInsertIndex": 2,
+    "baseColumnName": "suggestedSpecificEpithet",
+    "expression": "grel:if(value==cells[\"specificEpithet\"].value,1,0)",
+    "onError": "set-to-blank"
+  },
+  {
+    "op": "core/column-move",
+    "description": "Move column specificEpithet to position 2",
+    "columnName": "specificEpithet",
+    "index": 2
+  },
+  
     {
     "op": "core/column-addition",
     "description": "Create column suggestedGenus at index 2 based on column callAPI using expression grel:if(value.parseJson().get(\"status\")=='SYNONYM',(split(value.parseJson().get(\"canonicalName\"),' ')[0]),value.parseJson().get(\"genus\"))",
@@ -374,56 +408,5 @@ Taxonomy elements are reorganized to facilitate the taxonomic validation
     "baseColumnName": "callAPI",
     "expression": "grel:value.parseJson().get(\"matchType\")",
     "onError": "set-to-blank"
-  },    
-  {
-    "op": "core/column-addition",
-    "description": "Create column suggestedSpecificEpithet at index 6 based on column canonicalNameSuggested using expression grel:split(cells['canonicalNameSuggested'].value,' ')[1]",
-    "engineConfig": {
-      "mode": "row-based",
-      "facets": [
-        {
-          "omitError": false,
-          "expression": "value",
-          "selectBlank": false,
-          "selection": [
-            {
-              "v": {
-                "v": "SPECIES",
-                "l": "SPECIES"
-              }
-            }
-          ],
-          "selectError": false,
-          "invert": false,
-          "name": "suggestedRank",
-          "omitBlank": false,
-          "type": "list",
-          "columnName": "suggestedRank"
-        }
-      ]
-    },
-    "newColumnName": "suggestedSpecificEpithet",
-    "columnInsertIndex": 29,
-    "baseColumnName": "canonicalNameSuggested",
-    "expression": "grel:split(cells['canonicalNameSuggested'].value,' ')[1]",
-    "onError": "set-to-blank"
-  },
-  {
-    "op": "core/column-addition",
-    "description": "Create column specificEpithetValidation at index 29 based on column suggestedSpecificEpithet using expression grel:if(value==cells[\"specificEpithet\"].value,1,0)",
-    "engineConfig": {
-      "mode": "row-based",
-      "facets": []
-    },
-    "newColumnName": "specificEpithetValidation",
-    "columnInsertIndex": 29,
-    "baseColumnName": "suggestedSpecificEpithet",
-    "expression": "grel:if(value==cells[\"specificEpithet\"].value,1,0)",
-    "onError": "set-to-blank"
-  },
-  {
-    "op": "core/column-move",
-    "description": "Move column specificEpithet to position 2",
-    "columnName": "specificEpithet",
-    "index": 29
   }
+  
