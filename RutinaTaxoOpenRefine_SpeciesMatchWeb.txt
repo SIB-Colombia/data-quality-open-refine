@@ -23,7 +23,7 @@ Thus, you have two options to perform the taxon name matching:
 1-Using occurenceID, dataset below 6000 occurrences, GBIF speciesMatching should be perform for all occurrences
 2-Using scientificName, dataset above 6000 occurrences, GBIF speciesMatching should be perform for unique scientific names of the dataset
 
-According to the option you use replace 'originalName' for 'originalID'
+According to the option you use replace 'verbatimScientificName' for 'originalID'
 According to the option you use replace 'occurrenceID' for 'scientificName'
 
 Warnings
@@ -35,7 +35,7 @@ Conventions
 
   {
     "op": "core/column-addition",
-    "description": "Create column genus_GBIF at index 1 based on column scientificName using expression grel:cell.cross(\"normalized\",\"originalName\").cells[\"genus\"].value[0]",
+    "description": "Create column genus_GBIF at index 1 based on column scientificName using expression grel:cell.cross(\"normalized\",\"verbatimScientificName\").cells[\"genus\"].value[0]",
     "engineConfig": {
       "mode": "row-based",
       "facets": []
@@ -43,7 +43,7 @@ Conventions
     "newColumnName": "suggestedGenus",
     "columnInsertIndex": 1,
     "baseColumnName": "scientificName",
-    "expression": "grel:cell.cross(\"normalized\",\"originalName\").cells[\"genus\"].value[0]",
+    "expression": "grel:cell.cross(\"normalized\",\"verbatimScientificName\").cells[\"genus\"].value[0]",
     "onError": "set-to-blank"
   },
   {
@@ -67,7 +67,7 @@ Conventions
   },
   {
     "op": "core/column-addition",
-    "description": "Create column familyGBIF at index 1 based on column scientificName using expression grel:cell.cross(\"normalized\",\"originalName\").cells[\"family\"].value[0]",
+    "description": "Create column familyGBIF at index 1 based on column scientificName using expression grel:cell.cross(\"normalized\",\"verbatimScientificName\").cells[\"family\"].value[0]",
     "engineConfig": {
       "mode": "row-based",
       "facets": []
@@ -75,7 +75,7 @@ Conventions
     "newColumnName": "suggestedFamily",
     "columnInsertIndex": 1,
     "baseColumnName": "scientificName",
-    "expression": "grel:cell.cross(\"normalized\",\"originalName\").cells[\"family\"].value[0]",
+    "expression": "grel:cell.cross(\"normalized\",\"verbatimScientificName\").cells[\"family\"].value[0]",
     "onError": "set-to-blank"
   },
   {
@@ -99,7 +99,7 @@ Conventions
   },
   {
     "op": "core/column-addition",
-    "description": "Create column order_GBIF at index 1 based on column scientificName using expression grel:cell.cross(\"normalized\",\"originalName\").cells[\"order\"].value[0]",
+    "description": "Create column order_GBIF at index 1 based on column scientificName using expression grel:cell.cross(\"normalized\",\"verbatimScientificName\").cells[\"order\"].value[0]",
     "engineConfig": {
       "mode": "row-based",
       "facets": []
@@ -107,7 +107,7 @@ Conventions
     "newColumnName": "suggestedOrder",
     "columnInsertIndex": 1,
     "baseColumnName": "scientificName",
-    "expression": "grel:cell.cross(\"normalized\",\"originalName\").cells[\"order\"].value[0]",
+    "expression": "grel:cell.cross(\"normalized\",\"verbatimScientificName\").cells[\"order\"].value[0]",
     "onError": "set-to-blank"
   },
   {
@@ -131,7 +131,7 @@ Conventions
   },
  {
     "op": "core/column-addition",
-    "description": "Create column classGBIF at index 1 based on column scientificName using expression grel:cell.cross(\"normalized\",\"originalName\").cells[\"class\"].value[0]",
+    "description": "Create column classGBIF at index 1 based on column scientificName using expression grel:cell.cross(\"normalized\",\"verbatimScientificName\").cells[\"class\"].value[0]",
     "engineConfig": {
       "mode": "row-based",
       "facets": []
@@ -139,7 +139,7 @@ Conventions
     "newColumnName": "suggestedClass",
     "columnInsertIndex": 1,
     "baseColumnName": "scientificName",
-    "expression": "grel:cell.cross(\"normalized\",\"originalName\").cells[\"class\"].value[0]",
+    "expression": "grel:cell.cross(\"normalized\",\"verbatimScientificName\").cells[\"class\"].value[0]",
     "onError": "set-to-blank"
   },
   {
@@ -163,7 +163,7 @@ Conventions
   },  
   {
     "op": "core/column-addition",
-    "description": "Create column phylumGBIF at index 1 based on column scientificName using expression grel:cell.cross(\"normalized\",\"originalName\").cells[\"phylum\"].value[0]",
+    "description": "Create column phylumGBIF at index 1 based on column scientificName using expression grel:cell.cross(\"normalized\",\"verbatimScientificName\").cells[\"phylum\"].value[0]",
     "engineConfig": {
       "mode": "row-based",
       "facets": []
@@ -171,7 +171,7 @@ Conventions
     "newColumnName": "suggestedPhylum",
     "columnInsertIndex": 1,
     "baseColumnName": "scientificName",
-    "expression": "grel:cell.cross(\"normalized\",\"originalName\").cells[\"phylum\"].value[0]",
+    "expression": "grel:cell.cross(\"normalized\",\"verbatimScientificName\").cells[\"phylum\"].value[0]",
     "onError": "set-to-blank"
   },
   {
@@ -195,7 +195,7 @@ Conventions
   },
   {
     "op": "core/column-addition",
-    "description": "Create column kingdomGBIF at index 1 based on column scientificName using expression grel:cell.cross(\"normalized\",\"originalName\").cells[\"kingdom\"].value[0]",
+    "description": "Create column kingdomGBIF at index 1 based on column scientificName using expression grel:cell.cross(\"normalized\",\"verbatimScientificName\").cells[\"kingdom\"].value[0]",
     "engineConfig": {
       "mode": "row-based",
       "facets": []
@@ -203,7 +203,7 @@ Conventions
     "newColumnName": "suggestedKingdom",
     "columnInsertIndex": 1,
     "baseColumnName": "scientificName",
-    "expression": "grel:cell.cross(\"normalized\",\"originalName\").cells[\"kingdom\"].value[0]",
+    "expression": "grel:cell.cross(\"normalized\",\"verbatimScientificName\").cells[\"kingdom\"].value[0]",
     "onError": "set-to-blank"
   },
     {
@@ -227,7 +227,7 @@ Conventions
   },
   {
     "op": "core/column-addition",
-    "description": "Create column scientificNameGBIF at index 1 based on column scientificName using expression grel:cell.cross(\"normalized\",\"originalName\").cells[\"scientificName\"].value[0]",
+    "description": "Create column scientificNameGBIF at index 1 based on column scientificName using expression grel:cell.cross(\"normalized\",\"verbatimScientificName\").cells[\"scientificName\"].value[0]",
     "engineConfig": {
       "mode": "row-based",
       "facets": []
@@ -235,7 +235,7 @@ Conventions
     "newColumnName": "suggestedScientificName",
     "columnInsertIndex": 1,
     "baseColumnName": "scientificName",
-    "expression": "grel:cell.cross(\"normalized\",\"originalName\").cells[\"scientificName\"].value[0]",
+    "expression": "grel:cell.cross(\"normalized\",\"verbatimScientificName\").cells[\"scientificName\"].value[0]",
     "onError": "set-to-blank"
   },
       {
@@ -246,7 +246,7 @@ Conventions
   },
   {
     "op": "core/column-addition",
-    "description": "Create column canonicalName at index 1 based on column scientificName using expression grel:cell.cross(\"normalized\",\"originalName\").cells[\"species\"].value[0]",
+    "description": "Create column canonicalName at index 1 based on column scientificName using expression grel:cell.cross(\"normalized\",\"verbatimScientificName\").cells[\"species\"].value[0]",
     "engineConfig": {
       "mode": "row-based",
       "facets": []
@@ -254,12 +254,12 @@ Conventions
     "newColumnName": "acceptedName",
     "columnInsertIndex": 1,
     "baseColumnName": "scientificName",
-    "expression": "grel:cell.cross(\"normalized\",\"originalName\").cells[\"species\"].value[0]",
+    "expression": "grel:cell.cross(\"normalized\",\"verbatimScientificName\").cells[\"species\"].value[0]",
     "onError": "set-to-blank"
   },
     {
     "op": "core/column-addition",
-    "description": "Create column MatchType at index 1 based on column scientificName using expression grel:cell.cross(\"normalized\",\"originalName\").cells[\"matchType\"].value[0]",
+    "description": "Create column MatchType at index 1 based on column scientificName using expression grel:cell.cross(\"normalized\",\"verbatimScientificName\").cells[\"matchType\"].value[0]",
     "engineConfig": {
       "mode": "row-based",
       "facets": []
@@ -267,12 +267,12 @@ Conventions
     "newColumnName": "MatchType",
     "columnInsertIndex": 1,
     "baseColumnName": "scientificName",
-    "expression": "grel:cell.cross(\"normalized\",\"originalName\").cells[\"matchType\"].value[0]",
+    "expression": "grel:cell.cross(\"normalized\",\"verbatimScientificName\").cells[\"matchType\"].value[0]",
     "onError": "set-to-blank"
   },
   {
     "op": "core/column-addition",
-    "description": "Create column status at index 1 based on column scientificName using expression grel:cell.cross(\"normalized\",\"originalName\").cells[\"status\"].value[0]",
+    "description": "Create column status at index 1 based on column scientificName using expression grel:cell.cross(\"normalized\",\"verbatimScientificName\").cells[\"status\"].value[0]",
     "engineConfig": {
       "mode": "row-based",
       "facets": []
@@ -280,12 +280,12 @@ Conventions
     "newColumnName": "status",
     "columnInsertIndex": 1,
     "baseColumnName": "scientificName",
-    "expression": "grel:cell.cross(\"normalized\",\"originalName\").cells[\"status\"].value[0]",
+    "expression": "grel:cell.cross(\"normalized\",\"verbatimScientificName\").cells[\"status\"].value[0]",
     "onError": "set-to-blank"
   },
   {
     "op": "core/column-addition",
-    "description": "Create column rank at index 1 based on column scientificName using expression grel:cell.cross(\"normalized\",\"originalName\").cells[\"rank\"].value[0]",
+    "description": "Create column rank at index 1 based on column scientificName using expression grel:cell.cross(\"normalized\",\"verbatimScientificName\").cells[\"rank\"].value[0]",
     "engineConfig": {
       "mode": "row-based",
       "facets": []
@@ -293,6 +293,6 @@ Conventions
     "newColumnName": "rank",
     "columnInsertIndex": 1,
     "baseColumnName": "scientificName",
-    "expression": "grel:cell.cross(\"normalized\",\"originalName\").cells[\"rank\"].value[0]",
+    "expression": "grel:cell.cross(\"normalized\",\"verbatimScientificName\").cells[\"rank\"].value[0]",
     "onError": "set-to-blank"
   }
