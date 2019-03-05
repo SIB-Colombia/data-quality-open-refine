@@ -81,7 +81,7 @@ Taxonomy elements are reorganized to facilitate the taxonomic validation
   
   {
     "op": "core/column-addition",
-    "description": "Create column specificEpithetValidation at index 2 based on column suggestedSpecificEpithet using expression grel:if(value==cells[\"specificEpithet\"].value,'1','0')",
+    "description": "Create column specificEpithetValidation at index 2 based on column suggestedSpecificEpithet using expression grel:if(value==cells[\"specificEpithet\"].value,'1','0').toString()",
     "engineConfig": {
       "mode": "row-based",
       "facets": []
@@ -89,7 +89,7 @@ Taxonomy elements are reorganized to facilitate the taxonomic validation
     "newColumnName": "specificEpithetValidationValidation",
     "columnInsertIndex": 2,
     "baseColumnName": "suggestedSpecificEpithet",
-    "expression": "grel:if(value==cells[\"specificEpithet\"].value,'1','0')",
+    "expression": "grel:if(value==cells[\"specificEpithet\"].value,'1','0').toString()",
     "onError": "set-to-blank"
   },
   {
@@ -114,7 +114,7 @@ Taxonomy elements are reorganized to facilitate the taxonomic validation
   },
   {
     "op": "core/column-addition",
-    "description": "Create column genusValidation at index 2 based on column suggestedGenus using expression grel:if(value==cells[\"genus\"].value,'1','0')",
+    "description": "Create column genusValidation at index 2 based on column suggestedGenus using expression grel:if(value==cells[\"genus\"].value,'1','0').toString()",
     "engineConfig": {
       "mode": "row-based",
       "facets": []
@@ -122,7 +122,7 @@ Taxonomy elements are reorganized to facilitate the taxonomic validation
     "newColumnName": "genusValidation",
     "columnInsertIndex": 2,
     "baseColumnName": "suggestedGenus",
-    "expression": "grel:if(value==cells[\"genus\"].value,'1','0')",
+    "expression": "grel:if(value==cells[\"genus\"].value,'1','0').toString()",
     "onError": "set-to-blank"
   },
   {
@@ -146,7 +146,7 @@ Taxonomy elements are reorganized to facilitate the taxonomic validation
   },
   {
     "op": "core/column-addition",
-    "description": "Create column familyValidation at index 2 based on column suggestedFamily using expression grel:if(value==cells[\"family\"].value,'1','0')",
+    "description": "Create column familyValidation at index 2 based on column suggestedFamily using expression grel:if(value==cells[\"family\"].value,'1','0').toString()",
     "engineConfig": {
       "mode": "row-based",
       "facets": []
@@ -154,7 +154,7 @@ Taxonomy elements are reorganized to facilitate the taxonomic validation
     "newColumnName": "familyValidation",
     "columnInsertIndex": 2,
     "baseColumnName": "suggestedFamily",
-    "expression": "grel:if(value==cells[\"family\"].value,'1','0')",
+    "expression": "grel:if(value==cells[\"family\"].value,'1','0').toString()",
     "onError": "set-to-blank"
   },
   {
@@ -178,7 +178,7 @@ Taxonomy elements are reorganized to facilitate the taxonomic validation
   },
   {
     "op": "core/column-addition",
-    "description": "Create column orderValidation at index 2 based on column suggestedOrder using expression grel:if(value==cells[\"order\"].value,'1','0')",
+    "description": "Create column orderValidation at index 2 based on column suggestedOrder using expression grel:if(value==cells[\"order\"].value,'1','0').toString()",
     "engineConfig": {
       "mode": "row-based",
       "facets": []
@@ -186,7 +186,7 @@ Taxonomy elements are reorganized to facilitate the taxonomic validation
     "newColumnName": "orderValidation",
     "columnInsertIndex": 2,
     "baseColumnName": "suggestedOrder",
-    "expression": "grel:if(value==cells[\"order\"].value,'1','0')",
+    "expression": "grel:if(value==cells[\"order\"].value,'1','0').toString()",
     "onError": "set-to-blank"
   },
   {
@@ -210,7 +210,7 @@ Taxonomy elements are reorganized to facilitate the taxonomic validation
   },
   {
     "op": "core/column-addition",
-    "description": "Create column classValidation at index 2 based on column suggestedClass using expression grel:if(value==cells[\"class\"].value,'1','0')",
+    "description": "Create column classValidation at index 2 based on column suggestedClass using expression grel:if(value==cells[\"class\"].value,'1','0').toString()",
     "engineConfig": {
       "mode": "row-based",
       "facets": []
@@ -218,7 +218,7 @@ Taxonomy elements are reorganized to facilitate the taxonomic validation
     "newColumnName": "classValidation",
     "columnInsertIndex": 2,
     "baseColumnName": "suggestedClass",
-    "expression": "grel:if(value==cells[\"class\"].value,'1','0')",
+    "expression": "grel:if(value==cells[\"class\"].value,'1','0').toString()",
     "onError": "set-to-blank"
   },
   {
@@ -242,7 +242,7 @@ Taxonomy elements are reorganized to facilitate the taxonomic validation
   },
   {
     "op": "core/column-addition",
-    "description": "Create column phylumValidation at index 2 based on column suggestedPhylum using expression grel:if(value==cells[\"phylum\"].value,'1','0')",
+    "description": "Create column phylumValidation at index 2 based on column suggestedPhylum using expression grel:if(value==cells[\"phylum\"].value,'1','0').toString()",
     "engineConfig": {
       "mode": "row-based",
       "facets": []
@@ -250,7 +250,7 @@ Taxonomy elements are reorganized to facilitate the taxonomic validation
     "newColumnName": "phylumValidation",
     "columnInsertIndex": 2,
     "baseColumnName": "suggestedPhylum",
-    "expression": "grel:if(value==cells[\"phylum\"].value,'1','0')",
+    "expression": "grel:if(value==cells[\"phylum\"].value,'1','0').toString()",
     "onError": "set-to-blank"
   },
   {
@@ -274,7 +274,7 @@ Taxonomy elements are reorganized to facilitate the taxonomic validation
   },
   {
     "op": "core/column-addition",
-    "description": "Create column kingdomValidation at index 2 based on column suggstedKingdom using expression grel:if(value==cells[\"kingdom\"].value,'1','0')",
+    "description": "Create column kingdomValidation at index 2 based on column suggstedKingdom using expression grel:if(value==cells[\"kingdom\"].value,'1','0').toString()",
     "engineConfig": {
       "mode": "row-based",
       "facets": []
@@ -282,7 +282,7 @@ Taxonomy elements are reorganized to facilitate the taxonomic validation
     "newColumnName": "kingdomValidation",
     "columnInsertIndex": 2,
     "baseColumnName": "suggestedKingdom",
-    "expression": "grel:if(value==cells[\"kingdom\"].value,'1','0')",
+    "expression": "grel:if(value==cells[\"kingdom\"].value,'1','0').toString()",
     "onError": "set-to-blank"
   },
   {
@@ -372,7 +372,7 @@ Taxonomy elements are reorganized to facilitate the taxonomic validation
   },
   {
     "op": "core/column-addition",
-    "description": "Create column authorshipValidation at index 2 based on column suggstedAuthorship using expression grel:if(value==cells[\"scientificNameAuthorship\"].value,'1','0')",
+    "description": "Create column authorshipValidation at index 2 based on column suggstedAuthorship using expression grel:if(value==cells[\"scientificNameAuthorship\"].value,'1','0').toString()",
     "engineConfig": {
       "mode": "row-based",
       "facets": []
@@ -380,7 +380,7 @@ Taxonomy elements are reorganized to facilitate the taxonomic validation
     "newColumnName": "scientificNameAuthorshipValidation",
     "columnInsertIndex": 5,
     "baseColumnName": "suggestedScientificNameAuthorship",
-    "expression": "grel:if(value==cells[\"scientificNameAuthorship\"].value,'1','0')",
+    "expression": "grel:if(value==cells[\"scientificNameAuthorship\"].value,'1','0').toString()",
     "onError": "set-to-blank"
   },
   {
