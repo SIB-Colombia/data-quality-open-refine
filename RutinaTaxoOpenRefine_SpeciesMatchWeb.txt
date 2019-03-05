@@ -48,7 +48,7 @@ Conventions
   },
   {
     "op": "core/column-addition",
-    "description": "Create column genusValidation at index 1 based on column kingdom using expression grel:if(value==cells[\"suggestedGenus\"].value,1,0)\"",
+    "description": "Create column genusValidation at index 1 based on column kingdom using expression grel:if(value==cells[\"suggestedGenus\"].value,1,0).toString()\"",
     "engineConfig": {
       "mode": "row-based",
       "facets": []
@@ -56,7 +56,7 @@ Conventions
     "newColumnName": "genusValidation",
     "columnInsertIndex": 1,
     "baseColumnName": "genus",
-    "expression": "grel:if(value==cells[\"suggestedGenus\"].value,1,0)\"",
+    "expression": "grel:if(value==cells[\"suggestedGenus\"].value,1,0).toString()\"",
     "onError": "set-to-blank"
   },
   {
@@ -80,7 +80,7 @@ Conventions
   },
   {
     "op": "core/column-addition",
-    "description": "Create column familyValidation at index 1 based on column kingdom using expression grel:if(value==cells[\"suggestedFamily\"].value,1,0)\"",
+    "description": "Create column familyValidation at index 1 based on column kingdom using expression grel:if(value==cells[\"suggestedFamily\"].value,1,0).toString()\"",
     "engineConfig": {
       "mode": "row-based",
       "facets": []
@@ -88,7 +88,7 @@ Conventions
     "newColumnName": "familyValidation",
     "columnInsertIndex": 1,
     "baseColumnName": "family",
-    "expression": "grel:if(value==cells[\"suggestedFamily\"].value,1,0)\"",
+    "expression": "grel:if(value==cells[\"suggestedFamily\"].value,1,0).toString()\"",
     "onError": "set-to-blank"
   },
   {
@@ -112,7 +112,7 @@ Conventions
   },
   {
     "op": "core/column-addition",
-    "description": "Create column orderValidation at index 1 based on column kingdom using expression grel:if(value==cells[\"suggestedOrder\"].value,1,0)\"",
+    "description": "Create column orderValidation at index 1 based on column kingdom using expression grel:if(value==cells[\"suggestedOrder\"].value,1,0).toString()\"",
     "engineConfig": {
       "mode": "row-based",
       "facets": []
@@ -120,7 +120,7 @@ Conventions
     "newColumnName": "orderValidation",
     "columnInsertIndex": 1,
     "baseColumnName": "order",
-    "expression": "grel:if(value==cells[\"suggestedOrder\"].value,1,0)\"",
+    "expression": "grel:if(value==cells[\"suggestedOrder\"].value,1,0).toString()\"",
     "onError": "set-to-blank"
   },
   {
@@ -144,7 +144,7 @@ Conventions
   },
   {
     "op": "core/column-addition",
-    "description": "Create column classValidation at index 1 based on column kingdom using expression grel:if(value==cells[\"suggestedClass\"].value,1,0)\"",
+    "description": "Create column classValidation at index 1 based on column kingdom using expression grel:if(value==cells[\"suggestedClass\"].value,1,0).toString()\"",
     "engineConfig": {
       "mode": "row-based",
       "facets": []
@@ -152,7 +152,7 @@ Conventions
     "newColumnName": "classValidation",
     "columnInsertIndex": 1,
     "baseColumnName": "class",
-    "expression": "grel:if(value==cells[\"suggestedClass\"].value,1,0)\"",
+    "expression": "grel:if(value==cells[\"suggestedClass\"].value,1,0).toString()\"",
     "onError": "set-to-blank"
   },
   {
@@ -176,7 +176,7 @@ Conventions
   },
   {
     "op": "core/column-addition",
-    "description": "Create column phylumValidation at index 1 based on column kingdom using expression grel:if(value==cells[\"suggestedPhylum\"].value,1,0)\"",
+    "description": "Create column phylumValidation at index 1 based on column kingdom using expression grel:if(value==cells[\"suggestedPhylum\"].value,1,0).toString()\"",
     "engineConfig": {
       "mode": "row-based",
       "facets": []
@@ -184,7 +184,7 @@ Conventions
     "newColumnName": "phylumValidation",
     "columnInsertIndex": 1,
     "baseColumnName": "phylum",
-    "expression": "grel:if(value==cells[\"suggestedPhylum\"].value,1,0)\"",
+    "expression": "grel:if(value==cells[\"suggestedPhylum\"].value,1,0).toString()\"",
     "onError": "set-to-blank"
   },
   {
@@ -208,7 +208,7 @@ Conventions
   },
     {
     "op": "core/column-addition",
-    "description": "Create column kingdomValidation at index 1 based on column kingdom using expression grel:if(value==cells[\"suggestedKingdom\"].value,1,0)\"",
+    "description": "Create column kingdomValidation at index 1 based on column kingdom using expression grel:if(value==cells[\"suggestedKingdom\"].value,1,0).toString()\"",
     "engineConfig": {
       "mode": "row-based",
       "facets": []
@@ -216,7 +216,7 @@ Conventions
     "newColumnName": "kingdomValidation",
     "columnInsertIndex": 1,
     "baseColumnName": "kingdom",
-    "expression": "grel:if(value==cells[\"suggestedKingdom\"].value,1,0)\"",
+    "expression": "grel:if(value==cells[\"suggestedKingdom\"].value,1,0).toString()\"",
     "onError": "set-to-blank"
   },
   {
