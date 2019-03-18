@@ -34,7 +34,6 @@ Warnings
 New data will be stored in columns at the beginning of the dataset
 
 
-
 VERSION EN ESPAÑOL----------------------------------------------------------
 
 Explicación de la rutina: 
