@@ -1,6 +1,6 @@
 
 SiB Colombia scripts for Biodiversity data cleaning in OPEN REFINE
-Language: GERL
+Language: GREL
 Date:2018-04-24
 Contributors: Ricardo Ortiz, Camila Plata
 Name: Taxonomic Validation using GBIF's API
@@ -30,6 +30,20 @@ Warnings
 New data will be stored in columns at the beginning of the dataset
 Taxonomy elements are reorganized to facilitate the taxonomic validation
 ----------------------------------------------------------------------------
+
+{
+    "op": "core/text-transform",
+    "description": "Text transform on cells in column scientificName using expression grel:value.replace(/\\s+/,' ').trim()",
+    "engineConfig": {
+      "mode": "row-based",
+      "facets": []
+    },
+    "columnName": "scientificName",
+    "expression": "grel:value.replace(/\\s+/,' ').trim()",
+    "onError": "keep-original",
+    "repeat": false,
+    "repeatCount": 10
+  },
 
  {
     "op": "core/column-addition",
