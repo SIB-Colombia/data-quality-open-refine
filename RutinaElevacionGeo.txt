@@ -1,0 +1,121 @@
+﻿
+-------------------------------------------------------------------------No Copiar--------------------------------------------------------------------------------------------
+
+Rutinas del SiB Colombia para la limpieza y estandarización de datos primarios 
+de Biodiversidad en OPEN REFINE
+
+Nombre rutina: Validación y recuperación de elevaciones a partir del API de Geonames
+Languaje: GREL 'General Refine Expression Language'
+Fecha última Actualización: 2019-04-26
+Autores: Ricardo Ortiz 
+
+Explicación de la rutina: 
+1-A partir de la coordenda en grados decimales, se hace una petición al servicio de elevaciones de GeoNames,
+ que retorna la elevación en esa coordenada de acuerdo al modelo de elevación SRTM-1
+2-Crea un elemento verbatimCoordinates a partir de las coordenadas usadas para la petición al servicio de GeoNames
+
+
+Requerimientos para utilizar la rutina
+1- El registro del cual se quiere obtener la elevación debe contar con coordenadas en grados decimales (Ejemplo: 4.7585, -74.5821)
+2- Las coordenadas deben estar documentadas como elementos Darwin Core. (decimalLatitude, decimalLongitude)
+3- Se debe crear un usuario en geonames. El usuario debe ser incluido en el script para que se realice la validación
+4- Si se quiere usar el servicio usando el modo "Demo" como usuario, este solo permite hasta 20000 consultas diarias(mundiales) por lo que no siempre esta disponible en este modo.
+
+Advertencias
+El límite del servicio con usuario en GeoNames es de 2000 registros diarios. Se recomienda hacer la consulta sobre valores únicos de coordenadas y no sobre el total de los registros.
+
+Para crear una cuenta en GeoNames, diríjanse al siguiente link:http://www.geonames.org/login y diligencien el cuadro create a new user account. El "Username" es muy importante pues es el que usarán para correr el script.
+
+Para reemplazar su nombre de usario en este script, use CTRL-B y busque "demo", remplacelo por su nombre de usuario (ej: "rortizg")
+
+
+Para mas información sobre los servicios de GeoNames, diríjase a. http://www.geonames.org/export/web-services.html
+
+-------------------------------------------------------------------------No Copiar--------------------------------------------------------------------------------------------
+
+[
+    {
+    "op": "core/column-addition",
+    "description": "Create column verbatimCoordinates at index 20 based on column decimalLatitude using expression grel:cells['decimalLatitude'].value+\" | \"+cells['decimalLongitude'].value",
+    "engineConfig": {
+      "mode": "row-based",
+      "facets": []
+    },
+    "newColumnName": "verbatimCoordinates",
+    "columnInsertIndex": 20,
+    "baseColumnName": "decimalLatitude",
+    "expression": "grel:cells['decimalLatitude'].value+\" | \"+cells['decimalLongitude'].value",
+    "onError": "set-to-blank"
+  },
+  {
+    "op": "core/row-reorder",
+    "description": "Reorder rows",
+    "mode": "record-based",
+    "sorting": {
+      "criteria": [
+        {
+          "errorPosition": 1,
+          "caseSensitive": false,
+          "valueType": "string",
+          "column": "verbatimCoordinates",
+          "blankPosition": 2,
+          "reverse": false
+        }
+      ]
+    }
+  },
+  {
+    "op": "core/blank-down",
+    "description": "Blank down cells in column verbatimCoordinates",
+    "engineConfig": {
+      "mode": "row-based",
+      "facets": []
+    },
+    "columnName": "verbatimCoordinates"
+  },
+  {
+    "op": "core/column-addition-by-fetching-urls",
+    "description": "Create column Elevación API at index 20 by fetching URLs based on column decimalLatitude using expression grel:\"http://api.geonames.org/srtm1?lat=\"+cells['decimalLatitude'].value+\"&lng=\"+cells['decimalLongitude'].value+\"&username=demo\"",
+    "engineConfig": {
+      "mode": "row-based",
+      "facets": [
+        {
+          "omitError": false,
+          "expression": "isBlank(value)",
+          "selectBlank": false,
+          "selection": [
+            {
+              "v": {
+                "v": false,
+                "l": "false"
+              }
+            }
+          ],
+          "selectError": false,
+          "invert": false,
+          "name": "verbatimCoordinates",
+          "omitBlank": false,
+          "type": "list",
+          "columnName": "verbatimCoordinates"
+        }
+      ]
+    },
+    "newColumnName": "Elevación API",
+    "columnInsertIndex": 20,
+    "baseColumnName": "decimalLatitude",
+    "urlExpression": "grel:\"http://api.geonames.org/srtm1?lat=\"+cells['decimalLatitude'].value+\"&lng=\"+cells['decimalLongitude'].value+\"&username=demo\"",
+    "onError": "set-to-blank",
+    "delay": 250,
+    "cacheResponses": true
+  },
+  
+  {
+    "op": "core/fill-down",
+    "description": "Fill down cells in column Elevación API",
+    "engineConfig": {
+      "mode": "row-based",
+      "facets": []
+    },
+    "columnName": "Elevación API"
+  }
+]
