@@ -1,39 +1,64 @@
 
 ----------------------------------------------------------------------------
----No Copiar
-Rutinas del SiB Colombia para la limpieza y estandarización de datos primarios 
+---Do not copy /No Copiar
+
+--EN
+
+SiB Colombia scripts for Biodiversity data validation and cleaning in OPEN REFINE
+
+Script Name: Date format transformation ISO 8601
+Language: GREL 'General Refine Expression Language'
+Created:2018-03-21
+Last Update:2019-06-07
+Contributors: Camila Plata, Ricardo Ortiz 
+
+This script:
+1-Calls canadensys date Parsing API
+2-Extracts ISO 8601 Date as text
+3-Creates DwC date elements: year, month, day
+
+Conditions
+Dataset with column name 'eventDate'
+
+New data will be stored in columns at the beginning of the dataset
+Review the output for nulls, canadensys may not recognize all date formats
+
+--- Es
+
+Rutinas del SiB Colombia para la validación y limpieza de datos primarios 
 de Biodiversidad en OPEN REFINE
 
-Nombre rutina:Estandarización de Fechas (Atajo)
+Nombre rutina: Transformación del formato de la fecha ISO 8601
 Languaje: GREL 'General Refine Expression Language'
-Fecha última Actualización:2018-03-21
+Creado:2018-03-21
+Última Actualización:2019-06-07
 Autores:Camila Plata, Ricardo Ortiz 
 
-Explicación de la rutina: 
-1-Llamado al API de Canadensys 
-2-ajustar el resultado del API en formato JSON
-3-Genera la fecha estandarizada de acuerdo a la norma ISO 8601 (AAAA-MM-DD)
+Esta rutina:
+1-Llama al API de fechas de Canadensys 
+2-Extrae la fecha ISO 8601 como texto
+3-Crea los elementos DwC asociados a la fecha: year, month, day
 
-Requerimiento para utilizar la rutina
+Requerimientos:
 Conjunto de datos con la columna 'eventDate'
 
-Advertencias
--Las nuevas columnas apareceran el inicio del conjunto de datos
--No todas las fechas son convertidas exitosamente por el API, 
-revise las celdas donde el resultado haya sido 'null'
----No Copiar
+
+Los nuevos datos seran guardados en columnas el inicio del conjunto de datos
+No todas las fechas son convertidas exitosamente por el API, revise las celdas donde el resultado haya sido nulo
+
+---Do not copy /No Copiar
 ----------------------------------------------------------------------------
 
 [
   {
     "op": "core/column-addition-by-fetching-urls",
-    "description": "Create column canadensysDateAPI at index 2 by fetching URLs based on column eventDate using expression grel:\"http://data.canadensys.net/tools/dates.json?data=\"+value",
+    "description": "Create column canadensysDateAPI at index 1 by fetching URLs based on column eventDate using expression grel:\"http://data.canadensys.net/tools/dates.json?data=\"+value",
     "engineConfig": {
       "mode": "row-based",
       "facets": []
     },
     "newColumnName": "canadensysDateAPI",
-    "columnInsertIndex": 2,
+    "columnInsertIndex": 1,
     "baseColumnName": "eventDate",
     "urlExpression": "grel:\"http://data.canadensys.net/tools/dates.json?data=\"+value",
     "onError": "set-to-blank",
@@ -55,15 +80,60 @@ revise las celdas donde el resultado haya sido 'null'
   },
   {
     "op": "core/column-addition",
-    "description": "Create column eventDateISO at index 2 based on column canadensysDateAPI using expression grel:value.parseJson().get('iso8601').toString()",
+    "description": "Create column eventDateISO at index 1 based on column canadensysDateAPI using expression grel:value.parseJson().get('iso8601').toString()",
     "engineConfig": {
       "mode": "row-based",
       "facets": []
     },
     "newColumnName": "eventDateISO",
-    "columnInsertIndex": 2,
+    "columnInsertIndex": 1,
     "baseColumnName": "canadensysDateAPI",
     "expression": "grel:value.parseJson().get('iso8601').toString()",
     "onError": "set-to-blank"
+  },
+    {
+    "op": "core/column-addition",
+    "description": "Create column day at index 2 based on column eventDateISO using expression grel:smartSplit(value,\"-\")[2].toString()",
+    "engineConfig": {
+      "facets": [],
+      "mode": "row-based"
+    },
+    "newColumnName": "day",
+    "columnInsertIndex": 2,
+    "baseColumnName": "eventDateISO",
+    "expression": "grel:smartSplit(value,\"-\")[2].toString()",
+    "onError": "set-to-blank"
+  },
+  {
+    "op": "core/column-addition",
+    "description": "Create column month at index 2 based on column eventDateISO using expression grel:smartSplit(value,\"-\")[1].toString()",
+    "engineConfig": {
+      "facets": [],
+      "mode": "row-based"
+    },
+    "newColumnName": "month",
+    "columnInsertIndex": 2,
+    "baseColumnName": "eventDateISO",
+    "expression": "grel:smartSplit(value,\"-\")[1].toString()",
+    "onError": "set-to-blank"
+  },
+  {
+    "op": "core/column-addition",
+    "description": "Create column year at index 2 based on column eventDateISO using expression grel:smartSplit(value,\"-\")[0].toString()",
+    "engineConfig": {
+      "facets": [],
+      "mode": "row-based"
+    },
+    "newColumnName": "year",
+    "columnInsertIndex": 2,
+    "baseColumnName": "eventDateISO",
+    "expression": "grel:smartSplit(value,\"-\")[0].toString()",
+    "onError": "set-to-blank"
+  },
+    {
+    "op": "core/column-move",
+    "description": "Move column eventDate to position 1",
+    "columnName": "eventDate",
+    "index": 1
   }
   ]
