@@ -1,188 +1,212 @@
 --------------------------------------------------------------------------------
----No Copiar
-Rutinas del SiB Colombia para la limpieza y estandarización de datos primarios 
-de Biodiversidad en OPEN REFINE
+---Do not copy /No Copiar
+--EN
 
-Nombre rutina: validación de entidades geográficas 
-de acuerdo a la División político administrativa oficial del país (DIVIPOLA)
-Languaje: GREL 'General Refine Expression Language'
-Fecha última Actualización: 2018-03-21
-Autores: Camila Plata, Ricardo Ortiz 
+SiB Colombia scripts for Biodiversity data validation and cleaning in OPEN REFINE
 
-Explicación de la rutina: 
-1-Crea columnas con las entidades geográficas concatenadas para validar la jerarquía geográfica
-2-Compara las columnas creadas con DIVIPOLA 
-3-Cundo hay una coincidencia trae el nombre de las entidades geográficas
+Script Name: Date format transformation ISO 8601
+Language: Geographic Names Validation DIVIPOLA-Colombia
+Created:2018-03-21
+Last Update:2019-06-07
+Contributors: Camila Plata, Ricardo Ortiz 
 
+This script:
+1-Creates concatenated columns of geographic names to check geographic hierarchy
+2-Match single and concatenated columns with DIVIPOLA names
+3-Returns validation columns using a boolean descriptor (1,0)
 
-Requerimientos para utilizar la rutina
--Conjunto de datos con las columnas 'stateProvince','county','municipality'
--Archivo DIVIPOLA_20190417
-
-Advertencias
-Revise las columnas: spMatch, spcMatch, spcmMatch, 
-si se encuentran en blanco debe revisar las entidades geográficas y corregirlas de acuerdo a DIVIPOLA
-
-Convenciones
-sp   = stateProvince
-spc  = stateProvince+County
-spcm = stateProvince+County+Municipality
-spMatch   =  Coincidencia del Departamento del conjunto de datos con Divipola.
-spcMatch  = Coincidencia entre Departamento y Municipio del conjunto de datos con Divipola.
-spcmMatch = Coincidencia entre Departamento, Municipio y Centro Poblado del conjunto de datos con Divipola.
-
-
-
-SiB Colombia scripts for Biodiversity data cleaning in OPEN REFINE
-Language: GERL
-Date:2018-03-21
-Contributors: Camila Plata
-Name: Geographic Names Validation DIVIPOLA
-Procedure: 
-1-Creates concatenated columns of geographic names
-2-Match single and concatenated columns with DIVIPOLA
-3-Returns matched names when matching was possible
+			Conventions boolean descriptor
+			0-The geographic name DOES NOT match with any name at DIVIPOLA
+			1-The geographic name matches with DIVIPOLA
 
 Conditions
-Dataset with columns 'stateProvince','county','municipality'
+Dataset with DwC elements 'stateProvince'(minimum),'county','municipality'
 DIVIPOLA archive, latest version provided by SiB Colombia
 
-Warnings
 New data will be stored in columns at the beginning of the dataset
-Review output (spMatch, spcMatch, spcmMatch)=blank, those rows needs to be fixed and standardized
-BUG:May retrive dates is date api was runned before, date= no match
+Check the data when the validation columns are mark with '0', this data needs to be checked and fixed
 
 Conventions
-spcm = stateProvince+County+Municipality
 spc  = stateProvince+County
-sp   = stateProvince
+spcm = stateProvince+County+Municipality
+spValidation    = boolean descriptor, 1 if the stateProvince matches Divipola, 0 if not 
+spcValidation   = boolean descriptor, 1 if the combination of stateProvince+County matches Divipola, 0 if not 
+spcmMValidation = boolean descriptor, 1 if the combination of stateProvince+County+Municipality matches Divipola, 0 if not 
 
+--ES
 
+Rutinas del SiB Colombia para la validación y limpieza de datos primarios 
+de Biodiversidad en OPEN REFINE
 
----No Copiar
+Nombre rutina: Validación de entidades geográficas de acuerdo a la División político administrativa oficial de Colombia (DIVIPOLA)
+Languaje: GREL 'General Refine Expression Language'
+Creado:2018-03-21
+Última Actualización:2019-06-07
+Autores:Camila Plata, Ricardo Ortiz 
+
+Esta rutina:
+1-Crea columnas con las entidades geográficas concatenadas para validar la jerarquía geográfica
+2-Compara las columnas creadas con los nombres en DIVIPOLA 
+3-Genera columnas de validación con descriptores booleanos (1,0)
+
+			Convenciones descriptores booleanos
+			0-El nombre geográfico NO coincide con ningún nombre en DIVIPOLA
+			1-El nombre geográfico coincide con DIVIPOLA
+
+Requerimientos:
+Conjunto de datos con los elementos DwC 'stateProvince'(mínimo),'county','municipality'
+Archivo DIVIPOLA, la última versión proveida por el SiB Colombia
+
+Los nuevos datos seran guardados en columnas el inicio del conjunto de datos
+Revise los datos cuando las columnas de validación este marcadas con '0', estos datos necesitan ser revisados y ajustados
+
+Convenciones
+spc  = stateProvince+County
+spcm = stateProvince+County+Municipality
+spValidation    = descriptor booleano , 1 si stateProvince (Departamento) coincide con Divipola, 0 si no coincide
+spcValidation   = descriptor booleano , 1 si la combinación stateProvince+County (departamento+municipio) coincide con Divipola, 0 si no coincide
+spcmMValidation = descriptor booleano , 1 si la combinación stateProvince+County+Municipality (departamento+municipio+centroPoblado) coincide con Divipola, 0 si no coincide
+
+---Do not copy /No Copiar
 --------------------------------------------------------------------------------
 
 {
     "op": "core/column-addition",
-    "description": "Create column spcm at index 2 based on column stateProvince using expression grel:(cells['stateProvince'].value+' '+cells['county'].value+' '+cells['municipality'].value).trim().replace(/\\\\s+/,' ')",
+    "description": "Create column spcm at index 1 based on column stateProvince using expression grel:(cells['stateProvince'].value+' '+cells['county'].value+' '+cells['municipality'].value).trim().replace(/\\\\s+/,' ')",
     "engineConfig": {
       "mode": "row-based",
       "facets": []
     },
     "newColumnName": "spcm",
-    "columnInsertIndex": 2,
+    "columnInsertIndex": 1,
     "baseColumnName": "stateProvince",
     "expression": "grel:(cells['stateProvince'].value+' '+cells['county'].value+' '+cells['municipality'].value).trim().replace(/\\\\s+/,' ')",
     "onError": "set-to-blank"
   },
   {
     "op": "core/column-addition",
-    "description": "Create column spcmMatch at index 2 based on column spcm using expression grel:cell.cross('DIVIPOLA_20190417','SPCM')[0].cells['SPCM'].value",
+    "description": "Create column spcmMatch at index 1 based on column spcm using expression grel:cell.cross('DIVIPOLA_20190417','SPCM')[0].cells['SPCM'].value",
     "engineConfig": {
       "mode": "row-based",
       "facets": []
     },
     "newColumnName": "spcmSuggested",
-    "columnInsertIndex": 2,
+    "columnInsertIndex": 1,
     "baseColumnName": "spcm",
     "expression": "grel:cell.cross('DIVIPOLA_20190417','SPCM')[0].cells['SPCM'].value",
     "onError": "set-to-blank"
   },
  {
     "op": "core/column-addition",
-    "description": "Create column spcmValidation at index 2 based on column kingdom using expression grel:if(value==cells[\"spcmSuggested\"].value,1,0)\"",
+    "description": "Create column spcmValidation at index 1 based on column kingdom using expression grel:if(value==cells[\"spcmSuggested\"].value,1,0)\"",
     "engineConfig": {
       "mode": "row-based",
       "facets": []
     },
     "newColumnName": "spcmValidation",
-    "columnInsertIndex": 2,
+    "columnInsertIndex": 1,
     "baseColumnName": "spcm",
-    "expression": "grel:if(value==cells[\"spcmSuggested\"].value,1,0)\"",
+    "expression": "grel:if(value==cells[\"spcmSuggested\"].value,1,0).toString()\"",
     "onError": "set-to-blank"
   },
   {
     "op": "core/column-move",
-    "description": "Move column genus to position 2",
+    "description": "Move column genus to position 1",
     "columnName": "spcm",
-    "index": 2
+    "index": 1
   },
   {
     "op": "core/column-addition",
-    "description": "Create column spc at index 2 based on column stateProvince using expression grel:(cells['stateProvince'].value+' '+cells['county'].value).trim().replace(/\\\\s+/,' ')",
+    "description": "Create column spc at index 1 based on column stateProvince using expression grel:(cells['stateProvince'].value+' '+cells['county'].value).trim().replace(/\\\\s+/,' ')",
     "engineConfig": {
       "mode": "row-based",
       "facets": []
     },
     "newColumnName": "spc",
-    "columnInsertIndex": 2,
+    "columnInsertIndex": 1,
     "baseColumnName": "stateProvince",
     "expression": "grel:(cells['stateProvince'].value+' '+cells['county'].value).trim().replace(/\\\\s+/,' ')",
     "onError": "set-to-blank"
   },
  {
     "op": "core/column-addition",
-    "description": "Create column spcSuggested at index 2 based on column spc using expression grel:cell.cross('DIVIPOLA_20190417','SPC')[0].cells['SPC'].value",
+    "description": "Create column spcSuggested at index 1 based on column spc using expression grel:cell.cross('DIVIPOLA_20190417','SPC')[0].cells['SPC'].value",
     "engineConfig": {
       "mode": "row-based",
       "facets": []
     },
     "newColumnName": "spcSuggested",
-    "columnInsertIndex": 2,
+    "columnInsertIndex": 1,
     "baseColumnName": "spc",
     "expression": "grel:cell.cross('DIVIPOLA_20190417','SPC')[0].cells['SPC'].value",
     "onError": "set-to-blank"
   },
   {
     "op": "core/column-addition",
-    "description": "Create column spcValidation at index 2 based on column kingdom using expression grel:if(value==cells[\"spcSuggested\"].value,1,0)\"",
+    "description": "Create column spcValidation at index 1 based on column kingdom using expression grel:if(value==cells[\"spcSuggested\"].value,1,0)\"",
     "engineConfig": {
       "mode": "row-based",
       "facets": []
     },
     "newColumnName": "spcValidation",
-    "columnInsertIndex": 2,
+    "columnInsertIndex": 1,
     "baseColumnName": "spc",
-    "expression": "grel:if(value==cells[\"spcSuggested\"].value,1,0)\"",
+    "expression": "grel:if(value==cells[\"spcSuggested\"].value,1,0).toString()\"",
     "onError": "set-to-blank"
   },
    {
     "op": "core/column-move",
-    "description": "Move column genus to position 2",
+    "description": "Move column genus to position 1",
     "columnName": "spc",
-    "index": 2
+    "index": 1
   },
   {
     "op": "core/column-addition",
-    "description": "Create column spMatch at index 2 based on column stateProvince using expression grel:cell.cross('DIVIPOLA_20190417','stateProvince')[0].cells['stateProvince'].value",
+    "description": "Create column spMatch at index 1 based on column stateProvince using expression grel:cell.cross('DIVIPOLA_20190417','stateProvince')[0].cells['stateProvince'].value",
     "engineConfig": {
       "mode": "row-based",
       "facets": []
     },
     "newColumnName": "spSuggested",
-    "columnInsertIndex": 2,
+    "columnInsertIndex": 1,
     "baseColumnName": "stateProvince",
     "expression": "grel:cell.cross('DIVIPOLA_20190417','stateProvince')[0].cells['stateProvince'].value",
     "onError": "set-to-blank"
   },
   {
     "op": "core/column-addition",
-    "description": "Create column spValidation at index 2 based on column kingdom using expression grel:if(value==cells[\"spSuggested\"].value,1,0)\"",
+    "description": "Create column spValidation at index 1 based on column kingdom using expression grel:if(value==cells[\"spSuggested\"].value,1,0)\"",
     "engineConfig": {
       "mode": "row-based",
       "facets": []
     },
     "newColumnName": "spValidation",
-    "columnInsertIndex": 2,
+    "columnInsertIndex": 1,
     "baseColumnName": "stateProvince",
-    "expression": "grel:if(value==cells[\"spSuggested\"].value,1,0)\"",
+    "expression": "grel:if(value==cells[\"spSuggested\"].value,1,0).toString()\"",
     "onError": "set-to-blank"
   },
    {
     "op": "core/column-move",
-    "description": "Move column genus to position 2",
+    "description": "Move column stateProvince to position 1",
     "columnName": "stateProvince",
-    "index": 2
+    "index": 1
+  },
+  {
+    "op": "core/column-removal",
+    "description": "Remove column spSuggested",
+    "columnName": "spSuggested"
+  },
+  {
+    "op": "core/column-removal",
+    "description": "Remove column spcSuggested",
+    "columnName": "spcSuggested"
+  },
+  {
+    "op": "core/column-removal",
+    "description": "Remove column spmSuggested",
+    "columnName": "spcmSuggested"
   }
+ 
  
 

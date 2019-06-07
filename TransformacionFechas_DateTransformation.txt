@@ -17,13 +17,13 @@ This script:
 2-Extracts ISO 8601 Date as text
 3-Creates DwC date elements: year, month, day
 
-Conditions
-Dataset with column name 'eventDate'
+Conditions:
+Dataset with DwC element 'eventDate'
 
 New data will be stored in columns at the beginning of the dataset
 Review the output for nulls, canadensys may not recognize all date formats
 
---- Es
+--ES
 
 Rutinas del SiB Colombia para la validación y limpieza de datos primarios 
 de Biodiversidad en OPEN REFINE
@@ -40,7 +40,7 @@ Esta rutina:
 3-Crea los elementos DwC asociados a la fecha: year, month, day
 
 Requerimientos:
-Conjunto de datos con la columna 'eventDate'
+Conjunto de datos con el elemento DwC 'eventDate'
 
 
 Los nuevos datos seran guardados en columnas el inicio del conjunto de datos
