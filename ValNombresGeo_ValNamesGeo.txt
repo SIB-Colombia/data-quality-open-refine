@@ -156,7 +156,7 @@ spcmMValidation = descriptor booleano , 1 si la combinación stateProvince+Count
   },
    {
     "op": "core/column-move",
-    "description": "Move column genus to position 1",
+    "description": "Move column to position 1",
     "columnName": "spc",
     "index": 1
   },
@@ -185,6 +185,18 @@ spcmMValidation = descriptor booleano , 1 si la combinación stateProvince+Count
     "baseColumnName": "stateProvince",
     "expression": "grel:if(value==cells[\"spSuggested\"].value,1,0).toString()\"",
     "onError": "set-to-blank"
+  },
+   {
+    "op": "core/column-move",
+    "description": "Move column municipality to position 1",
+    "columnName": "municipality",
+    "index": 1
+  },
+   {
+    "op": "core/column-move",
+    "description": "Move column county to position 1",
+    "columnName": "county",
+    "index": 1
   },
    {
     "op": "core/column-move",
