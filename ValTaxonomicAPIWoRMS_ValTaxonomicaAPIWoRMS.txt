@@ -493,12 +493,12 @@ Los elementos taxonómicos son reorganizados para facilitar la validación taxon
   },
   {
     "op": "core/column-addition",
-    "description": "Create column taxonIDSuggested at index 2 based on column callAPI using expression grel:value.parseJson().get('lsid')",
+    "description": "Create column scientificNameIDSuggested at index 2 based on column callAPI using expression grel:value.parseJson().get('lsid')",
     "engineConfig": {
       "mode": "row-based",
       "facets": []
     },
-    "newColumnName": "taxonIDSuggested",
+    "newColumnName": "scientificNameIDSuggested",
     "columnInsertIndex": 2,
     "baseColumnName": "callAPIworms",
     "expression": "grel:value.parseJson().get('lsid')",
@@ -506,21 +506,21 @@ Los elementos taxonómicos son reorganizados para facilitar la validación taxon
   },
   {
     "op": "core/column-addition",
-    "description": "Create column authorshipValidation at index 2 based on column suggstedAuthorship using expression grel:if(value==cells[\"taxonID\"].value,'1','0').toString()",
+    "description": "Create column authorshipValidation at index 2 based on column suggstedAuthorship using expression grel:if(value==cells[\"scientificNameID\"].value,'1','0').toString()",
     "engineConfig": {
       "mode": "row-based",
       "facets": []
     },
-    "newColumnName": "taxonIDValidation",
+    "newColumnName": "scientificNameIDValidation",
     "columnInsertIndex":2,
-    "baseColumnName": "taxonIDSuggested",
-    "expression": "grel:if(value==cells[\"taxonID\"].value,'1','0').toString()",
+    "baseColumnName": "scientificNameIDSuggested",
+    "expression": "grel:if(value==cells[\"scientificNameID\"].value,'1','0').toString()",
     "onError": "set-to-blank"
   },
   {
     "op": "core/column-move",
-    "description": "Move column taxonID to position 2",
-    "columnName": "taxonID",
+    "description": "Move column scientificNameID to position 2",
+    "columnName": "scientificNameID",
     "index": 2
   }
 ]
