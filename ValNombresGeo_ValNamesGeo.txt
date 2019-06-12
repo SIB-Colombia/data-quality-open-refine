@@ -3,9 +3,10 @@
 --EN
 
 SiB Colombia scripts for Biodiversity data validation and cleaning in OPEN REFINE
+https://github.com/SIB-Colombia/data-quality-open-refine
 
-Script Name: Date format transformation ISO 8601
-Language: Geographic Names Validation DIVIPOLA-Colombia
+Script Name: Gegraphic name's validation according to DIVIPOLA 
+Language: GREL 'General Refine Expression Language'
 Created:2018-03-21
 Last Update:2019-06-07
 Contributors: Camila Plata, Ricardo Ortiz 
@@ -21,7 +22,7 @@ This script:
 
 Conditions
 Dataset with DwC elements 'stateProvince'(minimum),'county','municipality'
-DIVIPOLA archive, latest version provided by SiB Colombia
+DIVIPOLA archive uploaded in openRefine with named 'DIVIPOLA_20190417', the latest version can be found at the GitHuB repository
 
 New data will be stored in columns at the beginning of the dataset
 Check the data when the validation columns are mark with '0', this data needs to be checked and fixed
@@ -33,10 +34,15 @@ spValidation    = boolean descriptor, 1 if the stateProvince matches Divipola, 0
 spcValidation   = boolean descriptor, 1 if the combination of stateProvince+County matches Divipola, 0 if not 
 spcmMValidation = boolean descriptor, 1 if the combination of stateProvince+County+Municipality matches Divipola, 0 if not 
 
+Warnings
+The first time before running the script, upload to open refine the dataset and the divipola archive and restart openRefine, then run the script
+
+
 --ES
 
 Rutinas del SiB Colombia para la validación y limpieza de datos primarios 
 de Biodiversidad en OPEN REFINE
+https://github.com/SIB-Colombia/data-quality-open-refine
 
 Nombre rutina: Validación de entidades geográficas de acuerdo a la División político administrativa oficial de Colombia (DIVIPOLA)
 Languaje: GREL 'General Refine Expression Language'
@@ -55,7 +61,7 @@ Esta rutina:
 
 Requerimientos:
 Conjunto de datos con los elementos DwC 'stateProvince'(mínimo),'county','municipality'
-Archivo DIVIPOLA, la última versión proveida por el SiB Colombia
+Archivo DIVIPOLA cargado en openRefine con nombre 'DIVIPOLA_20190417', la última versión esta disponible en el repositorio de GitHuB
 
 Los nuevos datos seran guardados en columnas el inicio del conjunto de datos
 Revise los datos cuando las columnas de validación este marcadas con '0', estos datos necesitan ser revisados y ajustados
@@ -66,6 +72,9 @@ spcm = stateProvince+County+Municipality
 spValidation    = descriptor booleano , 1 si stateProvince (Departamento) coincide con Divipola, 0 si no coincide
 spcValidation   = descriptor booleano , 1 si la combinación stateProvince+County (departamento+municipio) coincide con Divipola, 0 si no coincide
 spcmMValidation = descriptor booleano , 1 si la combinación stateProvince+County+Municipality (departamento+municipio+centroPoblado) coincide con Divipola, 0 si no coincide
+
+Advertencias
+Si está usando el script por primera vez se recomienda cargar el conjunto de datos y el archivo de divipola, y reiniciar openRefine antes de correr el script
 
 ---Do not copy /No Copiar
 --------------------------------------------------------------------------------
