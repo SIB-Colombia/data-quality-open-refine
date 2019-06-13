@@ -60,20 +60,19 @@ Los elementos taxonómicos son reorganizados para facilitar la validación taxon
 ---Do not copy /No Copiar
 --------------------------------------------------------------------------------
 
-{
+  {
     "op": "core/text-transform",
-    "description": "Text transform on cells in column scientificName using expression grel:value.replace(/\\s+/,' ').trim()",
+    "description": "Text transform on cells in column scientificName using expression grel:value.trim().replace(/\\u00A0/,' ').replace(/\\s+/,' ')",
     "engineConfig": {
-      "mode": "row-based",
-      "facets": []
+      "facets": [],
+      "mode": "row-based"
     },
     "columnName": "scientificName",
-    "expression": "grel:value.replace(/\\s+/,' ').trim()",
+    "expression": "grel:value.trim().replace(/\\u00A0/,' ').replace(/\\s+/,' ')",
     "onError": "keep-original",
     "repeat": false,
     "repeatCount": 10
   },
-
  {
     "op": "core/column-addition",
     "description": "Create column NomAPI at index 2 based on column scientificName using expression grel:value.replace(\" \",\"%20\")",
@@ -422,8 +421,8 @@ Los elementos taxonómicos son reorganizados para facilitar la validación taxon
     },
     "newColumnName": "scientificNameAuthorshipValidation",
     "columnInsertIndex": 5,
-    "baseColumnName": "suggestedScientificNameAuthorship",
-    "expression": "grel:if(value==cells[\"scientificNameAuthorship\"].value,'1','0').toString()",
+    "baseColumnName": "scientificNameAuthorship",
+    "expression": "grel:if(value==cells['scientificNameAuthorshipSuggested'].value,1,0).toString()",
     "onError": "set-to-blank"
   },
   {
