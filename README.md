@@ -23,7 +23,7 @@ All the basics for uploading a file and running the scripts are documented on th
 This work has been produced by the Biodiversity Information System of Colombia -SiB Colombia, the code is distributed under a GNU General Public License v3.0.
 SiB Colombia promotes collaboration, open data, and open knowledge. Please use and share this scripts with a proper citation:
 
-Sistema de Información Sobre Biodiversidad de Colombia -SiB Colombia (2018). Biodiversity data quality Scripts in Open Refine (Version 1.0)[code]. https://github.com/SIB-Colombia/data-quality-open-refine/
+Sistema de Información Sobre Biodiversidad de Colombia -SiB Colombia (2019). Biodiversity data quality Scripts in Open Refine (Version 1.0)[code]. https://github.com/SIB-Colombia/data-quality-open-refine/
 
 ## Contact us
 e-mail: sib@humboltd.org.co
