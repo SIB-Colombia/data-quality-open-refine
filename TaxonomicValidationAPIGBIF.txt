@@ -1,35 +1,63 @@
+--------------------------------------------------------------------------------
+---Do not copy /No Copiar
+--EN
 
-SiB Colombia scripts for Biodiversity data cleaning in OPEN REFINE
-Language: GREL
-Date:2018-04-24
+SiB Colombia scripts for Biodiversity data validation and cleaning in OPEN REFINE
+https://github.com/SIB-Colombia/data-quality-open-refine
+
+Script Taxonomic Validation using GBIF's API
+Language: GREL 'General Refine Expression Language'
+Created: 2018-04-24
+Last Update:2019-06-13
 Contributors: Ricardo Ortiz, Camila Plata
-Name: Taxonomic Validation using GBIF's API
 
-Procedure: 
+This script:
 1-Matches original scientificName with GBIF's taxonomic Backbone
 2-Retrieves GBIF's rank and status allowing the user to evaluate the state of each name
 3-Retrieves GBIF's higher taxonomy for all names
-4-Compares GBIF'S taxonomic suggestions with original taxonomy using a boolean descriptor (1,0)
+4-Compares GBIF's taxonomic suggestions with original taxonomy using a boolean descriptor (1,0)
+
+			Conventions boolean descriptor
+			0-GBIF's suggested name DOES NOT match the original name
+			1-GBIF's suggested name matches the original name
 
 Conditions
-Dataset with minimum 'scientificName' column
-To obtain a validation of higher taxonomy these elements are also required: 'kingdom','phylum','class','order','family','genus'
+Dataset with minimum the DwC elements 'scientificName' and 'kingdom'
+To obtain a validation of higher taxonomy, these DwC elements are also required:,'phylum','class','order','family','genus'
 
-Important
-The Definitions of object/elements retrieve by GBIF's API may differ with those of the online tool SpeciesMatching
-
-	ScientificName: GBIF's scientific name matching the scientificName of the query
-	canonicalName: GBIF's canonicalName matching the scientificName of the query
-	species: GBIF's accepted name given the GBIF's scientific name matching the scientificName of the query
-
-Conventions boolean descriptor
-0-GBIF's suggested name DOES NOT match the original name
-1-GBIF's suggested name matches the original name
-	
-Warnings
 New data will be stored in columns at the beginning of the dataset
 Taxonomy elements are reorganized to facilitate the taxonomic validation
-----------------------------------------------------------------------------
+
+--ES
+
+Rutinas del SiB Colombia para la validación y limpieza de datos primarios 
+de Biodiversidad en OPEN REFINE
+https://github.com/SIB-Colombia/data-quality-open-refine
+
+Nombre rutina: Validación taxonomica usando el API GBIF
+Languaje: GREL 'General Refine Expression Language'
+Creado:2018-04-24
+Última Actualización:2019-06-13
+Autores: Ricardo Ortiz, Camila Plata
+
+Esta rutina:
+1-Compara el elemento scientificName con el árbol taxonómico de GBIF
+2-Trae los elementos rank y status permitiendo al usuario evaluar el estado del nombre científico
+3-Trae la taxonomia superior de cada nombre de acuerdo a GBIF
+4-Compara las sugerencias taxonómicas de GBIF con la taxonomia documentada usando descriptores booleanos (1,0)
+
+			Conventions boolean descriptor
+			0- El nombre sugerido por GBIF NO coincide con el nombre documentado en el conjunto de datos
+			1- El nombre sugerido por GBIF coincide con con el nombre documentado en el conjunto de datos
+Requerimientos:
+Conjunto de datos con mínimo los elementos DwC 'scientificName'y 'kingdon' documentados
+Para obtener la validación de la taxonomía superior también se requieren los elementos DwC: 'phylum','class','order','family','genus'
+
+Los nuevos datos seran guardados en columnas el inicio del conjunto de datos
+Los elementos taxonómicos son reorganizados para facilitar la validación taxonómicas
+
+---Do not copy /No Copiar
+--------------------------------------------------------------------------------
 
 {
     "op": "core/text-transform",
