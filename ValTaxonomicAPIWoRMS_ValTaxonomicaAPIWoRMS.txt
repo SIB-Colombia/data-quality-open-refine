@@ -42,15 +42,15 @@ Creado:2019-05-01
 Autores: Camila Plata, Leonardo Buitrago
 
 Esta rutina:
-1-Compara el elemento scientificName con el árbol taxonómico Worms's
+1-Compara el elemento scientificName con el árbol taxonómico de Worms
 2-Trae los elementos rank y status permitiendo al usuario evaluar el estado del nombre científico
-3-Trae la taxonomia superior de cada nombre de acuerdo a Worms's
+3-Trae la taxonomia superior de cada nombre de acuerdo a Worms
 4-Trae la clasificación del habitat de cada nombre en DwC según Worms
 5-Compara las sugerencias taxonómicas de Worms con la taxonomia documentada usando descriptores booleanos (1,0)
 
 			Conventions boolean descriptor
-			0- El nombre sugerido por Worms NO coincide con el the original name
-			1- El nombre sugerido por Worms coincide con el the original name
+			0- El nombre sugerido por Worms NO coincide con el nombre documentado en el conjunto de datos
+			1- El nombre sugerido por Worms coincide con el nombre documentado en el conjunto de datose
 
 Requerimientos:
 Conjunto de datos con minimo el elemento DwC 'scientificName' documentado
