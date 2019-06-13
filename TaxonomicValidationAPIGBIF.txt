@@ -49,7 +49,8 @@ Esta rutina:
 			Conventions boolean descriptor
 			0- El nombre sugerido por GBIF NO coincide con el nombre documentado en el conjunto de datos
 			1- El nombre sugerido por GBIF coincide con con el nombre documentado en el conjunto de datos
-Requerimientos:
+
+			Requerimientos:
 Conjunto de datos con mínimo los elementos DwC 'scientificName'y 'kingdon' documentados
 Para obtener la validación de la taxonomía superior también se requieren los elementos DwC: 'phylum','class','order','family','genus'
 
@@ -109,12 +110,12 @@ Los elementos taxonómicos son reorganizados para facilitar la validación taxon
   },
     {
     "op": "core/column-addition",
-    "description": "Create column suggestedSpecificEpithet at index 2 based on column callAPI using expression grel:split(value.parseJson().get(\"canonicalName\"),' ')[1]",
+    "description": "Create column specificEpithetSuggested at index 2 based on column callAPI using expression grel:split(value.parseJson().get(\"canonicalName\"),' ')[1]",
     "engineConfig": {
       "mode": "row-based",
       "facets": []
     },
-    "newColumnName": "suggestedSpecificEpithet",
+    "newColumnName": "specificEpithetSuggested",
     "columnInsertIndex": 2,
     "baseColumnName": "callAPI",
     "expression": "grel:split(value.parseJson().get(\"canonicalName\"),' ')[1]",
@@ -128,9 +129,9 @@ Los elementos taxonómicos son reorganizados para facilitar la validación taxon
       "mode": "row-based",
       "facets": []
     },
-    "newColumnName": "specificEpithetValidationValidation",
+    "newColumnName": "specificEpithetValidation",
     "columnInsertIndex": 2,
-    "baseColumnName": "suggestedSpecificEpithet",
+    "baseColumnName": "specificEpithetSuggested",
     "expression": "grel:if(value==cells[\"specificEpithet\"].value,'1','0').toString()",
     "onError": "set-to-blank"
   },
@@ -148,7 +149,7 @@ Los elementos taxonómicos son reorganizados para facilitar la validación taxon
       "mode": "row-based",
       "facets": []
     },
-    "newColumnName": "suggestedGenus",
+    "newColumnName": "genusSuggested",
     "columnInsertIndex": 2,
     "baseColumnName": "callAPI",
     "expression": "grel:if(value.parseJson().get(\"status\")=='SYNONYM',(split(value.parseJson().get(\"canonicalName\"),' ')[0]),value.parseJson().get(\"genus\"))",
@@ -163,7 +164,7 @@ Los elementos taxonómicos son reorganizados para facilitar la validación taxon
     },
     "newColumnName": "genusValidation",
     "columnInsertIndex": 2,
-    "baseColumnName": "suggestedGenus",
+    "baseColumnName": "genusSuggested",
     "expression": "grel:if(value==cells[\"genus\"].value,'1','0').toString()",
     "onError": "set-to-blank"
   },
@@ -180,7 +181,7 @@ Los elementos taxonómicos son reorganizados para facilitar la validación taxon
       "mode": "row-based",
       "facets": []
     },
-    "newColumnName": "suggestedFamily",
+    "newColumnName": "familySuggested",
     "columnInsertIndex": 2,
     "baseColumnName": "callAPI",
     "expression": "grel:value.parseJson().get(\"family\")",
@@ -195,7 +196,7 @@ Los elementos taxonómicos son reorganizados para facilitar la validación taxon
     },
     "newColumnName": "familyValidation",
     "columnInsertIndex": 2,
-    "baseColumnName": "suggestedFamily",
+    "baseColumnName": "familySuggested",
     "expression": "grel:if(value==cells[\"family\"].value,'1','0').toString()",
     "onError": "set-to-blank"
   },
@@ -212,7 +213,7 @@ Los elementos taxonómicos son reorganizados para facilitar la validación taxon
       "mode": "row-based",
       "facets": []
     },
-    "newColumnName": "suggestedOrder",
+    "newColumnName": "orderSuggested",
     "columnInsertIndex": 2,
     "baseColumnName": "callAPI",
     "expression": "grel:value.parseJson().get(\"order\")",
@@ -227,7 +228,7 @@ Los elementos taxonómicos son reorganizados para facilitar la validación taxon
     },
     "newColumnName": "orderValidation",
     "columnInsertIndex": 2,
-    "baseColumnName": "suggestedOrder",
+    "baseColumnName": "orderSuggested",
     "expression": "grel:if(value==cells[\"order\"].value,'1','0').toString()",
     "onError": "set-to-blank"
   },
@@ -244,7 +245,7 @@ Los elementos taxonómicos son reorganizados para facilitar la validación taxon
       "mode": "row-based",
       "facets": []
     },
-    "newColumnName": "suggestedClass",
+    "newColumnName": "classSuggested",
     "columnInsertIndex": 2,
     "baseColumnName": "callAPI",
     "expression": "grel:value.parseJson().get(\"class\")",
@@ -259,7 +260,7 @@ Los elementos taxonómicos son reorganizados para facilitar la validación taxon
     },
     "newColumnName": "classValidation",
     "columnInsertIndex": 2,
-    "baseColumnName": "suggestedClass",
+    "baseColumnName": "classSuggested",
     "expression": "grel:if(value==cells[\"class\"].value,'1','0').toString()",
     "onError": "set-to-blank"
   },
@@ -276,7 +277,7 @@ Los elementos taxonómicos son reorganizados para facilitar la validación taxon
       "mode": "row-based",
       "facets": []
     },
-    "newColumnName": "suggestedPhylum",
+    "newColumnName": "phylumSuggested",
     "columnInsertIndex": 2,
     "baseColumnName": "callAPI",
     "expression": "grel:value.parseJson().get(\"phylum\")",
@@ -291,7 +292,7 @@ Los elementos taxonómicos son reorganizados para facilitar la validación taxon
     },
     "newColumnName": "phylumValidation",
     "columnInsertIndex": 2,
-    "baseColumnName": "suggestedPhylum",
+    "baseColumnName": "phylumSuggested",
     "expression": "grel:if(value==cells[\"phylum\"].value,'1','0').toString()",
     "onError": "set-to-blank"
   },
@@ -308,7 +309,7 @@ Los elementos taxonómicos son reorganizados para facilitar la validación taxon
       "mode": "row-based",
       "facets": []
     },
-    "newColumnName": "suggestedKingdom",
+    "newColumnName": "kingdomSuggested",
     "columnInsertIndex": 2,
     "baseColumnName": "callAPI",
     "expression": "grel:value.parseJson().get(\"kingdom\")",
@@ -323,7 +324,7 @@ Los elementos taxonómicos son reorganizados para facilitar la validación taxon
     },
     "newColumnName": "kingdomValidation",
     "columnInsertIndex": 2,
-    "baseColumnName": "suggestedKingdom",
+    "baseColumnName": "kingdomSuggested",
     "expression": "grel:if(value==cells[\"kingdom\"].value,'1','0').toString()",
     "onError": "set-to-blank"
   },
@@ -340,7 +341,7 @@ Los elementos taxonómicos son reorganizados para facilitar la validación taxon
       "mode": "row-based",
       "facets": []
     },
-    "newColumnName": "suggestedTaxonomicStatus",
+    "newColumnName": "taxonomicStatusSuggested",
     "columnInsertIndex": 2,
     "baseColumnName": "callAPI",
     "expression": "grel:value.parseJson().get(\"status\")",
@@ -353,7 +354,7 @@ Los elementos taxonómicos son reorganizados para facilitar la validación taxon
       "mode": "row-based",
       "facets": []
     },
-    "newColumnName": "suggestedRank",
+    "newColumnName": "taxonRankSuggested",
     "columnInsertIndex": 2,
     "baseColumnName": "callAPI",
     "expression": "grel:value.parseJson().get(\"rank\")",
@@ -379,7 +380,7 @@ Los elementos taxonómicos son reorganizados para facilitar la validación taxon
       "mode": "row-based",
       "facets": []
     },
-    "newColumnName": "acceptedScientificName(species)",
+    "newColumnName": "acceptedScientificName",
     "columnInsertIndex": 2,
     "baseColumnName": "callAPI",
     "expression": "grel:value.parseJson().get(\"species\")",
@@ -392,7 +393,7 @@ Los elementos taxonómicos son reorganizados para facilitar la validación taxon
       "mode": "row-based",
       "facets": []
     },
-    "newColumnName": "suggestedScientificName",
+    "newColumnName": "scientificNameSuggested",
     "columnInsertIndex": 2,
     "baseColumnName": "callAPI",
     "expression": "grel:value.parseJson().get(\"scientificName\")",
@@ -406,9 +407,9 @@ Los elementos taxonómicos son reorganizados para facilitar la validación taxon
       "facets": []
     },
 
-    "newColumnName": "suggestedScientificNameAuthorship",
+    "newColumnName": "scientificNameAuthorshipSuggested",
     "columnInsertIndex": 5,
-    "baseColumnName": "suggestedScientificName",
+    "baseColumnName": "scientificNameSuggested",
     "expression": "grel:value.partition(cells[\"canonicalNameSuggested\"].value)[2].trim()",
     "onError": "set-to-blank"
   },
@@ -450,5 +451,10 @@ Los elementos taxonómicos son reorganizados para facilitar la validación taxon
     "baseColumnName": "callAPI",
     "expression": "grel:value.parseJson().get(\"matchType\")",
     "onError": "set-to-blank"
+  },
+  {
+    "op": "core/column-removal",
+    "description": "Remove column scientificNameSuggested",
+    "columnName": "scientificNameSuggested"
   }
   
