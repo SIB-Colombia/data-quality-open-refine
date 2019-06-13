@@ -59,7 +59,8 @@ Los elementos taxonómicos son reorganizados para facilitar la validación taxon
 
 ---Do not copy /No Copiar
 --------------------------------------------------------------------------------
-
+Copy from here/ Copiar Desde Aquí
+[
   {
     "op": "core/text-transform",
     "description": "Text transform on cells in column scientificName using expression grel:value.trim().replace(/\\u00A0/,' ').replace(/\\s+/,' ')",
@@ -456,4 +457,4 @@ Los elementos taxonómicos son reorganizados para facilitar la validación taxon
     "description": "Remove column scientificNameSuggested",
     "columnName": "scientificNameSuggested"
   }
-  
+]
