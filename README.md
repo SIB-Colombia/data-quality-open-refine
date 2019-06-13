@@ -56,7 +56,7 @@ Toda la información básica sobre cargar los archivos y correr las rutinas esta
 Este trabajo fue producido por el sistema de información sobre biodiversidad de Colombia, el código esta bajo una  licencia ‘ GNU General Public License v3.0’.
 El SiB Colombia promueve la colaboración y el acceso abierto a los datos y al conocimiento. Use y comparta este contenido dando el crédito apropiado:
  
-Sistema de Información Sobre Biodiversidad de Colombia -SiB Colombia (2018). Biodiversity data quality Scripts in Open Refine (Version 1.0)[code]. https://github.com/SIB-Colombia/data-quality-open-refine/
+Sistema de Información Sobre Biodiversidad de Colombia -SiB Colombia (2019). Biodiversity data quality Scripts in Open Refine (Version 1.0)[code]. https://github.com/SIB-Colombia/data-quality-open-refine/
 
 ## Contáctenos
 e-mail: sib@humboltd.org.co
