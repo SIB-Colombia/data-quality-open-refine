@@ -1,6 +1,7 @@
 --------------------------------------------------------------------------------
 ---Do not copy /No Copiar
---EN
+
+--ENGLISH VERSION
 
 SiB Colombia scripts for Biodiversity data validation and cleaning in OPEN REFINE
 https://github.com/SIB-Colombia/data-quality-open-refine
@@ -28,13 +29,13 @@ To obtain a validation of higher taxonomy, these DwC elements are also required:
 New data will be stored in columns at the beginning of the dataset
 Taxonomy elements are reorganized to facilitate the taxonomic validation
 
---ES
+--VERSION EN ESPAÑOL
 
 Rutinas del SiB Colombia para la validación y limpieza de datos primarios 
 de Biodiversidad en OPEN REFINE
 https://github.com/SIB-Colombia/data-quality-open-refine
 
-Nombre rutina: Validación taxonomica usando el API GBIF
+Nombre rutina: Validación taxonomica usando el API de GBIF
 Languaje: GREL 'General Refine Expression Language'
 Creado:2018-04-24
 Última Actualización:2019-06-13
@@ -50,7 +51,7 @@ Esta rutina:
 			0- El nombre sugerido por GBIF NO coincide con el nombre documentado en el conjunto de datos
 			1- El nombre sugerido por GBIF coincide con con el nombre documentado en el conjunto de datos
 
-			Requerimientos:
+Requerimientos:
 Conjunto de datos con mínimo los elementos DwC 'scientificName'y 'kingdon' documentados
 Para obtener la validación de la taxonomía superior también se requieren los elementos DwC: 'phylum','class','order','family','genus'
 
@@ -108,7 +109,7 @@ Copy from here/ Copiar Desde Aquí
     "columnName": "infraspecificEpithet",
     "index": 2
   },
-    {
+  {
     "op": "core/column-addition",
     "description": "Create column specificEpithetSuggested at index 2 based on column callAPI using expression grel:split(value.parseJson().get(\"canonicalName\"),' ')[1]",
     "engineConfig": {
@@ -120,8 +121,7 @@ Copy from here/ Copiar Desde Aquí
     "baseColumnName": "callAPI",
     "expression": "grel:split(value.parseJson().get(\"canonicalName\"),' ')[1]",
     "onError": "set-to-blank"
-  }
-  
+  },
   {
     "op": "core/column-addition",
     "description": "Create column specificEpithetValidation at index 2 based on column suggestedSpecificEpithet using expression grel:if(value==cells[\"specificEpithet\"].value,'1','0').toString()",
@@ -141,8 +141,7 @@ Copy from here/ Copiar Desde Aquí
     "columnName": "specificEpithet",
     "index": 2
   },
-  
-    {
+  {
     "op": "core/column-addition",
     "description": "Create column suggestedGenus at index 2 based on column callAPI using expression grel:if(value.parseJson().get(\"status\")=='SYNONYM',(split(value.parseJson().get(\"canonicalName\"),' ')[0]),value.parseJson().get(\"genus\"))",
     "engineConfig": {

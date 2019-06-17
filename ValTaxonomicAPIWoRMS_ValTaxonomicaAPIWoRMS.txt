@@ -1,6 +1,7 @@
 --------------------------------------------------------------------------------
 ---Do not copy /No Copiar
---EN
+
+--ENGLISH VERSION
 
 SiB Colombia scripts for Biodiversity data validation and cleaning in OPEN REFINE
 https://github.com/SIB-Colombia/data-quality-open-refine
@@ -29,7 +30,7 @@ To obtain a validation of higher taxonomy, these DwC elements are also required:
 New data will be stored in columns at the beginning of the dataset
 Taxonomy elements are reorganized to facilitate the taxonomic validation
 
---ES
+--VERSION EN ESPAÑOL
 
 Rutinas del SiB Colombia para la validación y limpieza de datos primarios 
 de Biodiversidad en OPEN REFINE
@@ -208,6 +209,44 @@ Los elementos taxonómicos son reorganizados para facilitar la validación taxon
     "baseColumnName": "callAPIworms",
     "expression": "grel:value.parseJson().get('citation')",
     "onError": "set-to-blank"
+  },
+   {
+    "op": "core/column-move",
+    "description": "Move column infraspecificEpithet to position 2",
+    "columnName": "infraspecificEpithet",
+    "index": 2
+  },
+  {
+    "op": "core/column-addition",
+    "description": "Create column specificEpithetSuggested at index 2 based on column callAPI using expression grel:split(value.parseJson().get(\"canonicalName\"),' ')[1]",
+    "engineConfig": {
+      "mode": "row-based",
+      "facets": []
+    },
+    "newColumnName": "specificEpithetSuggested",
+    "columnInsertIndex": 2,
+    "baseColumnName": "callAPIworms",
+    "expression": "grel:split(value.parseJson().get(\"scientificname\"),' ')[1]",
+    "onError": "set-to-blank"
+  },
+  {
+    "op": "core/column-addition",
+    "description": "Create column specificEpithetValidation at index 2 based on column suggestedSpecificEpithet using expression grel:if(value==cells[\"specificEpithet\"].value,'1','0').toString()",
+    "engineConfig": {
+      "mode": "row-based",
+      "facets": []
+    },
+    "newColumnName": "specificEpithetValidation",
+    "columnInsertIndex": 2,
+    "baseColumnName": "specificEpithetSuggested",
+    "expression": "grel:if(value==cells[\"specificEpithet\"].value,'1','0').toString()",
+    "onError": "set-to-blank"
+  },
+  {
+    "op": "core/column-move",
+    "description": "Move column infraspecificEpithet to position 2",
+    "columnName": "specificEpithet",
+    "index": 2
   },
   {
     "op": "core/column-addition",
@@ -403,6 +442,32 @@ Los elementos taxonómicos son reorganizados para facilitar la validación taxon
   },
   {
     "op": "core/column-addition",
+    "description": "Create column suggestedTaxonomicStatus at index 2 based on column callAPI using expression grel:value.parseJson().get(\"status\")",
+    "engineConfig": {
+      "mode": "row-based",
+      "facets": []
+    },
+    "newColumnName": "taxonomicStatusSuggested",
+    "columnInsertIndex": 2,
+    "baseColumnName": "callAPIworms",
+    "expression": "grel:value.parseJson().get('status')",
+    "onError": "set-to-blank"
+  }, 
+  {
+    "op": "core/column-addition",
+    "description": "Create column A at index 2 based on column callAPIworms using expression grel:value.parseJson().get('rank')",
+    "engineConfig": {
+      "facets": [],
+      "mode": "row-based"
+    },
+    "newColumnName": "taxonRankSuggested",
+    "columnInsertIndex": 2,
+    "baseColumnName": "callAPIworms",
+    "expression": "grel:value.parseJson().get('rank')",
+    "onError": "set-to-blank"
+  },
+  {
+    "op": "core/column-addition",
     "description": "Create column A at index 2 based on column callAPIworms using expression grel:value.parseJson().get('authority')",
     "engineConfig": {
       "facets": [],
@@ -432,45 +497,6 @@ Los elementos taxonómicos son reorganizados para facilitar la validación taxon
     "description": "Move column scientificNameAuthorship to position 2",
     "columnName": "scientificNameAuthorship",
     "index": 2
-  },
-  {
-    "op": "core/column-addition",
-    "description": "Create column A at index 2 based on column callAPIworms using expression grel:value.parseJson().get('match_type')",
-    "engineConfig": {
-      "facets": [],
-      "mode": "row-based"
-    },
-    "newColumnName": "taxonMatchType",
-    "columnInsertIndex": 2,
-    "baseColumnName": "callAPIworms",
-    "expression": "grel:value.parseJson().get('match_type')",
-    "onError": "set-to-blank"
-  },
-   {
-    "op": "core/column-addition",
-    "description": "Create column suggestedTaxonomicStatus at index 2 based on column callAPI using expression grel:value.parseJson().get(\"status\")",
-    "engineConfig": {
-      "mode": "row-based",
-      "facets": []
-    },
-    "newColumnName": "taxonomicStatusSuggested",
-    "columnInsertIndex": 2,
-    "baseColumnName": "callAPIworms",
-    "expression": "grel:value.parseJson().get('status')",
-    "onError": "set-to-blank"
-  }, 
-  {
-    "op": "core/column-addition",
-    "description": "Create column A at index 2 based on column callAPIworms using expression grel:value.parseJson().get('rank')",
-    "engineConfig": {
-      "facets": [],
-      "mode": "row-based"
-    },
-    "newColumnName": "taxonRankSuggested",
-    "columnInsertIndex": 2,
-    "baseColumnName": "callAPIworms",
-    "expression": "grel:value.parseJson().get('rank')",
-    "onError": "set-to-blank"
   },
   {
     "op": "core/column-addition",
@@ -522,5 +548,18 @@ Los elementos taxonómicos son reorganizados para facilitar la validación taxon
     "description": "Move column scientificNameID to position 2",
     "columnName": "scientificNameID",
     "index": 2
+  },
+  {
+    "op": "core/column-addition",
+    "description": "Create column A at index 2 based on column callAPIworms using expression grel:value.parseJson().get('match_type')",
+    "engineConfig": {
+      "facets": [],
+      "mode": "row-based"
+    },
+    "newColumnName": "taxonMatchType",
+    "columnInsertIndex": 2,
+    "baseColumnName": "callAPIworms",
+    "expression": "grel:value.parseJson().get('match_type')",
+    "onError": "set-to-blank"
   }
 ]
