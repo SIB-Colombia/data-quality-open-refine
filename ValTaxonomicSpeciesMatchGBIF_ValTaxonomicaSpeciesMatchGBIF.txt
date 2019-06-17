@@ -1,0 +1,428 @@
+--------------------------------------------------------------------------------
+---Do not copy /No Copiar
+
+--ENGLISH VERSION
+
+SiB Colombia scripts for Biodiversity data validation and cleaning in OPEN REFINE
+https://github.com/SIB-Colombia/data-quality-open-refine
+
+Script Taxonomic Validation using GBIF's Species Matching Web service
+Language: GREL 'General Refine Expression Language'
+Created: 2018-04-10
+Last Update:2019-06-17
+Contributors: Ricardo Ortiz, Camila Plata
+
+1-Matches original scientificName with GBIF's taxonomic Backbone
+2-Retrieves GBIF's rank and status allowing the user to evaluate the state of each name
+3-Retrieves GBIF's higher taxonomy for all names
+4-Compares GBIF's taxonomic suggestions with original taxonomy using a boolean descriptor (1,0)
+
+            Conventions boolean descriptor
+            0-GBIF's suggested name DOES NOT match the original name
+            1-GBIF's suggested name matches the original name
+
+Conditions
+Dataset with minimum the DwC elements 'scientificName' and 'kingdom'
+To obtain a validation of higher taxonomy, these DwC elements are also required:,'phylum','class','order','family','genus'
+Species Matching archive named 'normalized'obtained from speciesMatching GBIF (https://www.gbif.org/tools/species-lookup) and uploaded in OpenRefine.
+
+Important
+The limit of GBIF speciesMatching web service in a single query is 6000 occurrences. 
+Thus, you have two options to perform the taxon name matching:
+
+1-Using occurenceID, dataset below 6000 occurrences, GBIF speciesMatching should be performed for all occurrences
+2-Using scientificName, dataset above 6000 occurrences, GBIF speciesMatching should be performed for unique scientific names of the dataset
+
+New data will be stored in columns at the beginning of the dataset
+Taxonomy elements are reorganized to facilitate the taxonomic validation
+
+Warning
+The 'normalized' archive must be the only one named like that on your OpenRefine workspace, rename any other previous 'normalized' archives
+
+--VERSION EN ESPAÑOL
+
+Rutinas del SiB Colombia para la validación y limpieza de datos primarios 
+de Biodiversidad en OPEN REFINE
+https://github.com/SIB-Colombia/data-quality-open-refine
+
+Nombre rutina: Validación taxonomica usando el servicio web 'Species Matching' de GBIF
+Languaje: GREL 'General Refine Expression Language'
+Creado:2018-04-10
+Última Actualización:2019-06-17
+Autores: Ricardo Ortiz, Camila Plata
+
+Esta rutina:
+1-Compara el elemento scientificName con el árbol taxonómico de GBIF
+2-Trae los elementos rank y status permitiendo al usuario evaluar el estado del nombre científico
+3-Trae la taxonomia superior de cada nombre de acuerdo a GBIF
+4-Compara las sugerencias taxonómicas de GBIF con la taxonomia documentada usando descriptores booleanos (1,0)
+
+			Conventions boolean descriptor
+			0- El nombre sugerido por GBIF NO coincide con el nombre documentado en el conjunto de datos
+			1- El nombre sugerido por GBIF coincide con con el nombre documentado en el conjunto de datos
+			
+Requerimientos:
+Conjunto de datos con mínimo los elementos DwC 'scientificName'y 'kingdon' documentados
+Para obtener la validación de la taxonomía superior también se requieren los elementos DwC: 'phylum','class','order','family','genus'
+Archivo titulado 'normalized' obtenido de el servicio Species Matching de GBIF (https://www.gbif.org/tools/species-lookup) y cargado en OpenRefine
+
+Importante
+El límite del servicio web Species Matching en una sola consulta es de 6000 registros o nombres científicos.
+Entonces existen dos opciones para ejecutar la reconciliación de nombres científicos:
+
+1-Usar occurrenceID, para conjuntos de datos por debajo de 6000 regsitros, la consulta en Species Matching se sebe hacer para todos los registros
+2-Usar el scientificName, conjunto de datos por encima de 6000 registros, a consulta en Species Matching se sebe hacer para taxa unicos (esta es la opción por defeto del script)
+Para cambiar entre las dos opciones remplace en esta rutina 'verbatimScientificName' por 'occurrenceID'
+
+Los nuevos datos seran guardados en columnas el inicio del conjunto de datos
+Los elementos taxonómicos son reorganizados para facilitar la validación taxonómicasn
+
+Advertencia
+El archivo 'normalized' debe ser el único nombrado con ese título en su directorio de OpenRefine, cambie el nombre de cualquier otro archivo 'normalized' cargado previamente
+
+----------------------------------------------------------------------------
+Copy from here/ Copiar Desde Aquí
+
+[
+ {
+    "op": "core/text-transform",
+    "description": "Text transform on cells in column scientificName using expression grel:value.replace(/\\s+/,' ').trim()",
+    "engineConfig": {
+      "mode": "row-based",
+      "facets": []
+    },
+    "columnName": "scientificName",
+    "expression": "grel:value.replace(/\\s+/,' ').trim()",
+    "onError": "keep-original",
+    "repeat": false,
+    "repeatCount": 10
+  },
+	{
+    "op": "core/column-addition",
+    "description": "Create column suggestedSpecificEpithet at index 1 based on column verbatimScientificName using expression grel:if(cell.cross(\"normalized\", \"verbatimScientificName\")[0].cells[\"rank\"].value==\"SPECIES\",split(cell.cross(\"normalized\", \"verbatimScientificName\")[0].cells[\"scientificName\"].value,' ')[1],'')",
+    "engineConfig": {
+      "mode": "row-based",
+      "facets": []
+    },
+    "newColumnName": "specificEpithetSuggested",
+    "columnInsertIndex": 1,
+    "baseColumnName": "scientificName",
+    "expression": "grel:if(cell.cross(\"normalized\", \"verbatimScientificName\")[0].cells[\"rank\"].value==\"SPECIES\",split(cell.cross(\"normalized\", \"verbatimScientificName\")[0].cells[\"scientificName\"].value,' ')[1],'')",
+    "onError": "set-to-blank"
+  },
+  {
+    "op": "core/column-addition",
+    "description": "Create column genusValidation at index 1 based on column kingdom using expression grel:if(value==cells[\"suggestedGenus\"].value,1,0)\"",
+    "engineConfig": {
+      "mode": "row-based",
+      "facets": []
+    },
+    "newColumnName": "specificEpithetValidation",
+    "columnInsertIndex": 1,
+    "baseColumnName": "specificEpithet",
+    "expression": "grel:if(value==cells[\"specificEpithetSuggested\"].value,1,0).toString()\"",
+    "onError": "set-to-blank"
+  },
+  {
+    "op": "core/column-move",
+    "description": "Move column specificEpithet to position 1",
+    "columnName": "specificEpithet",
+    "index": 1
+  },
+  {
+    "op": "core/column-addition",
+    "description": "Create column suggestedGenus at index 6 based on column scientificName using expression grel:if(cell.cross(\"normalized\", \"verbatimScientificName\")[0].cells[\"rank\"].value==\"SPECIES\",split(cell.cross(\"normalized\", \"verbatimScientificName\")[0].cells[\"scientificName\"].value,' ')[0],if(cell.cross(\"normalized\", \"verbatimScientificName\")[0].cells[\"rank\"].value==\"GENUS\",split(cell.cross(\"normalized\", \"verbatimScientificName\")[0].cells[\"scientificName\"].value,' ')[0],''))",
+    "engineConfig": {
+      "mode": "row-based",
+      "facets": []
+    },
+    "newColumnName": "genusSuggested",
+    "columnInsertIndex": 1,
+    "baseColumnName": "scientificName",
+    "expression": "grel:if(cell.cross(\"normalized\", \"verbatimScientificName\")[0].cells[\"rank\"].value==\"SPECIES\",split(cell.cross(\"normalized\", \"verbatimScientificName\")[0].cells[\"scientificName\"].value,' ')[0],if(cell.cross(\"normalized\", \"verbatimScientificName\")[0].cells[\"rank\"].value==\"GENUS\",split(cell.cross(\"normalized\", \"verbatimScientificName\")[0].cells[\"scientificName\"].value,' ')[0],''))",
+    "onError": "set-to-blank"
+  },
+  {
+    "op": "core/column-addition",
+    "description": "Create column genusValidation at index 1 based on column kingdom using expression grel:if(value==cells[\"suggestedGenus\"].value,1,0)\"",
+    "engineConfig": {
+      "mode": "row-based",
+      "facets": []
+    },
+    "newColumnName": "genusValidation",
+    "columnInsertIndex": 1,
+    "baseColumnName": "genus",
+    "expression": "grel:if(value==cells[\"genusSuggested\"].value,1,0).toString()\"",
+    "onError": "set-to-blank"
+  },
+  {
+    "op": "core/column-move",
+    "description": "Move column genus to position 1",
+    "columnName": "genus",
+    "index": 1
+  },
+  {
+    "op": "core/column-addition",
+    "description": "Create column familyGBIF at index 1 based on column scientificName using expression grel:cell.cross(\"normalized\",\"verbatimScientificName\").cells[\"family\"].value[0]",
+    "engineConfig": {
+      "mode": "row-based",
+      "facets": []
+    },
+    "newColumnName": "familySuggested",
+    "columnInsertIndex": 1,
+    "baseColumnName": "scientificName",
+    "expression": "grel:cell.cross(\"normalized\",\"verbatimScientificName\").cells[\"family\"].value[0]",
+    "onError": "set-to-blank"
+  },
+  {
+    "op": "core/column-addition",
+    "description": "Create column familyValidation at index 1 based on column kingdom using expression grel:if(value==cells[\"suggestedFamily\"].value,1,0)\"",
+    "engineConfig": {
+      "mode": "row-based",
+      "facets": []
+    },
+    "newColumnName": "familyValidation",
+    "columnInsertIndex": 1,
+    "baseColumnName": "family",
+    "expression": "grel:if(value==cells[\"familySuggested\"].value,1,0).toString()\"",
+    "onError": "set-to-blank"
+  },
+  {
+    "op": "core/column-move",
+    "description": "Move column family to position 1",
+    "columnName": "family",
+    "index": 1
+  },
+  {
+    "op": "core/column-addition",
+    "description": "Create column order_GBIF at index 1 based on column scientificName using expression grel:cell.cross(\"normalized\",\"verbatimScientificName\").cells[\"order\"].value[0]",
+    "engineConfig": {
+      "mode": "row-based",
+      "facets": []
+    },
+    "newColumnName": "orderSuggested",
+    "columnInsertIndex": 1,
+    "baseColumnName": "scientificName",
+    "expression": "grel:cell.cross(\"normalized\",\"verbatimScientificName\").cells[\"order\"].value[0]",
+    "onError": "set-to-blank"
+  },
+  {
+    "op": "core/column-addition",
+    "description": "Create column orderValidation at index 1 based on column kingdom using expression grel:if(value==cells[\"suggestedOrder\"].value,1,0)\"",
+    "engineConfig": {
+      "mode": "row-based",
+      "facets": []
+    },
+    "newColumnName": "orderValidation",
+    "columnInsertIndex": 1,
+    "baseColumnName": "order",
+    "expression": "grel:if(value==cells[\"orderSuggested\"].value,1,0).toString()\"",
+    "onError": "set-to-blank"
+  },
+  {
+    "op": "core/column-move",
+    "description": "Move column order to position 1",
+    "columnName": "order",
+    "index": 1
+  },
+  {
+    "op": "core/column-addition",
+    "description": "Create column classGBIF at index 1 based on column scientificName using expression grel:cell.cross(\"normalized\",\"verbatimScientificName\").cells[\"class\"].value[0]",
+    "engineConfig": {
+      "mode": "row-based",
+      "facets": []
+    },
+    "newColumnName": "classSuggested",
+    "columnInsertIndex": 1,
+    "baseColumnName": "scientificName",
+    "expression": "grel:cell.cross(\"normalized\",\"verbatimScientificName\").cells[\"class\"].value[0]",
+    "onError": "set-to-blank"
+  },
+  {
+    "op": "core/column-addition",
+    "description": "Create column classValidation at index 1 based on column kingdom using expression grel:if(value==cells[\"suggestedClass\"].value,1,0)\"",
+    "engineConfig": {
+      "mode": "row-based",
+      "facets": []
+    },
+    "newColumnName": "classValidation",
+    "columnInsertIndex": 1,
+    "baseColumnName": "class",
+    "expression": "grel:if(value==cells[\"classSuggested\"].value,1,0).toString()\"",
+    "onError": "set-to-blank"
+  },
+  {
+    "op": "core/column-move",
+    "description": "Move column class to position 1",
+    "columnName": "class",
+    "index": 1
+  },  
+  {
+    "op": "core/column-addition",
+    "description": "Create column phylumGBIF at index 1 based on column scientificName using expression grel:cell.cross(\"normalized\",\"verbatimScientificName\").cells[\"phylum\"].value[0]",
+    "engineConfig": {
+      "mode": "row-based",
+      "facets": []
+    },
+    "newColumnName": "phylumSuggested",
+    "columnInsertIndex": 1,
+    "baseColumnName": "scientificName",
+    "expression": "grel:cell.cross(\"normalized\",\"verbatimScientificName\").cells[\"phylum\"].value[0]",
+    "onError": "set-to-blank"
+  },
+  {
+    "op": "core/column-addition",
+    "description": "Create column phylumValidation at index 1 based on column kingdom using expression grel:if(value==cells[\"suggestedPhylum\"].value,1,0)\"",
+    "engineConfig": {
+      "mode": "row-based",
+      "facets": []
+    },
+    "newColumnName": "phylumValidation",
+    "columnInsertIndex": 1,
+    "baseColumnName": "phylum",
+    "expression": "grel:if(value==cells[\"phylumSuggested\"].value,1,0).toString()\"",
+    "onError": "set-to-blank"
+  },
+  {
+    "op": "core/column-move",
+    "description": "Move column phylum to position 1",
+    "columnName": "phylum",
+    "index": 1
+  },
+  {
+    "op": "core/column-addition",
+    "description": "Create column kingdomGBIF at index 1 based on column scientificName using expression grel:cell.cross(\"normalized\",\"verbatimScientificName\").cells[\"kingdom\"].value[0]",
+    "engineConfig": {
+      "mode": "row-based",
+      "facets": []
+    },
+    "newColumnName": "kingdomSuggested",
+    "columnInsertIndex": 1,
+    "baseColumnName": "scientificName",
+    "expression": "grel:cell.cross(\"normalized\",\"verbatimScientificName\").cells[\"kingdom\"].value[0]",
+    "onError": "set-to-blank"
+  },
+    {
+    "op": "core/column-addition",
+    "description": "Create column kingdomValidation at index 1 based on column kingdom using expression grel:if(value==cells[\"suggestedKingdom\"].value,1,0)\"",
+    "engineConfig": {
+      "mode": "row-based",
+      "facets": []
+    },
+    "newColumnName": "kingdomValidation",
+    "columnInsertIndex": 1,
+    "baseColumnName": "kingdom",
+    "expression": "grel:if(value==cells[\"kingdomSuggested\"].value,1,0).toString()\"",
+    "onError": "set-to-blank"
+  },
+  {
+    "op": "core/column-move",
+    "description": "Move column kingdom to position 1",
+    "columnName": "kingdom",
+    "index": 1
+  },
+  {
+    "op": "core/column-addition",
+    "description": "Create column status at index 1 based on column scientificName using expression grel:cell.cross(\"normalized\",\"verbatimScientificName\").cells[\"status\"].value[0]",
+    "engineConfig": {
+      "mode": "row-based",
+      "facets": []
+    },
+    "newColumnName": "suggestedTaxonomicStatus",
+    "columnInsertIndex": 1,
+    "baseColumnName": "scientificName",
+    "expression": "grel:cell.cross(\"normalized\",\"verbatimScientificName\").cells[\"status\"].value[0]",
+    "onError": "set-to-blank"
+  },
+  {
+    "op": "core/column-addition",
+    "description": "Create column rank at index 1 based on column scientificName using expression grel:cell.cross(\"normalized\",\"verbatimScientificName\").cells[\"rank\"].value[0]",
+    "engineConfig": {
+      "mode": "row-based",
+      "facets": []
+    },
+    "newColumnName": "taxonRankSuggested",
+    "columnInsertIndex": 1,
+    "baseColumnName": "scientificName",
+    "expression": "grel:cell.cross(\"normalized\",\"verbatimScientificName\").cells[\"rank\"].value[0]",
+    "onError": "set-to-blank"
+  },
+  {
+    "op": "core/column-addition",
+    "description": "Create column canonicalName1 at index 1 based on column rank using expression grel:if(value == \"SPECIES\",cells['suggestedGenus'].value+' '+cells['suggestedSpecificEpithet'].value,if(value == \"GENUS\",cells['suggestedGenus'].value,if(value == \"FAMILY\",cells['suggestedFamily'].value,if(value == \"ORDER\",cells['suggestedOrder'].value,if(value == \"CLASS\",cells['suggestedClass'].value,if(value == \"PHYLUM\",cells['suggestedPhylum'].value,if(value == \"KINGDOM\",cells['suggestedKingdom'].value,'')))))))",
+    "engineConfig": {
+      "mode": "row-based",
+      "facets": []
+    },
+    "newColumnName": "canonicalNameSuggested",
+    "columnInsertIndex": 1,
+    "baseColumnName": "taxonRankSuggested",
+    "expression": "grel:if(value == \"SUBSPECIES\",cells['genusSuggested'].value+' '+cells['specificEpithetSuggested'].value,if(value == \"SPECIES\",cells['genusSuggested'].value+' '+cells['specificEpithetSuggested'].value,if(value == \"GENUS\",cells['genusSuggested'].value,if(value == \"FAMILY\",cells['familySuggested'].value,if(value == \"ORDER\",cells['orderSuggested'].value,if(value == \"CLASS\",cells['classSuggested'].value,if(value == \"PHYLUM\",cells['phylumSuggested'].value,if(value == \"KINGDOM\",cells['kingdomSuggested'].value,''))))))))",
+    "onError": "set-to-blank"
+  },
+  {
+    "op": "core/column-addition",
+    "description": "Create column acceptedScientificName at index 1 based on column scientificName using expression grel:cell.cross(\"normalized\",\"verbatimScientificName\").cells[\"species\"].value[0]",
+    "engineConfig": {
+      "mode": "row-based",
+      "facets": []
+    },
+    "newColumnName": "acceptedScientificName",
+    "columnInsertIndex": 1,
+    "baseColumnName": "scientificName",
+    "expression": "grel:cell.cross(\"normalized\",\"verbatimScientificName\").cells[\"species\"].value[0]",
+    "onError": "set-to-blank"
+  },
+  {
+    "op": "core/column-addition",
+    "description": "Create column scientificNameGBIF at index 1 based on column scientificName using expression grel:cell.cross(\"normalized\",\"verbatimScientificName\").cells[\"scientificName\"].value[0]",
+    "engineConfig": {
+      "mode": "row-based",
+      "facets": []
+  },
+    "newColumnName": "suggestedScientificName",
+    "columnInsertIndex": 1,
+    "baseColumnName": "scientificName",
+    "expression": "grel:cell.cross(\"normalized\",\"verbatimScientificName\").cells[\"scientificName\"].value[0]",
+    "onError": "set-to-blank"
+  },
+  {
+    "op": "core/column-move",
+    "description": "Move column scientificName to position 1",
+    "columnName": "scientificName",
+    "index": 1
+  },
+  {
+    "op": "core/column-addition",
+    "description": "Create column MatchType at index 1 based on column scientificName using expression grel:cell.cross(\"normalized\",\"verbatimScientificName\").cells[\"matchType\"].value[0]",
+    "engineConfig": {
+      "mode": "row-based",
+      "facets": []
+    },
+    "newColumnName": "taxonMatchType",
+    "columnInsertIndex": 1,
+    "baseColumnName": "scientificName",
+    "expression": "grel:cell.cross(\"normalized\",\"verbatimScientificName\").cells[\"matchType\"].value[0]",
+    "onError": "set-to-blank"
+  },
+  {
+    "op": "core/column-addition",
+    "description": "Create column scientificNameAuthorshipSuggested at index 6 based on column canonicalNameSuggested using expression grel:cells['suggestedScientificName'].value.partition(cells[\"canonicalNameSuggested\"].value)[2]",
+    "engineConfig": {
+      "mode": "row-based",
+      "facets": []
+    },
+    "newColumnName": "scientificNameAuthorshipSuggested",
+    "columnInsertIndex": 6,
+    "baseColumnName": "canonicalNameSuggested",
+    "expression": "grel:cells['suggestedScientificName'].value.partition(cells[\"canonicalNameSuggested\"].value)[2].trim()",
+    "onError": "set-to-blank"
+  },
+  {
+    "op": "core/column-removal",
+    "description": "Remove column suggestedScientificName",
+    "columnName": "suggestedScientificName"
+  }
+]
+   
+  
