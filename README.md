@@ -42,8 +42,8 @@ Estas rutinas validan de manera automática los datos, facilitando la limpieza y
 
   1. [Validación taxonómica con el API de GBIF](https://github.com/SIB-Colombia/data-quality-open-refine/blob/master/ValTaxonomicAPIGBIF_ValTaxonomicaAPIGBIF.txt)
   2. [Validación taxonómica con el servicio web ‘Species Matching’](https://github.com/SIB-Colombia/data-quality-open-refine/blob/master/ValTaxonomicSpeciesMatchGBIF_ValTaxonomicaSpeciesMatchGBIF.txt)
-  3. Validación taxonómica con el API de Worms (Datos Marinos) (https://github.com/SIB-Colombia/data-quality-open-refine/blob/master/ValTaxonomicAPIWoRMS_ValTaxonomicaAPIWoRMS.txt)
-  4. [Validación de los nombres geográficos de Colombia según el DANE] (https://github.com/SIB-Colombia/data-quality-open-refine/blob/master/ValNamesGeo_ValNombresGeo.txt)
+  3. [Validación taxonómica con el API de Worms (Datos Marinos)](https://github.com/SIB-Colombia/data-quality-open-refine/blob/master/ValTaxonomicAPIWoRMS_ValTaxonomicaAPIWoRMS.txt)
+  4. [Validación de los nombres geográficos de Colombia según el DANE](https://github.com/SIB-Colombia/data-quality-open-refine/blob/master/ValNamesGeo_ValNombresGeo.txt)
   5. [Transformación de fechas al estándar ISO con el servicio de conversión de ‘Canadensys’](https://github.com/SIB-Colombia/data-quality-open-refine/blob/master/DateTransform_TransformFechas.txt)
   6. [Validación de elevaciones con el API de GeoNames](https://github.com/SIB-Colombia/data-quality-open-refine/blob/master/ValElevationAPIGeoNames_ValElevacionAPIGeoNames.txt)
 
