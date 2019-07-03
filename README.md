@@ -1,15 +1,17 @@
 # Open Refine Scripts for Biodiversity Data Quality
+-Versión en español abajo.
+
 The biodiversity information system of Colombia -[SiB Colombia](https://sibcolombia.net/) developed a set of scripts in Open Refine 
 for data quality management of primary biodiversity data.
 
 ## About the Scripts
 These scripts perform automatic validations of data facilitating data cleaning and format fixing:
-  1. Taxonomic Validation with GBIF's API
-  2. Taxonomic Validation with Species Matching web service
-  3. Taxonomic Validation with WORMS's API (Marine data)
-  4. Colombian Geographic Names Validation
-  5. Dates transforming to ISO format with Canadensys conversion service
-  6. Full DwC comparison between two datasets
+  1. [Taxonomic Validation with GBIF's API](https://github.com/SIB-Colombia/data-quality-open-refine/blob/master/ValTaxonomicAPIGBIF_ValTaxonomicaAPIGBIF.txt)
+  2. [Taxonomic Validation with Species Matching web service](https://github.com/SIB-Colombia/data-quality-open-refine/blob/master/ValTaxonomicSpeciesMatchGBIF_ValTaxonomicaSpeciesMatchGBIF.txt)
+  3. [Taxonomic Validation with WORMS's API (Marine data)](https://github.com/SIB-Colombia/data-quality-open-refine/blob/master/ValTaxonomicAPIWoRMS_ValTaxonomicaAPIWoRMS.txt)
+  4. [Colombian Geographic Names Validation](https://github.com/SIB-Colombia/data-quality-open-refine/blob/master/ValNamesGeo_ValNombresGeo.txt)
+  5. [Dates transforming to ISO format with Canadensys conversion service](https://github.com/SIB-Colombia/data-quality-open-refine/blob/master/DateTransform_TransformFechas.txt)
+  6. [Validation of geographic elevation with GeoNames API](https://github.com/SIB-Colombia/data-quality-open-refine/blob/master/ValElevationAPIGeoNames_ValElevacionAPIGeoNames.txt)
 
 #### [Open Refine](http://openrefine.org/)
 "OpenRefine is a Java-based power tool that allows you to load data, understand it, clean it up, reconcile it, and augment it with data coming from the web. All from a web browser and the comfort and privacy of your own computer." From the Open Refine site
@@ -38,12 +40,12 @@ El sistema de información sobre biodiversidad de Colombia Colombia -[SiB Colomb
 ## Acerca de las rutinas
 Estas rutinas validan de manera automática los datos, facilitando la limpieza y estandarización:
 
-  1. Validación taxonómica con el API de GBIF
-  2. Validación taxonómica con el servicio web ‘Species Matching’
-  3. Validación taxonómica con el API de Worms (Datos Marinos)
-  4. Validación de los nombres geográficos de Colombia según el DANE
-  5. Transformación de fechas al estándar ISO con el servicio de conversión de ‘Canadensys’
-  6. Comparación completa de dos conjuntos de datos estructurados en DwC.
+  1. [Validación taxonómica con el API de GBIF](https://github.com/SIB-Colombia/data-quality-open-refine/blob/master/ValTaxonomicAPIGBIF_ValTaxonomicaAPIGBIF.txt)
+  2. [Validación taxonómica con el servicio web ‘Species Matching’](https://github.com/SIB-Colombia/data-quality-open-refine/blob/master/ValTaxonomicSpeciesMatchGBIF_ValTaxonomicaSpeciesMatchGBIF.txt)
+  3. Validación taxonómica con el API de Worms (Datos Marinos) (https://github.com/SIB-Colombia/data-quality-open-refine/blob/master/ValTaxonomicAPIWoRMS_ValTaxonomicaAPIWoRMS.txt)
+  4. [Validación de los nombres geográficos de Colombia según el DANE] (https://github.com/SIB-Colombia/data-quality-open-refine/blob/master/ValNamesGeo_ValNombresGeo.txt)
+  5. [Transformación de fechas al estándar ISO con el servicio de conversión de ‘Canadensys’](https://github.com/SIB-Colombia/data-quality-open-refine/blob/master/DateTransform_TransformFechas.txt)
+  6. [Validación de elevaciones con el API de GeoNames](https://github.com/SIB-Colombia/data-quality-open-refine/blob/master/ValElevationAPIGeoNames_ValElevacionAPIGeoNames.txt)
 
 #### [Open Refine](http://openrefine.org/)
 Open Refine es un programa que permite limpiar, transformar y dar formato a los datos, usar servicios web, corrección masiva campos, entre muchas otras.
