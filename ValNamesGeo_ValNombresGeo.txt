@@ -22,7 +22,7 @@ This script:
 
 Conditions
 Dataset with DwC elements 'stateProvince'(minimum),'county','municipality'
-DIVIPOLA archive uploaded in openRefine with named 'DIVIPOLA_2020311', the latest version can be found at the GitHuB repository
+DIVIPOLA archive uploaded in openRefine with named 'DIVIPOLA_20200311', the latest version can be found at the GitHuB repository
 
 New data will be stored in columns at the beginning of the dataset
 Check the data when the validation columns are mark with '0', this data needs to be checked and fixed
@@ -61,7 +61,7 @@ Esta rutina:
 
 Requerimientos:
 Conjunto de datos con los elementos DwC 'stateProvince'(mínimo),'county','municipality'
-Archivo DIVIPOLA cargado en openRefine con nombre 'DIVIPOLA_2020311', la última versión esta disponible en el repositorio de GitHuB
+Archivo DIVIPOLA cargado en openRefine con nombre 'DIVIPOLA_20200311', la última versión esta disponible en el repositorio de GitHuB
 
 Los nuevos datos seran guardados en columnas el inicio del conjunto de datos
 Revise los datos cuando las columnas de validación este marcadas con '0', estos datos necesitan ser revisados y ajustados
@@ -94,7 +94,7 @@ Si está usando el script por primera vez se recomienda cargar el conjunto de da
   },
   {
     "op": "core/column-addition",
-    "description": "Create column spcmMatch at index 1 based on column spcm using expression grel:cell.cross('DIVIPOLA_2020311','SPCM')[0].cells['SPCM'].value",
+    "description": "Create column spcmMatch at index 1 based on column spcm using expression grel:cell.cross('DIVIPOLA_20200311','SPCM')[0].cells['SPCM'].value",
     "engineConfig": {
       "mode": "row-based",
       "facets": []
@@ -102,7 +102,7 @@ Si está usando el script por primera vez se recomienda cargar el conjunto de da
     "newColumnName": "spcmSuggested",
     "columnInsertIndex": 1,
     "baseColumnName": "spcm",
-    "expression": "grel:cell.cross('DIVIPOLA_2020311','SPCM')[0].cells['SPCM'].value",
+    "expression": "grel:cell.cross('DIVIPOLA_20200311','SPCM')[0].cells['SPCM'].value",
     "onError": "set-to-blank"
   },
  {
@@ -139,7 +139,7 @@ Si está usando el script por primera vez se recomienda cargar el conjunto de da
   },
  {
     "op": "core/column-addition",
-    "description": "Create column spcSuggested at index 1 based on column spc using expression grel:cell.cross('DIVIPOLA_2020311','SPC')[0].cells['SPC'].value",
+    "description": "Create column spcSuggested at index 1 based on column spc using expression grel:cell.cross('DIVIPOLA_20200311','SPC')[0].cells['SPC'].value",
     "engineConfig": {
       "mode": "row-based",
       "facets": []
@@ -147,7 +147,7 @@ Si está usando el script por primera vez se recomienda cargar el conjunto de da
     "newColumnName": "spcSuggested",
     "columnInsertIndex": 1,
     "baseColumnName": "spc",
-    "expression": "grel:cell.cross('DIVIPOLA_2020311','SPC')[0].cells['SPC'].value",
+    "expression": "grel:cell.cross('DIVIPOLA_20200311','SPC')[0].cells['SPC'].value",
     "onError": "set-to-blank"
   },
   {
@@ -171,7 +171,7 @@ Si está usando el script por primera vez se recomienda cargar el conjunto de da
   },
   {
     "op": "core/column-addition",
-    "description": "Create column spMatch at index 1 based on column stateProvince using expression grel:cell.cross('DIVIPOLA_2020311','stateProvince')[0].cells['stateProvince'].value",
+    "description": "Create column spMatch at index 1 based on column stateProvince using expression grel:cell.cross('DIVIPOLA_20200311','stateProvince')[0].cells['stateProvince'].value",
     "engineConfig": {
       "mode": "row-based",
       "facets": []
@@ -179,7 +179,7 @@ Si está usando el script por primera vez se recomienda cargar el conjunto de da
     "newColumnName": "spSuggested",
     "columnInsertIndex": 1,
     "baseColumnName": "stateProvince",
-    "expression": "grel:cell.cross('DIVIPOLA_2020311','stateProvince')[0].cells['stateProvince'].value",
+    "expression": "grel:cell.cross('DIVIPOLA_20200311','stateProvince')[0].cells['stateProvince'].value",
     "onError": "set-to-blank"
   },
   {
