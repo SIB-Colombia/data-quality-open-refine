@@ -32,14 +32,13 @@ Para reemplazar su nombre de usario en este script, use CTRL-B y busque "demo", 
 Para mas información sobre los servicios de GeoNames, diríjase a. http://www.geonames.org/export/web-services.html
 
 -------------------------------------------------------------------------No Copiar--------------------------------------------------------------------------------------------
-
 [
-    {
+  {
     "op": "core/column-addition",
     "description": "Create column verbatimCoordinates at index 20 based on column decimalLatitude using expression grel:cells['decimalLatitude'].value+\" | \"+cells['decimalLongitude'].value",
     "engineConfig": {
-      "mode": "row-based",
-      "facets": []
+      "facets": [],
+      "mode": "row-based"
     },
     "newColumnName": "verbatimCoordinates",
     "columnInsertIndex": 20,
@@ -68,21 +67,22 @@ Para mas información sobre los servicios de GeoNames, diríjase a. http://www.g
     "op": "core/blank-down",
     "description": "Blank down cells in column verbatimCoordinates",
     "engineConfig": {
-      "mode": "row-based",
-      "facets": []
+      "facets": [],
+      "mode": "row-based"
     },
     "columnName": "verbatimCoordinates"
   },
   {
     "op": "core/column-addition-by-fetching-urls",
-    "description": "Create column Elevación API at index 20 by fetching URLs based on column decimalLatitude using expression grel:\"http://api.geonames.org/srtm1?lat=\"+cells['decimalLatitude'].value+\"&lng=\"+cells['decimalLongitude'].value+\"&username=demo\"",
+    "description": "Create column ElevacionAPI at index 20 by fetching URLs based on column decimalLatitude using expression grel:\"http://api.geonames.org/srtm1?lat=\"+cells['decimalLatitude'].value+\"&lng=\"+cells['decimalLongitude'].value+\"&username=bs.saavedra10\"",
     "engineConfig": {
-      "mode": "row-based",
       "facets": [
         {
-          "omitError": false,
+          "type": "list",
+          "name": "ElevacionAPI",
           "expression": "isBlank(value)",
-          "selectBlank": false,
+          "columnName": "ElevacionAPI",
+          "invert": false,
           "selection": [
             {
               "v": {
@@ -91,31 +91,64 @@ Para mas información sobre los servicios de GeoNames, diríjase a. http://www.g
               }
             }
           ],
-          "selectError": false,
-          "invert": false,
-          "name": "verbatimCoordinates",
+          "selectNumber": false,
+          "selectDateTime": false,
+          "selectBoolean": false,
           "omitBlank": false,
-          "type": "list",
-          "columnName": "verbatimCoordinates"
+          "selectBlank": false,
+          "omitError": false,
+          "selectError": false
         }
-      ]
+      ],
+      "mode": "row-based"
     },
-    "newColumnName": "Elevación API",
+    "newColumnName": "ElevacionAPI",
     "columnInsertIndex": 20,
     "baseColumnName": "decimalLatitude",
-    "urlExpression": "grel:\"http://api.geonames.org/srtm1?lat=\"+cells['decimalLatitude'].value+\"&lng=\"+cells['decimalLongitude'].value+\"&username=demo\"",
+    "urlExpression": "grel:\"http://api.geonames.org/srtm1?lat=\"+cells['decimalLatitude'].value+\"&lng=\"+cells['decimalLongitude'].value+\"&username=bs.saavedra10\"",
     "onError": "set-to-blank",
     "delay": 250,
-    "cacheResponses": true
+    "cacheResponses": true,
+    "httpHeadersJson": null
   },
-  
   {
     "op": "core/fill-down",
-    "description": "Fill down cells in column Elevación API",
+    "description": "Fill down cells in column ElevacionAPI",
+    "engineConfig": {
+      "facets": [],
+      "mode": "row-based"
+    },
+    "columnName": "ElevacionAPI"
+  },
+  {
+    "op": "core/column-addition",
+    "description": "Create column elevationValidation at index 2 based on column ElevacionAPI using expression grel:if(value==cells[\"minimumElevationInMeters\"].value,'1','0').toString()",
     "engineConfig": {
       "mode": "row-based",
       "facets": []
     },
-    "columnName": "Elevación API"
+    "newColumnName": "elevationValidation",
+    "columnInsertIndex": 2,
+    "baseColumnName": "ElevacionAPI",
+    "expression": "grel:if(value==cells[\"verbatimElevation\"].value,'1','0').toString()",
+    "onError": "set-to-blank"
+  },
+   {
+    "op": "core/column-move",
+    "description": "Move column ElevacionAPI to position 2",
+    "columnName": "ElevacionAPI",
+    "index": 2
+  },
+   {
+    "op": "core/column-move",
+    "description": "Move column minimumElevationInMeters to position 3",
+    "columnName": "minimumElevationInMeters",
+    "index": 2
+  },
+   {
+    "op": "core/column-move",
+    "description": "Move column elevationValidation to position 4",
+    "columnName": "elevationValidation",
+    "index": 2
   }
 ]
