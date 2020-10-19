@@ -36,6 +36,7 @@ ________________________________________________________________________________
 ## Rutinas de calidad de datos sobre biodiversidad en Open Refine 
 
 El sistema de información sobre biodiversidad de Colombia Colombia -[SiB Colombia](https://sibcolombia.net/) desarrolló un grupo de rutinas en Open Refine para gestionar la calidad de los datos primarios sobre biodiversidad.
+Consulte la [guía de validación y limpieza de datos sobre biodiversidad](http://repository.humboldt.org.co/handle/20.500.11761/35350)para mayor información de como utilizar estas rutinas.
 
 ## Acerca de las rutinas
 Estas rutinas validan de manera automática los datos, facilitando la limpieza y estandarización:
