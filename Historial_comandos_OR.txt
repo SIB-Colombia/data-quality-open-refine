@@ -1,0 +1,56 @@
+
+#Reemplazar valores de comas por puntos en una columna / Replace comma for point values in a column
+value.replace(',','.')
+
+#Modificar el formato de fecha a ISO-8601 / Modify date format based on ISO 8601
+value.toDate('dd/MM/yyyy').toString('yyyy-MM-dd')
+
+# Completar los valores de una columna, basado en los valores de otra. / Fill a column based in other column values. 
+cells['dwcElementName'].value
+
+#  Unión de columnas basado en columnas con valores iguales entre tablas (Llaves) / Column's join based in common columns between tables (Key)
+cell.cross("Lista_Plantas-Colombia", "scientificName").cells["scientificName"].value[0]
+
+# Limpeza de saltos de línea, espacios en blanco al inicio y al final de la línea y dobles espacios.
+value.trim().replace(/\u00A0/,' ').replace(/\s+/,' ')
+
+# Construir higherClassification dwc element based on higher taxonomy
+cells['kingdom'].value+" | "+cells['phylum'].value+" | "+cells['class'].value+" | "+cells['order'].value+" | "+cells['family'].value+" | "+cells['genus'].value+" | "+cells['specificEpithet'].value
+
+# Replace dates with months in text format like these georeferencedDate example: Tue Sep 24 00:00:00 COT 2019
+1. Use the split option for the date you want to parse.
+2. In month column use this code
+value.replace('Jan','01').replace('Feb','02').replace('Mar','03').replace('Apr','04').replace('May','05').replace('Jun','06').replace('Jul','07').replace('Aug','08').replace('Sep','09').replace('Oct','10').replace('Nov','11').replace('Dec','12')
+3. cells['georeferencedDate 6'].value+'-'+cells['georeferencedDate 2'].value+'-'+cells['georeferencedDate 3'].value
+
+
+# Partición. Comando útil para dividir el contenido de una columna a partir del contenido de otra. Usado para obtener la autoría a partir del nombre científicó 
+value.partition(cells["scientificNameAuthorship"].value)[0]
+
+
+# Llamados al API de GBIF a través de OpenRefine usando la opción "Add column by fetching URL".
+## Llamado API dataset
+"http://api.gbif.org/v1/dataset/"+ value
+### Extraer un campo del json de la respuesta del API
+value.parseJson()['publishingOrganizationKey']
+### Crear el doi a partir del llamado al API y el campo doi de la respuesta Json.
+"https://doi.org/"+value.parseJson()['doi']
+
+## Llamado API organization
+"http://api.gbif.org/v1/organization/"+value
+### Extraer el nombre de la organización de la respuesta Json
+value.parseJson()['title']
+
+# Condicional IF para comparar elementos
+## A partir de la longitud del campo.
+if(value.length() < 3, '0'+value, '')
+
+## Comparación entre dos campos para establece su igualdad a partir de un booleano
+if(value==cells["spcmSuggested"].value,1,0).toString()
+## Comparación anidada con dos condicionales
+if(value==true,if(cells['TituloColección'].value==true ,true, false), false)
+
+
+#Split de un campo a partir de un caracter
+smartSplit(value,',')[0]
+
