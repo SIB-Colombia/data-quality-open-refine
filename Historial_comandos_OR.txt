@@ -1,3 +1,16 @@
+Rutinas del SiB Colombia para la validación y limpieza de datos primarios 
+de Biodiversidad en OPEN REFINE
+https://github.com/SIB-Colombia/data-quality-open-refine
+
+Nombre: Comandos útiles de OpenRefine para manejo de datos sobre biodiversidad.
+Languaje: GREL 'General Refine Expression Language'
+Creado:2021-02-10
+Última Actualización:2021-02-10
+Autores: Ricardo Ortiz, Camila Plata, Esteban Marentes
+
+---------------------------------------------------------------------------------------------------------------
+
+
 
 #Reemplazar valores de comas por puntos en una columna / Replace comma for point values in a column
 value.replace(',','.')
@@ -8,7 +21,7 @@ value.toDate('dd/MM/yyyy').toString('yyyy-MM-dd')
 # Completar los valores de una columna, basado en los valores de otra. / Fill a column based in other column values. 
 cells['dwcElementName'].value
 
-#  Unión de columnas basado en columnas con valores iguales entre tablas (Llaves) / Column's join based in common columns between tables (Key)
+# Unión de columnas basado en columnas con valores iguales entre tablas (Llaves) / Column's join based in common columns between tables (Key)
 cell.cross("Lista_Plantas-Colombia", "scientificName").cells["scientificName"].value[0]
 
 # Limpeza de saltos de línea, espacios en blanco al inicio y al final de la línea y dobles espacios.
