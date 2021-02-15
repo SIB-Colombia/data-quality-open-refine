@@ -45,7 +45,7 @@ El límite del servicio con usuario en GeoNames es de 2000 registros diarios. Se
 
 Para crear una cuenta en GeoNames, diríjanse al siguiente link:http://www.geonames.org/login y diligencien el cuadro create a new user account. El "Username" es muy importante pues es el que usarán para correr el script.
 
-Para reemplazar su nombre de usario en este script, use CTRL-B y busque "demo", remplacelo por su nombre de usuario (ej: "rortizg")
+Para reemplazar su nombre de usario en este script, use CTRL-B y busque "demo", remplacelo por su nombre de usuario (ej: "rortizgeo")
 
 
 Para mas información sobre los servicios de GeoNames, diríjase a. http://www.geonames.org/export/web-services.html
@@ -93,7 +93,7 @@ Para mas información sobre los servicios de GeoNames, diríjase a. http://www.g
   },
   {
     "op": "core/column-addition-by-fetching-urls",
-    "description": "Create column elevationGeonames at index 3 by fetching URLs based on column uniqueDecimalCoordinates using expression grel:\"http://api.geonames.org/srtm1?lat=\"+cells['uniqueDecimalCoordinates'].value.split(\" | \")[0]+\"&lng=\"+cells['uniqueDecimalCoordinates'].value.split(\" | \")[1]+\"&username=rortizgeo\"",
+    "description": "Create column elevationGeonames at index 3 by fetching URLs based on column uniqueDecimalCoordinates using expression grel:\"http://api.geonames.org/srtm1?lat=\"+cells['uniqueDecimalCoordinates'].value.split(\" | \")[0]+\"&lng=\"+cells['uniqueDecimalCoordinates'].value.split(\" | \")[1]+\"&username=demo\"",
     "engineConfig": {
       "mode": "row-based",
       "facets": []
