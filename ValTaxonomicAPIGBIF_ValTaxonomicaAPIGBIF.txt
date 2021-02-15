@@ -9,7 +9,7 @@ https://github.com/SIB-Colombia/data-quality-open-refine
 Script Taxonomic Validation using GBIF's API
 Language: GREL 'General Refine Expression Language'
 Created: 2018-04-24
-Last Update:2019-06-13
+Last Update:2020-02-154
 Contributors: Ricardo Ortiz, Camila Plata
 
 This script:
@@ -100,7 +100,7 @@ Copy from here/ Copiar Desde Aquí
     "baseColumnName": "NomAPI",
     "urlExpression": "grel:\"http://api.gbif.org/v1/species/match?strict=true&name=\"+value+\"&kingdom=\"+cells['kingdom'].value",
     "onError": "set-to-blank",
-    "delay": 250,
+    "delay": 5,
     "cacheResponses": true
   },
   {
