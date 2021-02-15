@@ -10,16 +10,29 @@ Fecha última Actualización: 2019-04-26
 Autores: Ricardo Ortiz 
 
 Explicación de la rutina: 
-1-A partir de la coordenda en grados decimales, se hace una petición al servicio de elevaciones de GeoNames,
- que retorna la elevación en esa coordenada de acuerdo al modelo de elevación SRTM-1
-2-Crea un elemento verbatimCoordinates a partir de las coordenadas usadas para la petición al servicio de GeoNames
+1-Se crea un elemento no DwC *uniqueDecimalCoordinates* a partir del cuál se establecerán pares únicos de coordenadas (decimalLatitude y decimalLongitude) a partir de las cuales se hará un llamado al API de Geonames. 
+2-A partir del elemento *uniqueDecimalCoordinates*, se hace una petición al servicio de elevaciones de GeoNames, para este script se usa el servicio SRTM1, sin embargo el usuario puede usar otro modelo de elevación disponible. Como resultado se creara el elemento no DwC *elevationGeonames*.
+
+Modelos de elevación disponibles en Geonames:
+ -- Elevation - SRTM3: api.geonames.org/srtm3JSON?lat=```decimalLatitude```&lng=```decimalLatitude```&username=demo
+ -- Elevation - Aster Global Digital Elevation Model V2 2011: http://api.geonames.org/astergdem?llat=```decimalLatitude```&lng=```decimalLatitude```&username=demo
+ -- Elevation - GTOPO30: http://api.geonames.org/gtopo30?```decimalLatitude```&lng=```decimalLatitude```&username=demo
+
+3- Se crea el elemento *elevationValidation* a partir de las elevación documentada en minimunElevationInMeters y la elevación obtenida a partir del API de Geonames. A partir de la diferencia de las elevaciones se designa un valor booleano:
+
+-- 1: La diferencia entre la elevación en *minimumElevationInMeters* y *elevationGeonames* es menor a 100 m.s.n.m.
+-- 0: La diferencia entre la elevación en *minimumElevationInMeters* y *elevationGeonames* es mayor a 100 m.s.n.m.
 
 
 Requerimientos para utilizar la rutina
 1- El registro del cual se quiere obtener la elevación debe contar con coordenadas en grados decimales (Ejemplo: 4.7585, -74.5821)
 2- Las coordenadas deben estar documentadas como elementos Darwin Core. (decimalLatitude, decimalLongitude)
-3- Se debe crear un usuario en geonames. El usuario debe ser incluido en el script para que se realice la validación
-4- Si se quiere usar el servicio usando el modo "Demo" como usuario, este solo permite hasta 20000 consultas diarias(mundiales) por lo que no siempre esta disponible en este modo.
+3- Se debe **crear un usuario en geonames**. El usuario debe ser incluido en el script para que se realice la validación.
+4- Si se quiere usar el servicio usando el modo "Demo" como usuario, este solo permite hasta 20000 consultas diarias(mundiales) por lo que no siempre esta disponible en este modo. Si es el caso recibirá el siguiente mensaje de error: 
+
+~~~
+ERR:18:the daily limit of 20000 credits for demo has been exceeded. Please use an application specific account. Do not use the demo account for your application.
+~~~
 
 Advertencias
 El límite del servicio con usuario en GeoNames es de 2000 registros diarios. Se recomienda hacer la consulta sobre valores únicos de coordenadas y no sobre el total de los registros.
@@ -35,13 +48,13 @@ Para mas información sobre los servicios de GeoNames, diríjase a. http://www.g
 [
   {
     "op": "core/column-addition",
-    "description": "Create column verbatimCoordinates at index 20 based on column decimalLatitude using expression grel:cells['decimalLatitude'].value+\" | \"+cells['decimalLongitude'].value",
+    "description": "Create column uniqueDecimalCoordinates at index 20 based on column decimalLatitude using expression grel:cells['decimalLatitude'].value+\" | \"+cells['decimalLongitude'].value",
     "engineConfig": {
       "facets": [],
       "mode": "row-based"
     },
-    "newColumnName": "verbatimCoordinates",
-    "columnInsertIndex": 20,
+    "newColumnName": "uniqueDecimalCoordinates",
+    "columnInsertIndex": 2,
     "baseColumnName": "decimalLatitude",
     "expression": "grel:cells['decimalLatitude'].value+\" | \"+cells['decimalLongitude'].value",
     "onError": "set-to-blank"
@@ -56,7 +69,7 @@ Para mas información sobre los servicios de GeoNames, diríjase a. http://www.g
           "errorPosition": 1,
           "caseSensitive": false,
           "valueType": "string",
-          "column": "verbatimCoordinates",
+          "column": "uniqueDecimalCoordinates",
           "blankPosition": 2,
           "reverse": false
         }
@@ -65,90 +78,153 @@ Para mas información sobre los servicios de GeoNames, diríjase a. http://www.g
   },
   {
     "op": "core/blank-down",
-    "description": "Blank down cells in column verbatimCoordinates",
+    "description": "Blank down cells in column uniqueDecimalCoordinates",
     "engineConfig": {
       "facets": [],
       "mode": "row-based"
     },
-    "columnName": "verbatimCoordinates"
+    "columnName": "uniqueDecimalCoordinates"
   },
   {
     "op": "core/column-addition-by-fetching-urls",
-    "description": "Create column ElevacionAPI at index 20 by fetching URLs based on column decimalLatitude using expression grel:\"http://api.geonames.org/srtm1?lat=\"+cells['decimalLatitude'].value+\"&lng=\"+cells['decimalLongitude'].value+\"&username=bs.saavedra10\"",
+    "description": "Create column elevationGeonames at index 3 by fetching URLs based on column uniqueDecimalCoordinates using expression grel:\"http://api.geonames.org/srtm1?lat=\"+cells['uniqueDecimalCoordinates'].value.split(\" | \")[0]+\"&lng=\"+cells['uniqueDecimalCoordinates'].value.split(\" | \")[1]+\"&username=demo\"",
     "engineConfig": {
-      "facets": [
-        {
-          "type": "list",
-          "name": "ElevacionAPI",
-          "expression": "isBlank(value)",
-          "columnName": "ElevacionAPI",
-          "invert": false,
-          "selection": [
-            {
-              "v": {
-                "v": false,
-                "l": "false"
-              }
-            }
-          ],
-          "selectNumber": false,
-          "selectDateTime": false,
-          "selectBoolean": false,
-          "omitBlank": false,
-          "selectBlank": false,
-          "omitError": false,
-          "selectError": false
-        }
-      ],
-      "mode": "row-based"
+      "mode": "row-based",
+      "facets": []
     },
-    "newColumnName": "ElevacionAPI",
-    "columnInsertIndex": 20,
-    "baseColumnName": "decimalLatitude",
-    "urlExpression": "grel:\"http://api.geonames.org/srtm1?lat=\"+cells['decimalLatitude'].value+\"&lng=\"+cells['decimalLongitude'].value+\"&username=bs.saavedra10\"",
+    "newColumnName": "elevationGeonames",
+    "columnInsertIndex": 3,
+    "baseColumnName": "uniqueDecimalCoordinates",
+    "urlExpression": "grel:\"http://api.geonames.org/srtm1?lat=\"+cells['uniqueDecimalCoordinates'].value.split(\" | \")[0]+\"&lng=\"+cells['uniqueDecimalCoordinates'].value.split(\" | \")[1]+\"&username=rortizgeo\"",
     "onError": "set-to-blank",
     "delay": 250,
     "cacheResponses": true,
-    "httpHeadersJson": null
+    "httpHeadersJson": [
+      {
+        "name": "authorization",
+        "value": ""
+      },
+      {
+        "name": "user-agent",
+        "value": "OpenRefine 3.0 [TRUNK]"
+      },
+      {
+        "name": "accept",
+        "value": "*/*"
+      }
+    ]
   },
   {
+    "op": "core/text-transform",
+    "description": "Text transform on cells in column elevationGeonames using expression grel:value.trim().replace(/\\u00A0/,' ').replace(/\\s+/,' ')",
+    "engineConfig": {
+      "mode": "row-based",
+      "facets": []
+    },
+    "columnName": "elevationGeonames",
+    "expression": "grel:value.trim().replace(/\\u00A0/,' ').replace(/\\s+/,' ')",
+    "onError": "keep-original",
+    "repeat": false,
+    "repeatCount": 10
+  },
+
+  {
     "op": "core/fill-down",
-    "description": "Fill down cells in column ElevacionAPI",
+    "description": "Fill down cells in column elevationGeonames",
     "engineConfig": {
       "facets": [],
       "mode": "row-based"
     },
-    "columnName": "ElevacionAPI"
+    "columnName": "elevationGeonames"
+  },
+{
+    "op": "core/text-transform",
+    "description": "Text transform on cells in column elevationGeonames using expression value.toNumber()",
+    "engineConfig": {
+      "mode": "row-based",
+      "facets": []
+    },
+    "columnName": "elevationGeonames",
+    "expression": "value.toNumber()",
+    "onError": "keep-original",
+    "repeat": false,
+    "repeatCount": 10
+  },
+  {
+    "op": "core/text-transform",
+    "description": "Text transform on cells in column minimumElevationInMeters using expression value.toNumber()",
+    "engineConfig": {
+      "mode": "row-based",
+      "facets": []
+    },
+    "columnName": "minimumElevationInMeters",
+    "expression": "value.toNumber()",
+    "onError": "keep-original",
+    "repeat": false,
+    "repeatCount": 10
+  },
+
+{
+    "op": "core/text-transform",
+    "description": "Text transform on cells in column elevationGeonames using expression value.toNumber()",
+    "engineConfig": {
+      "mode": "row-based",
+      "facets": []
+    },
+    "columnName": "elevationGeonames",
+    "expression": "value.toNumber()",
+    "onError": "keep-original",
+    "repeat": false,
+    "repeatCount": 10
+  },
+  {
+    "op": "core/text-transform",
+    "description": "Text transform on cells in column minimumElevationInMeters using expression value.toNumber()",
+    "engineConfig": {
+      "mode": "row-based",
+      "facets": []
+    },
+    "columnName": "minimumElevationInMeters",
+    "expression": "value.toNumber()",
+    "onError": "keep-original",
+    "repeat": false,
+    "repeatCount": 10
   },
   {
     "op": "core/column-addition",
-    "description": "Create column elevationValidation at index 2 based on column ElevacionAPI using expression grel:if(value==cells[\"minimumElevationInMeters\"].value,'1','0').toString()",
+    "description": "Create column elevationValidation at index 4 based on column elevationGeonames using expression grel:if(abs(value - cells['minimumElevationInMeters'].value) < 100,'1','0')",
     "engineConfig": {
       "mode": "row-based",
       "facets": []
     },
     "newColumnName": "elevationValidation",
-    "columnInsertIndex": 2,
-    "baseColumnName": "ElevacionAPI",
-    "expression": "grel:if(value==cells[\"verbatimElevation\"].value,'1','0').toString()",
+    "columnInsertIndex": 4,
+    "baseColumnName": "elevationGeonames",
+    "expression": "grel:if(abs(value - cells['minimumElevationInMeters'].value) < 100,'1','0')",
     "onError": "set-to-blank"
   },
-   {
-    "op": "core/column-move",
-    "description": "Move column ElevacionAPI to position 2",
-    "columnName": "ElevacionAPI",
-    "index": 2
+
+  
+  {
+    "op": "core/column-removal",
+    "description": "Remove column uniqueDecimalCoordinates",
+    "columnName": "uniqueDecimalCoordinates"
   },
-   {
+
+  
+  {
     "op": "core/column-move",
-    "description": "Move column minimumElevationInMeters to position 3",
+    "description": "Move column minimumElevationInMeters to position 2",
     "columnName": "minimumElevationInMeters",
     "index": 2
   },
-   {
+
+  
+  {
     "op": "core/column-move",
-    "description": "Move column elevationValidation to position 4",
-    "columnName": "elevationValidation",
+    "description": "Move column maximumElevationInMeters to position 2",
+    "columnName": "maximumElevationInMeters",
     "index": 2
   }
+
 ]
