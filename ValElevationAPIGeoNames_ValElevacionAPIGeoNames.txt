@@ -22,7 +22,13 @@ Modelos de elevación disponibles en Geonames:
 
 -- 1: La diferencia entre la elevación en *minimumElevationInMeters* y *elevationGeonames* es menor a 100 m.s.n.m.
 -- 0: La diferencia entre la elevación en *minimumElevationInMeters* y *elevationGeonames* es mayor a 100 m.s.n.m.
+blank: No hay elevación mínima documentada.
 
+4. Si la elevación se encuentra documentanda en rangos (*minimumElevationInMetres* y *maximumElevationInMeters*) se crea un elemento *elevationRangeValidation* que evalua si la elevationGeonames se encuentra entre el rango de elevaciones.
+
+-- 1: Se encuentra entre el rango de elevaciones.
+-- 0: No se encuentra dentro del rango de elevaciones.
+blank: No hay elevación máxima documentada
 
 Requerimientos para utilizar la rutina
 1- El registro del cual se quiere obtener la elevación debe contar con coordenadas en grados decimales (Ejemplo: 4.7585, -74.5821)
@@ -87,7 +93,7 @@ Para mas información sobre los servicios de GeoNames, diríjase a. http://www.g
   },
   {
     "op": "core/column-addition-by-fetching-urls",
-    "description": "Create column elevationGeonames at index 3 by fetching URLs based on column uniqueDecimalCoordinates using expression grel:\"http://api.geonames.org/srtm1?lat=\"+cells['uniqueDecimalCoordinates'].value.split(\" | \")[0]+\"&lng=\"+cells['uniqueDecimalCoordinates'].value.split(\" | \")[1]+\"&username=demo\"",
+    "description": "Create column elevationGeonames at index 3 by fetching URLs based on column uniqueDecimalCoordinates using expression grel:\"http://api.geonames.org/srtm1?lat=\"+cells['uniqueDecimalCoordinates'].value.split(\" | \")[0]+\"&lng=\"+cells['uniqueDecimalCoordinates'].value.split(\" | \")[1]+\"&username=rortizgeo\"",
     "engineConfig": {
       "mode": "row-based",
       "facets": []
@@ -190,9 +196,25 @@ Para mas información sobre los servicios de GeoNames, diríjase a. http://www.g
     "repeat": false,
     "repeatCount": 10
   },
+
+  {
+    "op": "core/text-transform",
+    "description": "Text transform on cells in column maximumElevationInMeters using expression value.toNumber()",
+    "engineConfig": {
+      "mode": "row-based",
+      "facets": []
+    },
+    "columnName": "maximumElevationInMeters",
+    "expression": "value.toNumber()",
+    "onError": "keep-original",
+    "repeat": false,
+    "repeatCount": 10
+  },
+
+
   {
     "op": "core/column-addition",
-    "description": "Create column elevationValidation at index 4 based on column elevationGeonames using expression grel:if(abs(value - cells['minimumElevationInMeters'].value) < 100,'1','0')",
+    "description": "Create column elevationValidation at index 4 based on column elevationGeonames using expression grel:if(abs(value - cells['minimumElevationInMeters'].value) <= 100,'1','0')",
     "engineConfig": {
       "mode": "row-based",
       "facets": []
@@ -200,10 +222,23 @@ Para mas información sobre los servicios de GeoNames, diríjase a. http://www.g
     "newColumnName": "elevationValidation",
     "columnInsertIndex": 4,
     "baseColumnName": "elevationGeonames",
-    "expression": "grel:if(abs(value - cells['minimumElevationInMeters'].value) < 100,'1','0')",
+    "expression": "grel:if(abs(value - cells['minimumElevationInMeters'].value) <= 100,'1','0')",
     "onError": "set-to-blank"
   },
-
+  
+    {
+    "op": "core/column-addition",
+    "description": "Create column elevationRangeValidation at index 5 based on column elevationGeonames using expression grel:if(value >= cells['minimumElevationInMeters'].value,if(cells[maximumElevationInMeters].value != '',if(value <= cells['maximumElevationInMeters'].value,'1',''),''),'0')",
+    "engineConfig": {
+      "mode": "row-based",
+      "facets": []
+    },
+    "newColumnName": "elevationRangeValidation",
+    "columnInsertIndex": 5,
+    "baseColumnName": "elevationGeonames",
+    "expression": "grel:if(value >= cells['minimumElevationInMeters'].value,if(cells[maximumElevationInMeters].value != '',if(value <= cells['maximumElevationInMeters'].value,'1',''),''),'0')",
+    "onError": "set-to-blank"
+  },
   
   {
     "op": "core/column-removal",
@@ -211,19 +246,17 @@ Para mas información sobre los servicios de GeoNames, diríjase a. http://www.g
     "columnName": "uniqueDecimalCoordinates"
   },
 
-  
-  {
-    "op": "core/column-move",
-    "description": "Move column minimumElevationInMeters to position 2",
-    "columnName": "minimumElevationInMeters",
-    "index": 2
-  },
-
-  
   {
     "op": "core/column-move",
     "description": "Move column maximumElevationInMeters to position 2",
     "columnName": "maximumElevationInMeters",
+    "index": 2
+  },
+
+  {
+    "op": "core/column-move",
+    "description": "Move column minimumElevationInMeters to position 2",
+    "columnName": "minimumElevationInMeters",
     "index": 2
   }
 
