@@ -25,13 +25,13 @@ Review the output for nulls, canadensys may not recognize all date formats
 
 --ES
 
-Rutinas del SiB Colombia para la validación y limpieza de datos primarios 
+Rutinas del SiB Colombia para la validaciÃ³n y limpieza de datos primarios 
 de Biodiversidad en OPEN REFINE
 
-Nombre rutina: Transformación del formato de la fecha ISO 8601
+Nombre rutina: TransformaciÃ³n del formato de la fecha ISO 8601
 Languaje: GREL 'General Refine Expression Language'
 Creado:2018-03-21
-Última Actualización:2019-06-07
+Ãšltima ActualizaciÃ³n:2019-06-07
 Autores:Camila Plata, Ricardo Ortiz 
 
 Esta rutina:
@@ -49,91 +49,171 @@ No todas las fechas son convertidas exitosamente por el API, revise las celdas d
 ---Do not copy /No Copiar
 ----------------------------------------------------------------------------
 
+
+
 [
   {
     "op": "core/column-addition-by-fetching-urls",
-    "description": "Create column canadensysDateAPI at index 1 by fetching URLs based on column eventDate using expression grel:\"http://data.canadensys.net/tools/dates.json?data=\"+value",
+    "description": "Create column dateParsingCanadensysAPI at index 2 by fetching URLs based on column eventDate using expression grel:\"http://data.canadensys.net/tools/dates.json?data=\"+escape(cells[\"eventDate\"].value,\"url\")",
     "engineConfig": {
       "mode": "row-based",
       "facets": []
     },
-    "newColumnName": "canadensysDateAPI",
-    "columnInsertIndex": 1,
+    "newColumnName": "dateParsingCanadensysAPI",
+    "columnInsertIndex": 2,
     "baseColumnName": "eventDate",
-    "urlExpression": "grel:\"http://data.canadensys.net/tools/dates.json?data=\"+value",
+    "urlExpression": "grel:\"http://data.canadensys.net/tools/dates.json?data=\"+escape(cells[\"eventDate\"].value,\"url\")",
     "onError": "set-to-blank",
     "delay": 250,
-    "cacheResponses": true
+    "cacheResponses": true,
+    "httpHeadersJson": [
+      {
+        "name": "authorization",
+        "value": ""
+      },
+      {
+        "name": "user-agent",
+        "value": "OpenRefine 3.0 [TRUNK]"
+      },
+      {
+        "name": "accept",
+        "value": "*/*"
+      }
+    ]
+  },
+ 
+   {
+    "op": "core/column-addition",
+    "description": "Create column dayISO8601 at index 2 based on column dateParsingCanadensysAPI using expression grel:forEach(value.parseJson().get(\"data\").get(\"results\"),v,v.get(\"day\"))[0])",
+    "engineConfig": {
+      "mode": "row-based",
+      "facets": []
+    },
+    "newColumnName": "dayISO8601",
+    "columnInsertIndex": 2,
+    "baseColumnName": "dateParsingCanadensysAPI",
+    "expression": "grel:forEach(value.parseJson().get(\"data\").get(\"results\"),v,v.get(\"day\"))[0])",
+    "onError": "set-to-blank"
   },
   {
     "op": "core/text-transform",
-    "description": "Text transform on cells in column canadensysDateAPI using expression grel:value.replace('{\"data\":{\"results\":[','').replace(']}}','')",
+    "description": "Text transform on cells in column dayISO8601 using expression value.toString()",
     "engineConfig": {
       "mode": "row-based",
       "facets": []
     },
-    "columnName": "canadensysDateAPI",
-    "expression": "grel:value.replace('{\"data\":{\"results\":[','').replace(']}}','')",
+    "columnName": "dayISO8601",
+    "expression": "value.toString()",
     "onError": "keep-original",
     "repeat": false,
     "repeatCount": 10
   },
   {
     "op": "core/column-addition",
-    "description": "Create column eventDateISO at index 1 based on column canadensysDateAPI using expression grel:value.parseJson().get('iso8601').toString()",
+    "description": "Create column monthISO8601 at index 4 based on column dateParsingCanadensysAPI using expression grel:forEach(value.parseJson().get(\"data\").get(\"results\"),v,v.get(\"month\"))[0])",
     "engineConfig": {
       "mode": "row-based",
       "facets": []
     },
-    "newColumnName": "eventDateISO",
-    "columnInsertIndex": 1,
-    "baseColumnName": "canadensysDateAPI",
-    "expression": "grel:value.parseJson().get('iso8601').toString()",
-    "onError": "set-to-blank"
-  },
-    {
-    "op": "core/column-addition",
-    "description": "Create column day at index 2 based on column eventDateISO using expression grel:smartSplit(value,\"-\")[2].toString()",
-    "engineConfig": {
-      "facets": [],
-      "mode": "row-based"
-    },
-    "newColumnName": "day",
+    "newColumnName": "monthISO8601",
     "columnInsertIndex": 2,
-    "baseColumnName": "eventDateISO",
-    "expression": "grel:smartSplit(value,\"-\")[2].toString()",
+    "baseColumnName": "dateParsingCanadensysAPI",
+    "expression": "grel:forEach(value.parseJson().get(\"data\").get(\"results\"),v,v.get(\"month\"))[0])",
     "onError": "set-to-blank"
   },
   {
-    "op": "core/column-addition",
-    "description": "Create column month at index 2 based on column eventDateISO using expression grel:smartSplit(value,\"-\")[1].toString()",
+    "op": "core/text-transform",
+    "description": "Text transform on cells in column monthISO8601 using expression value.toString()",
     "engineConfig": {
-      "facets": [],
-      "mode": "row-based"
+      "mode": "row-based",
+      "facets": []
     },
-    "newColumnName": "month",
+    "columnName": "monthISO8601",
+    "expression": "value.toString()",
+    "onError": "keep-original",
+    "repeat": false,
+    "repeatCount": 10
+  },
+   {
+    "op": "core/column-addition",
+    "description": "Create column yearISO8601 at index 4 based on column dateParsingCanadensysAPI using expression grel:forEach(value.parseJson().get(\"data\").get(\"results\"),v,v.get(\"year\"))[0])",
+    "engineConfig": {
+      "mode": "row-based",
+      "facets": []
+    },
+    "newColumnName": "yearISO8601",
     "columnInsertIndex": 2,
-    "baseColumnName": "eventDateISO",
-    "expression": "grel:smartSplit(value,\"-\")[1].toString()",
+    "baseColumnName": "dateParsingCanadensysAPI",
+    "expression": "grel:forEach(value.parseJson().get(\"data\").get(\"results\"),v,v.get(\"year\"))[0])",
     "onError": "set-to-blank"
   },
   {
-    "op": "core/column-addition",
-    "description": "Create column year at index 2 based on column eventDateISO using expression grel:smartSplit(value,\"-\")[0].toString()",
+    "op": "core/text-transform",
+    "description": "Text transform on cells in column yearISO8601 using expression value.toString()",
     "engineConfig": {
-      "facets": [],
-      "mode": "row-based"
+      "mode": "row-based",
+      "facets": []
     },
-    "newColumnName": "year",
+    "columnName": "yearISO8601",
+    "expression": "value.toString()",
+    "onError": "keep-original",
+    "repeat": false,
+    "repeatCount": 10
+  },
+  {
+    "op": "core/column-addition",
+    "description": "Create column eventDateISO8601 at index 4 based on column dateParsingCanadensysAPI using expression grel:forEach(value.parseJson().get(\"data\").get(\"results\"),v,v.get(\"iso8601\"))[0])",
+    "engineConfig": {
+      "mode": "row-based",
+      "facets": []
+    },
+    "newColumnName": "eventDateISO8601",
     "columnInsertIndex": 2,
-    "baseColumnName": "eventDateISO",
-    "expression": "grel:smartSplit(value,\"-\")[0].toString()",
+    "baseColumnName": "dateParsingCanadensysAPI",
+    "expression": "grel:forEach(value.parseJson().get(\"data\").get(\"results\"),v,v.get(\"iso8601\"))[0])",
     "onError": "set-to-blank"
   },
-    {
+  {
+    "op": "core/column-rename",
+    "description": "Rename column eventDate to verbatimEventDate",
+    "oldColumnName": "eventDate",
+    "newColumnName": "verbatimEventDate"
+  },
+  {
     "op": "core/column-move",
-    "description": "Move column eventDate to position 1",
-    "columnName": "eventDate",
-    "index": 1
+    "description": "Move column verbatimEventDate to position 2",
+    "columnName": "verbatimEventDate",
+    "index": 2
   }
-  ]
+  {
+    "op": "core/text-transform",
+    "description": "Text transform on cells in column monthISO8601 using expression grel:if(value.length() == 1, '0'+value, value)",
+    "engineConfig": {
+      "mode": "row-based",
+      "facets": []
+    },
+    "columnName": "monthISO8601",
+    "expression": "grel:if(value.length() == 1, '0'+value, value)",
+    "onError": "keep-original",
+    "repeat": false,
+    "repeatCount": 10
+  },
+  {
+    "op": "core/text-transform",
+    "description": "Text transform on cells in column dayISO8601 using expression grel:if(value.length() == 1, '0'+value, value)",
+    "engineConfig": {
+      "mode": "row-based",
+      "facets": []
+    },
+    "columnName": "dayISO8601",
+    "expression": "grel:if(value.length() == 1, '0'+value, value)",
+    "onError": "keep-original",
+    "repeat": false,
+    "repeatCount": 10
+  },
+  {
+    "op": "core/column-removal",
+    "description": "Remove column dateParsingCanadensysAPI",
+    "columnName": "dateParsingCanadensysAPI"
+  }    
+]
