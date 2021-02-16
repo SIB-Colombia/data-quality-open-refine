@@ -9,13 +9,13 @@ SiB Colombia scripts for Biodiversity data validation and cleaning in OPEN REFIN
 Script Name: Date format transformation ISO 8601
 Language: GREL 'General Refine Expression Language'
 Created:2018-03-21
-Last Update:2019-06-07
+Last Update:2021-02-16
 Contributors: Camila Plata, Ricardo Ortiz 
 
 This script:
 1-Calls canadensys date Parsing API
 2-Extracts ISO 8601 Date as text
-3-Creates DwC date elements: year, month, day
+3-Creates DwC date elements: year, month, day, and a verbatimEventDate
 
 Conditions:
 Dataset with DwC element 'eventDate'
@@ -37,7 +37,7 @@ Autores:Camila Plata, Ricardo Ortiz
 Esta rutina:
 1-Llama al API de fechas de Canadensys 
 2-Extrae la fecha ISO 8601 como texto
-3-Crea los elementos DwC asociados a la fecha: year, month, day
+3-Crea los elementos DwC asociados a la fecha: year, month, day y la fecha original (verbatimEventDate).
 
 Requerimientos:
 Conjunto de datos con el elemento DwC 'eventDate'
