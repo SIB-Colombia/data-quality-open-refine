@@ -66,7 +66,7 @@ Los elementos taxonómicos son reorganizados para facilitar la validación taxon
 [
   {
     "op": "core/text-transform",
-    "description": "Text transform on cells in column scientificName using expression grel:value.replace(/\\s+/,' ').trim()",
+    "description": "Text transform on cells in column scientificName",
     "engineConfig": {
       "mode": "row-based",
       "facets": []
@@ -79,7 +79,7 @@ Los elementos taxonómicos son reorganizados para facilitar la validación taxon
   },
    {
     "op": "core/column-addition",
-    "description": "Create column NomAPI at index 2 based on column scientificName using expression grel:value.replace(\" \",\"%20\")",
+    "description": "Create column NomAPI at index 2 based on column scientificName ,
     "engineConfig": {
       "mode": "row-based",
       "facets": []
@@ -92,7 +92,7 @@ Los elementos taxonómicos son reorganizados para facilitar la validación taxon
   },
  {
     "op": "core/column-addition-by-fetching-urls",
-    "description": "Create column c at index 3 by fetching URLs based on column NomAPIw using expression grel:'http://www.marinespecies.org/rest/AphiaRecordsByMatchNames?scientificnames%5B%5D='+value+'&marine_only=false'",
+    "description": "Create column c at index 3 by fetching URLs based on column NomAPIw",
     "engineConfig": {
       "facets": [],
       "mode": "row-based"
@@ -102,7 +102,7 @@ Los elementos taxonómicos son reorganizados para facilitar la validación taxon
     "baseColumnName": "NomAPIw",
     "urlExpression": "grel:'http://www.marinespecies.org/rest/AphiaRecordsByMatchNames?scientificnames%5B%5D='+value+'&marine_only=false'",
     "onError": "set-to-blank",
-    "delay": 250,
+    "delay": 50,
     "cacheResponses": true,
     "httpHeadersJson": [
       {
@@ -121,7 +121,7 @@ Los elementos taxonómicos son reorganizados para facilitar la validación taxon
   },
   {
     "op": "core/text-transform",
-    "description": "Text transform on cells in column callAPIworms using expression grel:value.replace('[','').replace(']','')",
+    "description": "Text transform on cells in column callAPIworms",
     "engineConfig": {
       "facets": [],
       "mode": "row-based"
@@ -134,7 +134,7 @@ Los elementos taxonómicos son reorganizados para facilitar la validación taxon
   },
   {
     "op": "core/column-addition",
-    "description": "Create column isTerrestrial at index 2 based on column callAPIworms using expression grel:value.parseJson().get('isTerrestrial')",
+    "description": "Create column isTerrestrial at index 2 based on column callAPIworms",
     "engineConfig": {
       "facets": [],
       "mode": "row-based"
@@ -147,7 +147,7 @@ Los elementos taxonómicos son reorganizados para facilitar la validación taxon
   },
   {
     "op": "core/column-addition",
-    "description": "Create column isFreshwater at index 2 based on column callAPIworms using expression grel:value.parseJson().get('isFreshwater')",
+    "description": "Create column isFreshwater at index 2 based on column callAPIworms",
     "engineConfig": {
       "facets": [],
       "mode": "row-based"
@@ -160,7 +160,7 @@ Los elementos taxonómicos son reorganizados para facilitar la validación taxon
   },
   {
     "op": "core/column-addition",
-    "description": "Create column isBrackish at index 2 based on column callAPIworms using expression grel:value.parseJson().get('isBrackish')",
+    "description": "Create column isBrackish at index 2 based on column callAPIworms",
     "engineConfig": {
       "facets": [],
       "mode": "row-based"
@@ -173,7 +173,7 @@ Los elementos taxonómicos son reorganizados para facilitar la validación taxon
   },
   {
     "op": "core/column-addition",
-    "description": "Create column isMarine at index 2 based on column callAPIworms using expression grel:value.parseJson().get('isMarine')",
+    "description": "Create column isMarine at index 2 based on column callAPIworms",
     "engineConfig": {
       "facets": [],
       "mode": "row-based"
@@ -186,7 +186,7 @@ Los elementos taxonómicos son reorganizados para facilitar la validación taxon
   }, 
   {
     "op": "core/column-addition",
-    "description": "Create column A at index 2 based on column callAPIworms using expression grel:value.parseJson().get('url')",
+    "description": "Create column A at index 2 based on column callAPIworms",
     "engineConfig": {
       "facets": [],
       "mode": "row-based"
@@ -199,7 +199,7 @@ Los elementos taxonómicos son reorganizados para facilitar la validación taxon
   },  
   {
     "op": "core/column-addition",
-    "description": "Create column A at index 2 based on column callAPIworms using expression grel:value.parseJson().get('citation')",
+    "description": "Create column A at index 2 based on column callAPIworms",
     "engineConfig": {
       "facets": [],
       "mode": "row-based"
@@ -218,7 +218,7 @@ Los elementos taxonómicos son reorganizados para facilitar la validación taxon
   },
   {
     "op": "core/column-addition",
-    "description": "Create column specificEpithetSuggested at index 2 based on column callAPI using expression grel:split(value.parseJson().get(\"canonicalName\"),' ')[1]",
+    "description": "Create column specificEpithetSuggested at index 2 based on column callAPIworms",
     "engineConfig": {
       "mode": "row-based",
       "facets": []
@@ -231,7 +231,7 @@ Los elementos taxonómicos son reorganizados para facilitar la validación taxon
   },
   {
     "op": "core/column-addition",
-    "description": "Create column specificEpithetValidation at index 2 based on column suggestedSpecificEpithet using expression grel:if(value==cells[\"specificEpithet\"].value,'1','0').toString()",
+    "description": "Create column specificEpithetValidation at index 2 based on column suggestedSpecificEpithet",
     "engineConfig": {
       "mode": "row-based",
       "facets": []
@@ -250,7 +250,7 @@ Los elementos taxonómicos son reorganizados para facilitar la validación taxon
   },
   {
     "op": "core/column-addition",
-    "description": "Create column A at index 2 based on column callAPIworms using expression grel:value.parseJson().get('genus')",
+    "description": "Create column A at index 2 based on column callAPIworms",
     "engineConfig": {
       "facets": [],
       "mode": "row-based"
@@ -263,7 +263,7 @@ Los elementos taxonómicos son reorganizados para facilitar la validación taxon
   },
   {
     "op": "core/column-addition",
-    "description": "Create column genusValidation at index 2 based on column suggstedKingdom using expression grel:if(value==cells[\"genus\"].value,'1','0').toString()",
+    "description": "Create column genusValidation at index 2 based on column suggstedKingdom",
     "engineConfig": {
       "mode": "row-based",
       "facets": []
@@ -282,7 +282,7 @@ Los elementos taxonómicos son reorganizados para facilitar la validación taxon
   },
   {
     "op": "core/column-addition",
-    "description": "Create column A at index 2 based on column callAPIworms using expression grel:value.parseJson().get('family')",
+    "description": "Create column familySuggested at index 2 based on column callAPIworms",
     "engineConfig": {
       "facets": [],
       "mode": "row-based"
@@ -295,7 +295,7 @@ Los elementos taxonómicos son reorganizados para facilitar la validación taxon
   },
   {
     "op": "core/column-addition",
-    "description": "Create column familyValidation at index 2 based on column suggstedKingdom using expression grel:if(value==cells[\"family\"].value,'1','0').toString()",
+    "description": "Create column familyValidation at index 2 based on column familySuggested",
     "engineConfig": {
       "mode": "row-based",
       "facets": []
@@ -314,7 +314,7 @@ Los elementos taxonómicos son reorganizados para facilitar la validación taxon
   },
      {
     "op": "core/column-addition",
-    "description": "Create column A at index 2 based on column callAPIworms using expression grel:value.parseJson().get('order')",
+    "description": "Create column A at index 2 based on column callAPIworms",
     "engineConfig": {
       "facets": [],
       "mode": "row-based"
@@ -327,7 +327,7 @@ Los elementos taxonómicos son reorganizados para facilitar la validación taxon
   },
   {
     "op": "core/column-addition",
-    "description": "Create column orderValidation at index 2 based on column suggstedKingdom using expression grel:if(value==cells[\"order\"].value,'1','0').toString()",
+    "description": "Create column orderValidation at index 2 based on column suggestedOrder",
     "engineConfig": {
       "mode": "row-based",
       "facets": []
@@ -346,7 +346,7 @@ Los elementos taxonómicos son reorganizados para facilitar la validación taxon
   },
    {
     "op": "core/column-addition",
-    "description": "Create column A at index 2 based on column callAPIworms using expression grel:value.parseJson().get('class')",
+    "description": "Create column A at index 2 based on column callAPIworms",
     "engineConfig": {
       "facets": [],
       "mode": "row-based"
@@ -359,7 +359,7 @@ Los elementos taxonómicos son reorganizados para facilitar la validación taxon
   },
   {
     "op": "core/column-addition",
-    "description": "Create column classValidation at index 2 based on column suggstedKingdom using expression grel:if(value==cells[\"class\"].value,'1','0').toString()",
+    "description": "Create column classValidation at index 2 based on column suggestedClass",
     "engineConfig": {
       "mode": "row-based",
       "facets": []
@@ -378,7 +378,7 @@ Los elementos taxonómicos son reorganizados para facilitar la validación taxon
   },
   {
     "op": "core/column-addition",
-    "description": "Create column A at index 2 based on column callAPIworms using expression grel:value.parseJson().get('phylum')",
+    "description": "Create column A at index 2 based on column callAPIworms",
     "engineConfig": {
       "facets": [],
       "mode": "row-based"
@@ -391,7 +391,7 @@ Los elementos taxonómicos son reorganizados para facilitar la validación taxon
   },   
    {
     "op": "core/column-addition",
-    "description": "Create column phylumValidation at index 2 based on column suggstedKingdom using expression grel:if(value==cells[\"phylum\"].value,'1','0').toString()",
+    "description": "Create column phylumValidation at index 2 based on column suggestedPhylum",
     "engineConfig": {
       "mode": "row-based",
       "facets": []
@@ -410,7 +410,7 @@ Los elementos taxonómicos son reorganizados para facilitar la validación taxon
   },
   {
     "op": "core/column-addition",
-    "description": "Create column A at index 2 based on column callAPIworms using expression grel:value.parseJson().get('kingdom')",
+    "description": "Create column A at index 2 based on column callAPIworms",
     "engineConfig": {
       "facets": [],
       "mode": "row-based"
@@ -423,7 +423,7 @@ Los elementos taxonómicos son reorganizados para facilitar la validación taxon
   },
    {
     "op": "core/column-addition",
-    "description": "Create column kingdomValidation at index 2 based on column suggstedKingdom using expression grel:if(value==cells[\"kingdom\"].value,'1','0').toString()",
+    "description": "Create column kingdomValidation at index 2 based on column suggestedKingdom",
     "engineConfig": {
       "mode": "row-based",
       "facets": []
@@ -442,7 +442,7 @@ Los elementos taxonómicos son reorganizados para facilitar la validación taxon
   },
   {
     "op": "core/column-addition",
-    "description": "Create column suggestedTaxonomicStatus at index 2 based on column callAPI using expression grel:value.parseJson().get(\"status\")",
+    "description": "Create column suggestedTaxonomicStatus at index 2 based on column callAPIworms",
     "engineConfig": {
       "mode": "row-based",
       "facets": []
@@ -455,7 +455,7 @@ Los elementos taxonómicos son reorganizados para facilitar la validación taxon
   }, 
   {
     "op": "core/column-addition",
-    "description": "Create column A at index 2 based on column callAPIworms using expression grel:value.parseJson().get('rank')",
+    "description": "Create column A at index 2 based on column callAPIworms",
     "engineConfig": {
       "facets": [],
       "mode": "row-based"
@@ -468,7 +468,7 @@ Los elementos taxonómicos son reorganizados para facilitar la validación taxon
   },
   {
     "op": "core/column-addition",
-    "description": "Create column A at index 2 based on column callAPIworms using expression grel:value.parseJson().get('authority')",
+    "description": "Create column A at index 2 based on column callAPIworms",
     "engineConfig": {
       "facets": [],
       "mode": "row-based"
@@ -481,7 +481,7 @@ Los elementos taxonómicos son reorganizados para facilitar la validación taxon
   },
   {
     "op": "core/column-addition",
-    "description": "Create column authorshipValidation at index 2 based on column suggstedAuthorship using expression grel:if(value==cells[\"scientificNameAuthorship\"].value,'1','0').toString()",
+    "description": "Create column authorshipValidation at index 2 based on column suggstedAuthorship",
     "engineConfig": {
       "mode": "row-based",
       "facets": []
@@ -500,7 +500,7 @@ Los elementos taxonómicos son reorganizados para facilitar la validación taxon
   },
   {
     "op": "core/column-addition",
-    "description": "Create column acceptedScientificName(species) at index 2 based on column callAPI using expression grel:value.parseJson().get('valid_name')",
+    "description": "Create column acceptedScientificName(species) at index 2 based on column callAPIworms",
     "engineConfig": {
       "mode": "row-based",
       "facets": []
@@ -519,7 +519,7 @@ Los elementos taxonómicos son reorganizados para facilitar la validación taxon
   },
   {
     "op": "core/column-addition",
-    "description": "Create column scientificNameIDSuggested at index 2 based on column callAPI using expression grel:value.parseJson().get('lsid')",
+    "description": "Create column scientificNameIDSuggested at index 2 based on column callAPIworms",
     "engineConfig": {
       "mode": "row-based",
       "facets": []
@@ -532,7 +532,7 @@ Los elementos taxonómicos son reorganizados para facilitar la validación taxon
   },
   {
     "op": "core/column-addition",
-    "description": "Create column authorshipValidation at index 2 based on column suggstedAuthorship using expression grel:if(value==cells[\"scientificNameID\"].value,'1','0').toString()",
+    "description": "Create column authorshipValidation at index 2 based on column scientificNameIDSuggested",
     "engineConfig": {
       "mode": "row-based",
       "facets": []
@@ -551,7 +551,7 @@ Los elementos taxonómicos son reorganizados para facilitar la validación taxon
   },
   {
     "op": "core/column-addition",
-    "description": "Create column A at index 2 based on column callAPIworms using expression grel:value.parseJson().get('match_type')",
+    "description": "Create column A at index 2 based on column callAPIworms",
     "engineConfig": {
       "facets": [],
       "mode": "row-based"
