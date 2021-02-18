@@ -51,6 +51,7 @@ Para reemplazar su nombre de usario en este script, use CTRL-B y busque "demo", 
 Para mas información sobre los servicios de GeoNames, diríjase a. http://www.geonames.org/export/web-services.html
 
 -------------------------------------------------------------------------No Copiar--------------------------------------------------------------------------------------------
+
 [
   {
     "op": "core/column-addition",
@@ -93,12 +94,12 @@ Para mas información sobre los servicios de GeoNames, diríjase a. http://www.g
   },
   {
     "op": "core/column-addition-by-fetching-urls",
-    "description": "Create column elevationGeonames at index 3 by fetching URLs based on column uniqueDecimalCoordinates using expression grel:\"http://api.geonames.org/srtm1?lat=\"+cells['uniqueDecimalCoordinates'].value.split(\" | \")[0]+\"&lng=\"+cells['uniqueDecimalCoordinates'].value.split(\" | \")[1]+\"&username=demo\"",
+    "description": "Create column elevationSuggested at index 3 by fetching URLs based on column uniqueDecimalCoordinates using expression grel:\"http://api.geonames.org/srtm1?lat=\"+cells['uniqueDecimalCoordinates'].value.split(\" | \")[0]+\"&lng=\"+cells['uniqueDecimalCoordinates'].value.split(\" | \")[1]+\"&username=rortizgeo\"",
     "engineConfig": {
       "mode": "row-based",
       "facets": []
     },
-    "newColumnName": "elevationGeonames",
+    "newColumnName": "elevationSuggested",
     "columnInsertIndex": 3,
     "baseColumnName": "uniqueDecimalCoordinates",
     "urlExpression": "grel:\"http://api.geonames.org/srtm1?lat=\"+cells['uniqueDecimalCoordinates'].value.split(\" | \")[0]+\"&lng=\"+cells['uniqueDecimalCoordinates'].value.split(\" | \")[1]+\"&username=rortizgeo\"",
@@ -122,12 +123,12 @@ Para mas información sobre los servicios de GeoNames, diríjase a. http://www.g
   },
   {
     "op": "core/text-transform",
-    "description": "Text transform on cells in column elevationGeonames using expression grel:value.trim().replace(/\\u00A0/,' ').replace(/\\s+/,' ')",
+    "description": "Text transform on cells in column elevationSuggested using expression grel:value.trim().replace(/\\u00A0/,' ').replace(/\\s+/,' ')",
     "engineConfig": {
       "mode": "row-based",
       "facets": []
     },
-    "columnName": "elevationGeonames",
+    "columnName": "elevationSuggested",
     "expression": "grel:value.trim().replace(/\\u00A0/,' ').replace(/\\s+/,' ')",
     "onError": "keep-original",
     "repeat": false,
@@ -136,21 +137,21 @@ Para mas información sobre los servicios de GeoNames, diríjase a. http://www.g
 
   {
     "op": "core/fill-down",
-    "description": "Fill down cells in column elevationGeonames",
+    "description": "Fill down cells in column elevationSuggested",
     "engineConfig": {
       "facets": [],
       "mode": "row-based"
     },
-    "columnName": "elevationGeonames"
+    "columnName": "elevationSuggested"
   },
 {
     "op": "core/text-transform",
-    "description": "Text transform on cells in column elevationGeonames using expression value.toNumber()",
+    "description": "Text transform on cells in column elevationSuggested using expression value.toNumber()",
     "engineConfig": {
       "mode": "row-based",
       "facets": []
     },
-    "columnName": "elevationGeonames",
+    "columnName": "elevationSuggested",
     "expression": "value.toNumber()",
     "onError": "keep-original",
     "repeat": false,
@@ -172,12 +173,12 @@ Para mas información sobre los servicios de GeoNames, diríjase a. http://www.g
 
 {
     "op": "core/text-transform",
-    "description": "Text transform on cells in column elevationGeonames using expression value.toNumber()",
+    "description": "Text transform on cells in column elevationSuggested using expression value.toNumber()",
     "engineConfig": {
       "mode": "row-based",
       "facets": []
     },
-    "columnName": "elevationGeonames",
+    "columnName": "elevationSuggested",
     "expression": "value.toNumber()",
     "onError": "keep-original",
     "repeat": false,
@@ -214,29 +215,29 @@ Para mas información sobre los servicios de GeoNames, diríjase a. http://www.g
 
   {
     "op": "core/column-addition",
-    "description": "Create column elevationValidation at index 4 based on column elevationGeonames using expression grel:if(abs(value - cells['minimumElevationInMeters'].value) <= 100,'1','0')",
+    "description": "Create column elevationValidation at index 4 based on column elevationSuggested using expression grel:if(abs(value - cells['minimumElevationInMeters'].value) <= 100,'1','0')",
     "engineConfig": {
       "mode": "row-based",
       "facets": []
     },
     "newColumnName": "elevationValidation",
     "columnInsertIndex": 4,
-    "baseColumnName": "elevationGeonames",
+    "baseColumnName": "elevationSuggested",
     "expression": "grel:if(abs(value - cells['minimumElevationInMeters'].value) <= 100,'1','0')",
     "onError": "set-to-blank"
   },
   
-    {
+  {
     "op": "core/column-addition",
-    "description": "Create column elevationRangeValidation at index 5 based on column elevationGeonames using expression grel:if(value >= cells['minimumElevationInMeters'].value,if(cells[maximumElevationInMeters].value != '',if(value <= cells['maximumElevationInMeters'].value,'1',''),''),'0')",
+    "description": "Create column elevationRangeValidation at index 5 based on column elevationSuggested using expression grel:if(cells[minimumElevationInMeters].value != '',if(cells[maximumElevationInMeters].value != '',if(value >= cells['minimumElevationInMeters'].value,if(value <= cells['maximumElevationInMeters'].value,'1','0'),'0'),''),'')",
     "engineConfig": {
       "mode": "row-based",
       "facets": []
     },
     "newColumnName": "elevationRangeValidation",
     "columnInsertIndex": 5,
-    "baseColumnName": "elevationGeonames",
-    "expression": "grel:if(value >= cells['minimumElevationInMeters'].value,if(cells[maximumElevationInMeters].value != '',if(value <= cells['maximumElevationInMeters'].value,'1',''),''),'0')",
+    "baseColumnName": "elevationSuggested",
+    "expression": "grel:if(cells[minimumElevationInMeters].value != '',if(cells[maximumElevationInMeters].value != '',if(value >= cells['minimumElevationInMeters'].value,if(value <= cells['maximumElevationInMeters'].value,'1','0'),'0'),''),'')",
     "onError": "set-to-blank"
   },
   
