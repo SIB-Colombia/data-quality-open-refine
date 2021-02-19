@@ -10,8 +10,6 @@ Autores: Ricardo Ortiz, Camila Plata, Esteban Marentes
 
 ---------------------------------------------------------------------------------------------------------------
 
-
-
 #Reemplazar valores de comas por puntos en una columna / Replace comma for point values in a column
 value.replace(',','.')
 
@@ -20,6 +18,10 @@ value.toDate('dd/MM/yyyy').toString('yyyy-MM-dd')
 
 # Completar los valores de una columna, basado en los valores de otra. / Fill a column based in other column values. 
 cells['dwcElementName'].value
+
+
+#Agregar un identificador consecutivo basado en el institutionCode, colectionCode. Nota: Si no cuenta con estos elementos puede que la línea no traiga resultados, cambié el nombre de las columnas a usar para generar el identificador, según el tipo de publicación.
+cells['institutionCode'].value+":"+cells['collectionCode'].value+":"+"000"[0,3-row.index.length()+1] + row.index
 
 # Unión de columnas basado en columnas con valores iguales entre tablas (Llaves) / Column's join based in common columns between tables (Key)
 cell.cross("Lista_Plantas-Colombia", "scientificName").cells["scientificName"].value[0]
