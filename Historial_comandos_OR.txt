@@ -56,6 +56,13 @@ value.parseJson()['publishingOrganizationKey']
 ### Extraer el nombre de la organización de la respuesta Json
 value.parseJson()['title']
 
+
+## Llamado API citación a partir del doi
+"https://api.gbif.org/v1/dataset/doi/"+value.replace('https://doi.org/','')
+### Extraer la citación de la respuesta Json
+value.parseJson().results[0].citation.text
+
+
 # Condicional IF para comparar elementos
 ## A partir de la longitud del campo.
 if(value.length() < 3, '0'+value, '')
