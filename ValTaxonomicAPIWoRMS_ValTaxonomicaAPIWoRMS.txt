@@ -77,18 +77,18 @@ Los elementos taxonómicos son reorganizados para facilitar la validación taxon
     "repeat": false,
     "repeatCount": 10
   },
-   {
+  {
     "op": "core/column-addition",
-    "description": "Create column NomAPI at index 2 based on column scientificName ,
     "engineConfig": {
-      "mode": "row-based",
-      "facets": []
+      "facets": [],
+      "mode": "row-based"
     },
+    "baseColumnName": "scientificName",
+    "expression": "grel:value.replace(' ','%20')",
+    "onError": "set-to-blank",
     "newColumnName": "NomAPIw",
     "columnInsertIndex": 2,
-    "baseColumnName": "scientificName",
-    "expression": "grel:value.replace(\" \",\"%20\")",
-    "onError": "set-to-blank"
+    "description": "Create column NomAPIw at index 4 based on column scientificName using expression grel:value.replace(' ','%20')"
   },
  {
     "op": "core/column-addition-by-fetching-urls",
@@ -102,7 +102,7 @@ Los elementos taxonómicos son reorganizados para facilitar la validación taxon
     "baseColumnName": "NomAPIw",
     "urlExpression": "grel:'http://www.marinespecies.org/rest/AphiaRecordsByMatchNames?scientificnames%5B%5D='+value+'&marine_only=false'",
     "onError": "set-to-blank",
-    "delay": 50,
+    "delay": 0,
     "cacheResponses": true,
     "httpHeadersJson": [
       {
