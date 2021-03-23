@@ -40,6 +40,8 @@
 		"reproductiveCondition",
 		"behavior",
 		"establishmentMeans",
+		"degreeOfEstablishment",
+		"pathway",
 		"occurrenceStatus",
 		"preparations",
 		"disposition",
