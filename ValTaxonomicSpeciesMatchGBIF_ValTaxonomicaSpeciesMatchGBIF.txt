@@ -39,49 +39,54 @@ Taxonomy elements are reorganized to facilitate the taxonomic validation
 Warning
 The 'normalized' archive must be the only one named like that on your OpenRefine workspace, rename any other previous 'normalized' archives
 
---VERSION EN ESPAÑOL
+--VERSION EN ESPAÃ‘OL
 
-Rutinas del SiB Colombia para la validación y limpieza de datos primarios 
+Rutinas del SiB Colombia para la validaciÃ³n y limpieza de datos primarios 
 de Biodiversidad en OPEN REFINE
 https://github.com/SIB-Colombia/data-quality-open-refine
 
-Nombre rutina: Validación taxonomica usando el servicio web 'Species Matching' de GBIF
+Nombre rutina: ValidaciÃ³n taxonomica usando el servicio web 'Species Matching' de GBIF
 Languaje: GREL 'General Refine Expression Language'
 Creado:2018-04-10
-Última Actualización:2019-06-17
+Ãšltima ActualizaciÃ³n:2019-06-17
 Autores: Ricardo Ortiz, Camila Plata
 
 Esta rutina:
-1-Compara el elemento scientificName con el árbol taxonómico de GBIF
-2-Trae los elementos rank y status permitiendo al usuario evaluar el estado del nombre científico
+1-Compara el elemento scientificName con el Ã¡rbol taxonÃ³mico de GBIF
+2-Trae los elementos rank y status permitiendo al usuario evaluar el estado del nombre cientÃ­fico
 3-Trae la taxonomia superior de cada nombre de acuerdo a GBIF
-4-Compara las sugerencias taxonómicas de GBIF con la taxonomia documentada usando descriptores booleanos (1,0)
+4-Compara las sugerencias taxonÃ³micas de GBIF con la taxonomia documentada usando descriptores booleanos (1,0)
 
 			Conventions boolean descriptor
 			0- El nombre sugerido por GBIF NO coincide con el nombre documentado en el conjunto de datos
 			1- El nombre sugerido por GBIF coincide con con el nombre documentado en el conjunto de datos
 			
 Requerimientos:
-Conjunto de datos con mínimo los elementos DwC 'scientificName'y 'kingdon' documentados
-Para obtener la validación de la taxonomía superior también se requieren los elementos DwC: 'phylum','class','order','family','genus'
+Conjunto de datos con mÃ­nimo los elementos DwC 'scientificName'y 'kingdon' documentados
+Para obtener la validaciÃ³n de la taxonomÃ­a superior tambiÃ©n se requieren los elementos DwC: 'phylum','class','order','family','genus'
 Archivo titulado 'normalized' obtenido de el servicio Species Matching de GBIF (https://www.gbif.org/tools/species-lookup) y cargado en OpenRefine
 
 Importante
-El límite del servicio web Species Matching en una sola consulta es de 6000 registros o nombres científicos.
-Entonces existen dos opciones para ejecutar la reconciliación de nombres científicos:
+El lÃ­mite del servicio web Species Matching en una sola consulta es de 6000 registros o nombres cientÃ­ficos.
+Entonces existen dos opciones para ejecutar la reconciliaciÃ³n de nombres cientÃ­ficos:
 
 1-Usar occurrenceID, para conjuntos de datos por debajo de 6000 regsitros, la consulta en Species Matching se sebe hacer para todos los registros
-2-Usar el scientificName, conjunto de datos por encima de 6000 registros, a consulta en Species Matching se sebe hacer para taxa unicos (esta es la opción por defeto del script)
+2-Usar el scientificName, conjunto de datos por encima de 6000 registros, a consulta en Species Matching se sebe hacer para taxa unicos (esta es la opciÃ³n por defeto del script)
 Para cambiar entre las dos opciones remplace en esta rutina 'verbatimScientificName' por 'occurrenceID'
 
 Los nuevos datos seran guardados en columnas el inicio del conjunto de datos
-Los elementos taxonómicos son reorganizados para facilitar la validación taxonómicasn
+Los elementos taxonÃ³micos son reorganizados para facilitar la validaciÃ³n taxonÃ³micasn
 
 Advertencia
-El archivo 'normalized' debe ser el único nombrado con ese título en su directorio de OpenRefine, cambie el nombre de cualquier otro archivo 'normalized' cargado previamente
+El archivo 'normalized' debe ser el Ãºnico nombrado con ese tÃ­tulo en su directorio de OpenRefine, cambie el nombre de cualquier otro archivo 'normalized' cargado previamente
+-----------------------------------------------------------------------------
+Por: Natalia Medina
 
+La rutina de validacion usando el servicio web de Species Matching de GBIF, presenta claridad en cuanto a la definicion de operaciones, descripciones y expresiones para la ejecucion de las acciones. Es importante la transformacion de celdas de los caracteres que presentan patrones de texo en varias cadenas, como los espacios en blanco. Se hace uso de la funcion cell.cross para cruzar celdas y comparar su contenido en otra celda. Asi mismo hace uso de los condicionales para la asignacion de boleanos de las comparaciones realizadas con el servicio web. y realizar sugerencias.
+
+No es claro de donde surge el llamado 
 ----------------------------------------------------------------------------
-Copy from here/ Copiar Desde Aquí
+Copy from here/ Copiar Desde AquÃ­
 
 [
  {
