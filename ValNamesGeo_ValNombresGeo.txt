@@ -8,7 +8,7 @@ https://github.com/SIB-Colombia/data-quality-open-refine
 Script Name: Gegraphic name's validation according to DIVIPOLA 
 Language: GREL 'General Refine Expression Language'
 Created:2018-03-21
-Last Update:2019-06-07
+Last Update:2021-07-16
 Contributors: Camila Plata, Ricardo Ortiz 
 
 This script:
@@ -79,6 +79,7 @@ Si está usando el script por primera vez se recomienda cargar el conjunto de da
 ---Do not copy /No Copiar
 --------------------------------------------------------------------------------
 
+
 {
     "op": "core/column-addition",
     "description": "Create column spcm at index 1 based on column stateProvince using expression grel:(cells['stateProvince'].value+' '+cells['county'].value+' '+cells['municipality'].value).trim().replace(/\\\\s+/,' ')",
@@ -94,7 +95,7 @@ Si está usando el script por primera vez se recomienda cargar el conjunto de da
   },
   {
     "op": "core/column-addition",
-    "description": "Create column spcmMatch at index 1 based on column spcm using expression grel:cell.cross('DIVIPOLA_20200311','SPCM')[0].cells['SPCM'].value",
+    "description": "Create column spcmMatch at index 1 based on column spcm using expression grel:cell.cross('DIVIPOLA_20210416','SPCM')[0].cells['SPCM'].value",
     "engineConfig": {
       "mode": "row-based",
       "facets": []
@@ -102,7 +103,7 @@ Si está usando el script por primera vez se recomienda cargar el conjunto de da
     "newColumnName": "spcmSuggested",
     "columnInsertIndex": 1,
     "baseColumnName": "spcm",
-    "expression": "grel:cell.cross('DIVIPOLA_20200311','SPCM')[0].cells['SPCM'].value",
+    "expression": "grel:cell.cross('DIVIPOLA_20210416','SPCM')[0].cells['SPCM'].value",
     "onError": "set-to-blank"
   },
  {
@@ -139,7 +140,7 @@ Si está usando el script por primera vez se recomienda cargar el conjunto de da
   },
  {
     "op": "core/column-addition",
-    "description": "Create column spcSuggested at index 1 based on column spc using expression grel:cell.cross('DIVIPOLA_20200311','SPC')[0].cells['SPC'].value",
+    "description": "Create column spcSuggested at index 1 based on column spc using expression grel:cell.cross('DIVIPOLA_20210416','SPC')[0].cells['SPC'].value",
     "engineConfig": {
       "mode": "row-based",
       "facets": []
@@ -147,7 +148,7 @@ Si está usando el script por primera vez se recomienda cargar el conjunto de da
     "newColumnName": "spcSuggested",
     "columnInsertIndex": 1,
     "baseColumnName": "spc",
-    "expression": "grel:cell.cross('DIVIPOLA_20200311','SPC')[0].cells['SPC'].value",
+    "expression": "grel:cell.cross('DIVIPOLA_20210416','SPC')[0].cells['SPC'].value",
     "onError": "set-to-blank"
   },
   {
@@ -171,7 +172,7 @@ Si está usando el script por primera vez se recomienda cargar el conjunto de da
   },
   {
     "op": "core/column-addition",
-    "description": "Create column spMatch at index 1 based on column stateProvince using expression grel:cell.cross('DIVIPOLA_20200311','stateProvince')[0].cells['stateProvince'].value",
+    "description": "Create column spMatch at index 1 based on column stateProvince using expression grel:cell.cross('DIVIPOLA_20210416','stateProvince')[0].cells['stateProvince'].value",
     "engineConfig": {
       "mode": "row-based",
       "facets": []
@@ -179,7 +180,7 @@ Si está usando el script por primera vez se recomienda cargar el conjunto de da
     "newColumnName": "spSuggested",
     "columnInsertIndex": 1,
     "baseColumnName": "stateProvince",
-    "expression": "grel:cell.cross('DIVIPOLA_20200311','stateProvince')[0].cells['stateProvince'].value",
+    "expression": "grel:cell.cross('DIVIPOLA_20210416','stateProvince')[0].cells['stateProvince'].value",
     "onError": "set-to-blank"
   },
   {
@@ -228,6 +229,3 @@ Si está usando el script por primera vez se recomienda cargar el conjunto de da
     "description": "Remove column spmSuggested",
     "columnName": "spcmSuggested"
   }
- 
- 
-
