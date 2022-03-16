@@ -52,7 +52,7 @@ Esta rutina:
 			1- El nombre sugerido por GBIF coincide con con el nombre documentado en el conjunto de datos
 
 Requerimientos:
-Conjunto de datos con mínimo los elementos DwC 'scientificName'y 'kingdon' documentados
+Conjunto de datos con mínimo los elementos DwC 'scientificName'y 'kingdom' documentados
 Para obtener la validación de la taxonomía superior también se requieren los elementos DwC: 'phylum','class','order','family','genus'
 
 Los nuevos datos seran guardados en columnas el inicio del conjunto de datos
