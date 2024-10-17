@@ -76,3 +76,20 @@ if(value==true,if(cells['TituloColección'].value==true ,true, false), false)
 #Split de un campo a partir de un caracter
 smartSplit(value,',')[0]
 
+
+## snipet para extraer el taxonID luego del llamado general al API de GBIF
+
+ {
+    "op": "core/column-addition",
+    "description": "Create column taxonID at index 2 based on column callAPI using expression grel:value.parseJson().get(\"usageKey\")",
+    "engineConfig": {
+      "mode": "row-based",
+      "facets": []
+    },
+    "newColumnName": "taxonID",
+    "columnInsertIndex": 2,
+    "baseColumnName": "callAPI",
+    "expression": "grel:\"gbif.org/species/\" + value.parseJson().get(\"usageKey\")",
+    "onError": "set-to-blank"
+  }
+
